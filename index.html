@@ -1,1 +1,510 @@
-Sorry, there was an issue generating the file. Please try again later.
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Скрининг развития ребёнка</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+        body { background: #f5f7fa; padding: 15px; color: #2c3e50; }
+        .container { max-width: 600px; margin: 0 auto; }
+
+        header { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; text-align: center; }
+        h1 { color: #3498db; font-size: 24px; margin-bottom: 8px; }
+        .warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-size: 14px; }
+        .warning strong { color: #856404; }
+
+        .progress { background: #fff; padding: 12px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .progress-bar { width: 100%; height: 8px; background: #e9ecef; border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; background: #3498db; width: 0%; transition: width 0.3s; }
+
+        .section { background: #fff; margin-bottom: 15px; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .section-title { background: #3498db; color: white; padding: 15px; font-size: 16px; font-weight: 600; }
+
+        .question { padding: 15px; border-bottom: 1px solid #f0f0f0; }
+        .question:last-child { border-bottom: none; }
+        .question-text { font-size: 15px; margin-bottom: 12px; line-height: 1.5; }
+        .q-num { color: #3498db; font-weight: bold; margin-right: 5px; }
+
+        .options { display: flex; gap: 10px; }
+        .option { flex: 1; }
+        .option input { display: none; }
+        .option label { display: block; padding: 12px; text-align: center; border: 2px solid #e0e0e0; border-radius: 8px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .option label:hover { border-color: #3498db; background: #f8f9ff; }
+        .option input:checked + label { color: white; }
+        .option input:checked + label[for$="-yes"] { background: #2ecc71; border-color: #2ecc71; }
+        .option input:checked + label[for$="-no"] { background: #e74c3c; border-color: #e74c3c; }
+
+        .unanswered { animation: shake 0.5s; }
+        @keyframes shake { 0%,100% {transform: translateX(0);} 25% {transform: translateX(-5px);} 75% {transform: translateX(5px);} }
+
+        .btn { width: 100%; padding: 16px; background: #3498db; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: 600; cursor: pointer; margin: 20px 0; }
+
+        .results { display: none; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-top: 20px; }
+        .score { font-size: 56px; font-weight: bold; text-align: center; margin: 20px 0; }
+        .score.low { color: #2ecc71; }
+        .score.medium { color: #f39c12; }
+        .score.high { color: #e74c3c; }
+
+        .risk-title { text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+        .risk-desc { text-align: center; color: #7f8c8d; margin-bottom: 20px; }
+
+        .section-result { padding: 12px; border-radius: 8px; margin-bottom: 10px; background: #f8f9fa; }
+        .section-result-title { font-weight: 600; margin-bottom: 5px; }
+        .section-result-bar { width: 100%; height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden; }
+        .section-result-fill { height: 100%; transition: width 0.5s; }
+
+        footer { text-align: center; margin-top: 30px; font-size: 12px; color: #95a5a6; }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <header>
+            <h1>📋 Скрининг развития ребёнка</h1>
+            <p style="color: #7f8c8d; font-size: 14px;">Опросник для родителей (возраст 4-5 лет)</p>
+        </header>
+
+        <div class="warning">
+            <strong>ВАЖНО:</strong> Это предварительная оценка, не заменяющая врача. Отвечайте честно.
+        </div>
+
+        <div class="progress">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                <span style="font-size: 14px;">Прогресс</span>
+                <span style="font-size: 14px;"><span id="answered">0</span> / 30</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+        </div>
+
+        <form id="quiz">
+
+            <!-- РАЗДЕЛ 1 -->
+            <div class="section">
+                <div class="section-title">📣 Речь и коммуникация</div>
+
+                <div class="question" data-q="1">
+                    <p class="question-text"><span class="q-num">1.</span> Может вести разговор туда-сюда (задает вопрос, слушает ответ)?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q1" id="q1-yes" value="yes"><label for="q1-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q1" id="q1-no" value="no"><label for="q1-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="2">
+                    <p class="question-text"><span class="q-num">2.</span> Использует жесты, чтобы показать, что хочет (показывает пальцем)?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q2" id="q2-yes" value="yes"><label for="q2-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q2" id="q2-no" value="no"><label for="q2-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="3">
+                    <p class="question-text"><span class="q-num">3.</span> Понимает шутки или переносный смысл слов?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q3" id="q3-yes" value="yes"><label for="q3-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q3" id="q3-no" value="no"><label for="q3-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="4">
+                    <p class="question-text"><span class="q-num">4.</span> Повторяет фразы/слова (эхолалия)?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q4" id="q4-yes" value="yes"><label for="q4-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q4" id="q4-no" value="no"><label for="q4-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="5">
+                    <p class="question-text"><span class="q-num">5.</span> Говорит о своих интересах, не замечая реакции собеседника?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q5" id="q5-yes" value="yes"><label for="q5-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q5" id="q5-no" value="no"><label for="q5-no">НЕТ</label></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- РАЗДЕЛ 2 -->
+            <div class="section">
+                <div class="section-title">👥 Социальное взаимодействие</div>
+
+                <div class="question" data-q="6">
+                    <p class="question-text"><span class="q-num">6.</span> Смотрит в глаза при разговоре?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q6" id="q6-yes" value="yes"><label for="q6-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q6" id="q6-no" value="no"><label for="q6-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="7">
+                    <p class="question-text"><span class="q-num">7.</span> Интересуется другими детьми и пытается играть с ними?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q7" id="q7-yes" value="yes"><label for="q7-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q7" id="q7-no" value="no"><label for="q7-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="8">
+                    <p class="question-text"><span class="q-num">8.</span> Делится игрушками или показывает что-то интересное?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q8" id="q8-yes" value="yes"><label for="q8-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q8" id="q8-no" value="no"><label for="q8-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="9">
+                    <p class="question-text"><span class="q-num">9.</span> Утешает других, когда они расстроены?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q9" id="q9-yes" value="yes"><label for="q9-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q9" id="q9-no" value="no"><label for="q9-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="10">
+                    <p class="question-text"><span class="q-num">10.</span> Предпочитает играть один, а не с другими детьми?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q10" id="q10-yes" value="yes"><label for="q10-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q10" id="q10-no" value="no"><label for="q10-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="11">
+                    <p class="question-text"><span class="q-num">11.</span> Понимает чувства других (когда кто-то грустит)?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q11" id="q11-yes" value="yes"><label for="q11-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q11" id="q11-no" value="no"><label for="q11-no">НЕТ</label></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- РАЗДЕЛ 3 -->
+            <div class="section">
+                <div class="section-title">🎮 Игра и воображение</div>
+
+                <div class="question" data-q="12">
+                    <p class="question-text"><span class="q-num">12.</span> Играет в ролевые игры с воображением (готовит, лечит игрушки)?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q12" id="q12-yes" value="yes"><label for="q12-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q12" id="q12-no" value="no"><label for="q12-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="13">
+                    <p class="question-text"><span class="q-num">13.</span> Использует игрушки необычно (крутит колёса вместо катания)?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q13" id="q13-yes" value="yes"><label for="q13-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q13" id="q13-no" value="no"><label for="q13-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="14">
+                    <p class="question-text"><span class="q-num">14.</span> Выстраивает предметы в линию или группирует необычно?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q14" id="q14-yes" value="yes"><label for="q14-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q14" id="q14-no" value="no"><label for="q14-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="15">
+                    <p class="question-text"><span class="q-num">15.</span> Играет с игрушками как другие дети его возраста?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q15" id="q15-yes" value="yes"><label for="q15-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q15" id="q15-no" value="no"><label for="q15-no">НЕТ</label></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- РАЗДЕЛ 4 -->
+            <div class="section">
+                <div class="section-title">🔄 Повторяющееся поведение</div>
+
+                <div class="question" data-q="16">
+                    <p class="question-text"><span class="q-num">16.</span> Есть необычные интересы, занимающие много времени?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q16" id="q16-yes" value="yes"><label for="q16-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q16" id="q16-no" value="no"><label for="q16-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="17">
+                    <p class="question-text"><span class="q-num">17.</span> Расстраивается, если меняется привычный распорядок?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q17" id="q17-yes" value="yes"><label for="q17-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q17" id="q17-no" value="no"><label for="q17-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="18">
+                    <p class="question-text"><span class="q-num">18.</span> Повторяет движения (машет руками, крутится)?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q18" id="q18-yes" value="yes"><label for="q18-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q18" id="q18-no" value="no"><label for="q18-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="19">
+                    <p class="question-text"><span class="q-num">19.</span> Настаивает, чтобы всё было «правильно»?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q19" id="q19-yes" value="yes"><label for="q19-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q19" id="q19-no" value="no"><label for="q19-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="20">
+                    <p class="question-text"><span class="q-num">20.</span> Сильно реагирует на изменения (плачет при другой дороге)?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q20" id="q20-yes" value="yes"><label for="q20-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q20" id="q20-no" value="no"><label for="q20-no">НЕТ</label></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- РАЗДЕЛ 5 -->
+            <div class="section">
+                <div class="section-title">👁️ Сенсорные особенности</div>
+
+                <div class="question" data-q="21">
+                    <p class="question-text"><span class="q-num">21.</span> Необычно реагирует на звуки (закрывает уши при обычных)?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q21" id="q21-yes" value="yes"><label for="q21-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q21" id="q21-no" value="no"><label for="q21-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="22">
+                    <p class="question-text"><span class="q-num">22.</span> Необычно реагирует на прикосновения (не любит одежду)?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q22" id="q22-yes" value="yes"><label for="q22-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q22" id="q22-no" value="no"><label for="q22-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="23">
+                    <p class="question-text"><span class="q-num">23.</span> Нюхает или облизывает предметы необычно?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q23" id="q23-yes" value="yes"><label for="q23-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q23" id="q23-no" value="no"><label for="q23-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="24">
+                    <p class="question-text"><span class="q-num">24.</span> Интересуется визуальными эффектами (вращающиеся предметы, свет)?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q24" id="q24-yes" value="yes"><label for="q24-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q24" id="q24-no" value="no"><label for="q24-no">НЕТ</label></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- РАЗДЕЛ 6 -->
+            <div class="section">
+                <div class="section-title">🎭 Имитационное поведение</div>
+
+                <div class="question" data-q="25">
+                    <p class="question-text"><span class="q-num">25.</span> Постоянно копирует персонажей/животных (бегает, кричит как динозавр)?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q25" id="q25-yes" value="yes"><label for="q25-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q25" id="q25-no" value="no"><label for="q25-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="26">
+                    <p class="question-text"><span class="q-num">26.</span> Немедленно воспроизводит увиденное в мультфильмах?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q26" id="q26-yes" value="yes"><label for="q26-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q26" id="q26-no" value="no"><label for="q26-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="27">
+                    <p class="question-text"><span class="q-num">27.</span> Это имитационное поведение занимает большую часть времени?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q27" id="q27-yes" value="yes"><label for="q27-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q27" id="q27-no" value="no"><label for="q27-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="28">
+                    <p class="question-text"><span class="q-num">28.</span> Может остановить это поведение, если попросить?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q28" id="q28-yes" value="yes"><label for="q28-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q28" id="q28-no" value="no"><label for="q28-no">НЕТ</label></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- РАЗДЕЛ 7 -->
+            <div class="section">
+                <div class="section-title">😰 Социальная тревожность</div>
+
+                <div class="question" data-q="29">
+                    <p class="question-text"><span class="q-num">29.</span> Сильно расстраивается в новых ситуациях с незнакомыми людьми?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q29" id="q29-yes" value="yes"><label for="q29-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q29" id="q29-no" value="no"><label for="q29-no">НЕТ</label></div>
+                    </div>
+                </div>
+
+                <div class="question" data-q="30">
+                    <p class="question-text"><span class="q-num">30.</span> Отказывается ходить в гости или принимать гостей?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q30" id="q30-yes" value="yes"><label for="q30-yes">ДА</label></div>
+                        <div class="option"><input type="radio" name="q30" id="q30-no" value="no"><label for="q30-no">НЕТ</label></div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+        <button class="btn" onclick="calculate()">📊 Показать результат</button>
+
+        <div class="results" id="results">
+            <div class="score" id="score-display"></div>
+            <div class="risk-title" id="risk-title"></div>
+            <div class="risk-desc" id="risk-desc"></div>
+
+            <div id="sections" style="margin: 20px 0;"></div>
+
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 20px;">
+                <h4 style="margin-bottom: 10px;">Рекомендации:</h4>
+                <ul id="recommendations" style="list-style: none; padding: 0;"></ul>
+            </div>
+
+            <button class="btn" onclick="restart()" style="background: #95a5a6;">🔄 Пройти заново</button>
+        </div>
+
+        <footer>
+            ⚠️ Это предварительная оценка, не заменяет врача. При сомнениях обратитесь к специалисту.
+        </footer>
+    </div>
+
+    <script>
+        // Reverse scoring questions (NO = 1 point)
+        const reverse = [1,2,3,6,7,8,9,11,12,15,28];
+
+        // Track progress
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                const answered = document.querySelectorAll('input[type="radio"]:checked').length;
+                document.getElementById('answered').textContent = answered;
+                document.getElementById('progress').style.width = (answered/30*100) + '%';
+            });
+        });
+
+        function calculate() {
+            let score = 0, missed = [];
+
+            // Check all answered
+            for(let i=1; i<=30; i++) {
+                const q = document.querySelector(`[data-q="${i}"]`);
+                if(!document.querySelector(`input[name="q${i}"]:checked`)) {
+                    missed.push(i);
+                    q.classList.add('unanswered');
+                } else {
+                    q.classList.remove('unanswered');
+                }
+            }
+
+            if(missed.length > 0) {
+                alert(`❌ Ответьте на вопросы: ${missed.join(', ')}`);
+                document.querySelector(`[data-q="${missed[0]}"]`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            // Calculate score
+            for(let i=1; i<=30; i++) {
+                const ans = document.querySelector(`input[name="q${i}"]:checked`).value;
+                if(reverse.includes(i)) {
+                    if(ans === 'no') score++;
+                } else {
+                    if(ans === 'yes') score++;
+                }
+            }
+
+            showResults(score);
+        }
+
+        function showResults(score) {
+            const result = document.getElementById('results');
+            result.style.display = 'block';
+
+            let level, title, desc, color, recs;
+
+            if(score <= 10) {
+                level = 'low';
+                title = '✅ Низкий риск';
+                desc = 'Особенности в пределах нормы';
+                color = '#2ecc71';
+                recs = ['Продолжайте наблюдение', 'Регулярные осмотры у педиатра'];
+            } else if(score <= 14) {
+                level = 'medium';
+                title = '⚠️ Пограничный результат';
+                desc = 'Наблюдение + повторная оценка через 3-6 мес';
+                color = '#f39c12';
+                recs = ['Ведите дневник наблюдений', 'Обсудите с педиатром', 'При усилении — к психологу'];
+            } else {
+                level = 'high';
+                title = '🔴 Высокий риск';
+                desc = 'Необходима консультация детского психиатра/невролога';
+                color = '#e74c3c';
+                recs = ['Направление к психиатру', 'Комплексная диагностика', 'Ранняя диагностика важна'];
+            }
+
+            document.getElementById('score-display').textContent = score;
+            document.getElementById('score-display').className = 'score ' + level;
+            document.getElementById('risk-title').textContent = title;
+            document.getElementById('risk-title').style.color = color;
+            document.getElementById('risk-desc').textContent = desc;
+
+            // Section breakdown
+            const sectionData = [
+                {name: 'Речь', questions: [1,2,3,4,5]},
+                {name: 'Социальное', questions: [6,7,8,9,10,11]},
+                {name: 'Игра', questions: [12,13,14,15]},
+                {name: 'Поведение', questions: [16,17,18,19,20]},
+                {name: 'Сенсорика', questions: [21,22,23,24]},
+                {name: 'Имитация', questions: [25,26,27,28]},
+                {name: 'Тревожность', questions: [29,30]}
+            ];
+
+            let sectionsHTML = '<h4 style="margin-bottom: 10px;">Разбивка по секциям:</h4>';
+            sectionData.forEach(s => {
+                let secScore = 0;
+                s.questions.forEach(qNum => {
+                    const ans = document.querySelector(`input[name="q${qNum}"]:checked`).value;
+                    if(reverse.includes(qNum)) {
+                        if(ans === 'no') secScore++;
+                    } else {
+                        if(ans === 'yes') secScore++;
+                    }
+                });
+                const perc = Math.round(secScore / s.questions.length * 100);
+                const barColor = perc < 33 ? '#2ecc71' : perc < 66 ? '#f39c12' : '#e74c3c';
+
+                sectionsHTML += `
+                    <div class="section-result">
+                        <div class="section-result-title">${s.name}: ${secScore}/${s.questions.length}</div>
+                        <div class="section-result-bar">
+                            <div class="section-result-fill" style="width: ${perc}%; background: ${barColor};"></div>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('sections').innerHTML = sectionsHTML;
+
+            // Recommendations
+            document.getElementById('recommendations').innerHTML = recs.map(r => `<li style="padding: 5px 0;">→ ${r}</li>`).join('');
+
+            result.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function restart() {
+            document.getElementById('quiz').reset();
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('answered').textContent = '0';
+            document.getElementById('progress').style.width = '0%';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
