@@ -3,508 +3,1457 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Скрининг развития ребёнка</title>
+    <meta name="description" content="Global Aina Nutrition - Онлайн-консультации по питанию. Индивидуальный подход без жёстких диет. Работаем дистанционно из Франции.">
+    <meta name="keywords" content="консультации по питанию, онлайн питание, эксперт по питанию, здоровое питание">
+    <meta name="author" content="Айна Мусхаджиева">
+    <meta property="og:title" content="Global Aina Nutrition - Онлайн-консультации по питанию">
+    <meta property="og:description" content="Индивидуальный подход к вашему рациону без жёстких диет. Работаем онлайн из Франции.">
+    <meta property="og:type" content="website">
+    <title>Global Aina Nutrition - Онлайн-консультации по питанию</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="alternate icon" href="favicon.ico">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
-        body { background: #f5f7fa; padding: 15px; color: #2c3e50; }
-        .container { max-width: 600px; margin: 0 auto; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        header { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; text-align: center; }
-        h1 { color: #3498db; font-size: 24px; margin-bottom: 8px; }
-        .warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-size: 14px; }
-        .warning strong { color: #856404; }
+        :root {
+            --primary-bg: #FAF8F5;
+            --secondary-bg: #F5F0E8;
+            --accent-bg: #E8E4DE;
+            --text-color: #3D3D3D;
+            --accent-color: #C9A96E;
+            --white: #FFFFFF;
+        }
 
-        .progress { background: #fff; padding: 12px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .progress-bar { width: 100%; height: 8px; background: #e9ecef; border-radius: 4px; overflow: hidden; }
-        .progress-fill { height: 100%; background: #3498db; width: 0%; transition: width 0.3s; }
+        html {
+            scroll-behavior: smooth;
+        }
 
-        .section { background: #fff; margin-bottom: 15px; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .section-title { background: #3498db; color: white; padding: 15px; font-size: 16px; font-weight: 600; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-color);
+            background-color: var(--primary-bg);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-        .question { padding: 15px; border-bottom: 1px solid #f0f0f0; }
-        .question:last-child { border-bottom: none; }
-        .question-text { font-size: 15px; margin-bottom: 12px; line-height: 1.5; }
-        .q-num { color: #3498db; font-weight: bold; margin-right: 5px; }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+        }
 
-        .options { display: flex; gap: 10px; }
-        .option { flex: 1; }
-        .option input { display: none; }
-        .option label { display: block; padding: 12px; text-align: center; border: 2px solid #e0e0e0; border-radius: 8px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
-        .option label:hover { border-color: #3498db; background: #f8f9ff; }
-        .option input:checked + label { color: white; }
-        .option input:checked + label[for$="-yes"] { background: #2ecc71; border-color: #2ecc71; }
-        .option input:checked + label[for$="-no"] { background: #e74c3c; border-color: #e74c3c; }
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--white);
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: box-shadow 0.3s ease;
+        }
 
-        .unanswered { animation: shake 0.5s; }
-        @keyframes shake { 0%,100% {transform: translateX(0);} 25% {transform: translateX(-5px);} 75% {transform: translateX(5px);} }
+        header.scrolled {
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
 
-        .btn { width: 100%; padding: 16px; background: #3498db; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: 600; cursor: pointer; margin: 20px 0; }
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            text-decoration: none;
+        }
 
-        .results { display: none; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-top: 20px; }
-        .score { font-size: 56px; font-weight: bold; text-align: center; margin: 20px 0; }
-        .score.low { color: #2ecc71; }
-        .score.medium { color: #f39c12; }
-        .score.high { color: #e74c3c; }
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
 
-        .risk-title { text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 10px; }
-        .risk-desc { text-align: center; color: #7f8c8d; margin-bottom: 20px; }
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
 
-        .section-result { padding: 12px; border-radius: 8px; margin-bottom: 10px; background: #f8f9fa; }
-        .section-result-title { font-weight: 600; margin-bottom: 5px; }
-        .section-result-bar { width: 100%; height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden; }
-        .section-result-fill { height: 100%; transition: width 0.5s; }
+        nav a:hover {
+            color: var(--accent-color);
+        }
 
-        footer { text-align: center; margin-top: 30px; font-size: 12px; color: #95a5a6; }
+        .cta-button {
+            background-color: var(--accent-color);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid var(--accent-color);
+        }
+
+        .cta-button:hover {
+            background-color: transparent;
+            color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .mobile-menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 8rem 5% 6rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            color: var(--text-color);
+            font-weight: 300;
+            line-height: 1.8;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 5rem 5%;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--text-color);
+        }
+
+        .section-text {
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            text-align: center;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text-color);
+        }
+
+        /* About Section */
+        .about {
+            background-color: var(--white);
+        }
+
+        .about-text {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            font-size: 1.05rem;
+            line-height: 1.9;
+            color: var(--text-color);
+            font-weight: 300;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .signature {
+            font-style: italic;
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            margin-top: 2rem;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        /* Benefits Section */
+        .benefits {
+            background-color: var(--secondary-bg);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .benefit-card {
+            background-color: var(--white);
+            padding: 2.5rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .benefit-card:nth-child(1) { animation-delay: 0.1s; }
+        .benefit-card:nth-child(2) { animation-delay: 0.2s; }
+        .benefit-card:nth-child(3) { animation-delay: 0.3s; }
+        .benefit-card:nth-child(4) { animation-delay: 0.4s; }
+        .benefit-card:nth-child(5) { animation-delay: 0.5s; }
+        .benefit-card:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .benefit-icon {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .benefit-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        .benefit-card p {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text-color);
+            font-weight: 300;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            background-color: var(--white);
+        }
+
+        .steps-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            gap: 3rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            padding: 2rem;
+            background-color: var(--primary-bg);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            background-color: var(--secondary-bg);
+            transform: translateX(10px);
+        }
+
+        .step-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            min-width: 80px;
+        }
+
+        .step-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .step-content p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--text-color);
+            font-weight: 300;
+        }
+
+        /* Services Section */
+        .services {
+            background-color: var(--secondary-bg);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background-color: var(--white);
+            padding: 2.5rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            border-color: var(--accent-color);
+        }
+
+        .service-card.premium {
+            border: 3px solid var(--accent-color);
+            background: linear-gradient(135deg, var(--white) 0%, var(--primary-bg) 100%);
+        }
+
+        .service-card.premium::before {
+            content: 'VIP';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--accent-color);
+            color: var(--white);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .service-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        .service-price {
+            font-size: 2rem;
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .service-description {
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+            font-weight: 300;
+        }
+
+        .service-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .service-tag {
+            background-color: var(--accent-bg);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        .service-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid var(--accent-color);
+            display: inline-block;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--accent-color);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--accent-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid var(--accent-color);
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--accent-color);
+            color: var(--white);
+        }
+
+        /* Payment Methods Section */
+        .payment {
+            background-color: var(--white);
+        }
+
+        .payment-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .payment-methods {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+
+        .payment-method {
+            font-size: 1.1rem;
+            padding: 1rem 2rem;
+            background-color: var(--primary-bg);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .payment-icons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .payment-icon {
+            font-size: 3rem;
+            color: var(--text-color);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .payment-icon:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        /* FAQ Section */
+        .faq {
+            background-color: var(--secondary-bg);
+        }
+
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background-color: var(--white);
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question {
+            padding: 1.5rem 2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            font-size: 1.1rem;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background-color: var(--primary-bg);
+            color: var(--accent-color);
+        }
+
+        .faq-question i {
+            transition: transform 0.3s ease;
+            color: var(--accent-color);
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-answer-content {
+            padding: 0 2rem 1.5rem;
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-color);
+            font-weight: 300;
+        }
+
+        /* Contact Section */
+        .contact {
+            background-color: var(--white);
+        }
+
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .contact-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .contact-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: var(--primary-bg);
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .contact-method:hover {
+            background-color: var(--accent-bg);
+            transform: translateX(10px);
+        }
+
+        .contact-method i {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            min-width: 30px;
+        }
+
+        .contact-method-info {
+            flex: 1;
+        }
+
+        .contact-method-label {
+            font-size: 0.85rem;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contact-method-value {
+            font-size: 1.05rem;
+            font-weight: 500;
+        }
+
+        .contact-form {
+            background-color: var(--primary-bg);
+            padding: 2.5rem;
+            border-radius: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--accent-bg);
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: var(--white);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-submit {
+            width: 100%;
+            background-color: var(--accent-color);
+            color: var(--white);
+            padding: 1rem 2rem;
+            border: 2px solid var(--accent-color);
+            border-radius: 30px;
+            font-weight: 500;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .form-submit:hover {
+            background-color: transparent;
+            color: var(--accent-color);
+        }
+
+        /* Final CTA Section */
+        .final-cta {
+            background: linear-gradient(135deg, var(--accent-color) 0%, #B89760 100%);
+            color: var(--white);
+            text-align: center;
+            padding: 5rem 5%;
+        }
+
+        .final-cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+
+        .final-cta p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .final-cta .cta-button {
+            background-color: var(--white);
+            color: var(--accent-color);
+            border-color: var(--white);
+        }
+
+        .final-cta .cta-button:hover {
+            background-color: transparent;
+            color: var(--white);
+            border-color: var(--white);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--text-color);
+            color: var(--white);
+            padding: 3rem 5% 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--accent-color);
+        }
+
+        .disclaimer {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .footer-policies {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .footer-policies a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-policies a:hover {
+            opacity: 0.7;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 968px) {
+            nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                height: 100vh;
+                width: 80%;
+                max-width: 400px;
+                background-color: var(--white);
+                flex-direction: column;
+                padding: 5rem 2rem;
+                gap: 2rem;
+                transition: right 0.3s ease;
+                box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1);
+                align-items: flex-start;
+            }
+
+            nav.active {
+                right: 0;
+            }
+
+            nav a {
+                font-size: 1.2rem;
+            }
+
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
+            .mobile-menu-toggle.active span:nth-child(1) {
+                transform: rotate(45deg) translate(8px, 8px);
+            }
+
+            .mobile-menu-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .mobile-menu-toggle.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(7px, -7px);
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            section {
+                padding: 3rem 5%;
+            }
+
+            .hero {
+                padding: 5rem 5% 4rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-description {
+                font-size: 1rem;
+            }
+
+            .step {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .step-number {
+                min-width: auto;
+            }
+        }
+
+        /* Smooth animations */
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-
-        <header>
-            <h1>📋 Скрининг развития ребёнка</h1>
-            <p style="color: #7f8c8d; font-size: 14px;">Опросник для родителей (возраст 4-5 лет)</p>
-        </header>
-
-        <div class="warning">
-            <strong>ВАЖНО:</strong> Это предварительная оценка, не заменяющая врача. Отвечайте честно.
+    <!-- Header -->
+    <header id="header">
+        <a href="#" class="logo">Global Aina Nutrition</a>
+        <nav id="nav">
+            <a href="#about">Обо мне</a>
+            <a href="#services">Услуги</a>
+            <a href="#how-it-works">Как это работает</a>
+            <a href="#faq">FAQ</a>
+            <a href="#contact">Контакты</a>
+            <a href="#contact" class="cta-button">Записаться</a>
+        </nav>
+        <div class="mobile-menu-toggle" id="mobile-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
+    </header>
 
-        <div class="progress">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                <span style="font-size: 14px;">Прогресс</span>
-                <span style="font-size: 14px;"><span id="answered">0</span> / 30</span>
-            </div>
-            <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <p class="hero-subtitle">Консультации по питанию онлайн</p>
+        <h1>Питание, которое подходит именно вам</h1>
+        <p class="hero-description">Индивидуальный подход к вашему рациону без жёстких диет и ограничений. Осознанное питание, которое становится образом жизни.</p>
+        <a href="#services" class="cta-button">Выбрать услугу</a>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <h2 class="section-title">Обо мне</h2>
+        <div class="about-text">
+            <p>Меня зовут Айна Мусхаджиева. Я эксперт по питанию и основатель проекта Global Aina Nutrition.</p>
+            <p>Помогаю людям выстроить здоровые и комфортные отношения с едой — без стресса, запретов и чувства вины. Мой подход основан на научных данных, внимании к индивидуальным особенностям и уважении к вашему образу жизни.</p>
+            <p>Работаю онлайн с клиентами по всему миру. Каждая рекомендация — это результат глубокого анализа вашего рациона, привычек и целей.</p>
+            <p class="signature">— Айна Мусхаджиева</p>
         </div>
+    </section>
 
-        <form id="quiz">
-
-            <!-- РАЗДЕЛ 1 -->
-            <div class="section">
-                <div class="section-title">📣 Речь и коммуникация</div>
-
-                <div class="question" data-q="1">
-                    <p class="question-text"><span class="q-num">1.</span> Может вести разговор туда-сюда (задает вопрос, слушает ответ)?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q1" id="q1-yes" value="yes"><label for="q1-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q1" id="q1-no" value="no"><label for="q1-no">НЕТ</label></div>
-                    </div>
+    <!-- Benefits Section -->
+    <section class="benefits">
+        <h2 class="section-title">Почему выбирают меня</h2>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <i class="fas fa-user-check"></i>
                 </div>
-
-                <div class="question" data-q="2">
-                    <p class="question-text"><span class="q-num">2.</span> Использует жесты, чтобы показать, что хочет (показывает пальцем)?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q2" id="q2-yes" value="yes"><label for="q2-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q2" id="q2-no" value="no"><label for="q2-no">НЕТ</label></div>
-                    </div>
-                </div>
-
-                <div class="question" data-q="3">
-                    <p class="question-text"><span class="q-num">3.</span> Понимает шутки или переносный смысл слов?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q3" id="q3-yes" value="yes"><label for="q3-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q3" id="q3-no" value="no"><label for="q3-no">НЕТ</label></div>
-                    </div>
-                </div>
-
-                <div class="question" data-q="4">
-                    <p class="question-text"><span class="q-num">4.</span> Повторяет фразы/слова (эхолалия)?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q4" id="q4-yes" value="yes"><label for="q4-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q4" id="q4-no" value="no"><label for="q4-no">НЕТ</label></div>
-                    </div>
-                </div>
-
-                <div class="question" data-q="5">
-                    <p class="question-text"><span class="q-num">5.</span> Говорит о своих интересах, не замечая реакции собеседника?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q5" id="q5-yes" value="yes"><label for="q5-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q5" id="q5-no" value="no"><label for="q5-no">НЕТ</label></div>
-                    </div>
-                </div>
+                <h3>Индивидуально</h3>
+                <p>Каждая рекомендация составляется под ваши цели, вкусы и образ жизни. Никаких шаблонов.</p>
             </div>
-
-            <!-- РАЗДЕЛ 2 -->
-            <div class="section">
-                <div class="section-title">👥 Социальное взаимодействие</div>
-
-                <div class="question" data-q="6">
-                    <p class="question-text"><span class="q-num">6.</span> Смотрит в глаза при разговоре?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q6" id="q6-yes" value="yes"><label for="q6-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q6" id="q6-no" value="no"><label for="q6-no">НЕТ</label></div>
-                    </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <i class="fas fa-microscope"></i>
                 </div>
-
-                <div class="question" data-q="7">
-                    <p class="question-text"><span class="q-num">7.</span> Интересуется другими детьми и пытается играть с ними?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q7" id="q7-yes" value="yes"><label for="q7-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q7" id="q7-no" value="no"><label for="q7-no">НЕТ</label></div>
-                    </div>
-                </div>
-
-                <div class="question" data-q="8">
-                    <p class="question-text"><span class="q-num">8.</span> Делится игрушками или показывает что-то интересное?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q8" id="q8-yes" value="yes"><label for="q8-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q8" id="q8-no" value="no"><label for="q8-no">НЕТ</label></div>
-                    </div>
-                </div>
-
-                <div class="question" data-q="9">
-                    <p class="question-text"><span class="q-num">9.</span> Утешает других, когда они расстроены?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q9" id="q9-yes" value="yes"><label for="q9-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q9" id="q9-no" value="no"><label for="q9-no">НЕТ</label></div>
-                    </div>
-                </div>
-
-                <div class="question" data-q="10">
-                    <p class="question-text"><span class="q-num">10.</span> Предпочитает играть один, а не с другими детьми?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q10" id="q10-yes" value="yes"><label for="q10-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q10" id="q10-no" value="no"><label for="q10-no">НЕТ</label></div>
-                    </div>
-                </div>
-
-                <div class="question" data-q="11">
-                    <p class="question-text"><span class="q-num">11.</span> Понимает чувства других (когда кто-то грустит)?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q11" id="q11-yes" value="yes"><label for="q11-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q11" id="q11-no" value="no"><label for="q11-no">НЕТ</label></div>
-                    </div>
-                </div>
+                <h3>Научно</h3>
+                <p>Все рекомендации основаны на современных исследованиях и проверенных данных о питании.</p>
             </div>
-
-            <!-- РАЗДЕЛ 3 -->
-            <div class="section">
-                <div class="section-title">🎮 Игра и воображение</div>
-
-                <div class="question" data-q="12">
-                    <p class="question-text"><span class="q-num">12.</span> Играет в ролевые игры с воображением (готовит, лечит игрушки)?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q12" id="q12-yes" value="yes"><label for="q12-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q12" id="q12-no" value="no"><label for="q12-no">НЕТ</label></div>
-                    </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <i class="fas fa-heart"></i>
                 </div>
-
-                <div class="question" data-q="13">
-                    <p class="question-text"><span class="q-num">13.</span> Использует игрушки необычно (крутит колёса вместо катания)?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q13" id="q13-yes" value="yes"><label for="q13-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q13" id="q13-no" value="no"><label for="q13-no">НЕТ</label></div>
-                    </div>
-                </div>
-
-                <div class="question" data-q="14">
-                    <p class="question-text"><span class="q-num">14.</span> Выстраивает предметы в линию или группирует необычно?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q14" id="q14-yes" value="yes"><label for="q14-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q14" id="q14-no" value="no"><label for="q14-no">НЕТ</label></div>
-                    </div>
-                </div>
-
-                <div class="question" data-q="15">
-                    <p class="question-text"><span class="q-num">15.</span> Играет с игрушками как другие дети его возраста?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q15" id="q15-yes" value="yes"><label for="q15-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q15" id="q15-no" value="no"><label for="q15-no">НЕТ</label></div>
-                    </div>
-                </div>
+                <h3>Бережно</h3>
+                <p>Без жёстких ограничений, запретов и чувства вины. Только комфортные изменения в вашем темпе.</p>
             </div>
-
-            <!-- РАЗДЕЛ 4 -->
-            <div class="section">
-                <div class="section-title">🔄 Повторяющееся поведение</div>
-
-                <div class="question" data-q="16">
-                    <p class="question-text"><span class="q-num">16.</span> Есть необычные интересы, занимающие много времени?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q16" id="q16-yes" value="yes"><label for="q16-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q16" id="q16-no" value="no"><label for="q16-no">НЕТ</label></div>
-                    </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <i class="fas fa-lock"></i>
                 </div>
-
-                <div class="question" data-q="17">
-                    <p class="question-text"><span class="q-num">17.</span> Расстраивается, если меняется привычный распорядок?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q17" id="q17-yes" value="yes"><label for="q17-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q17" id="q17-no" value="no"><label for="q17-no">НЕТ</label></div>
-                    </div>
-                </div>
-
-                <div class="question" data-q="18">
-                    <p class="question-text"><span class="q-num">18.</span> Повторяет движения (машет руками, крутится)?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q18" id="q18-yes" value="yes"><label for="q18-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q18" id="q18-no" value="no"><label for="q18-no">НЕТ</label></div>
-                    </div>
-                </div>
-
-                <div class="question" data-q="19">
-                    <p class="question-text"><span class="q-num">19.</span> Настаивает, чтобы всё было «правильно»?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q19" id="q19-yes" value="yes"><label for="q19-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q19" id="q19-no" value="no"><label for="q19-no">НЕТ</label></div>
-                    </div>
-                </div>
-
-                <div class="question" data-q="20">
-                    <p class="question-text"><span class="q-num">20.</span> Сильно реагирует на изменения (плачет при другой дороге)?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q20" id="q20-yes" value="yes"><label for="q20-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q20" id="q20-no" value="no"><label for="q20-no">НЕТ</label></div>
-                    </div>
-                </div>
+                <h3>Конфиденциально</h3>
+                <p>Вся информация о вас остаётся строго между нами. Полная приватность.</p>
             </div>
-
-            <!-- РАЗДЕЛ 5 -->
-            <div class="section">
-                <div class="section-title">👁️ Сенсорные особенности</div>
-
-                <div class="question" data-q="21">
-                    <p class="question-text"><span class="q-num">21.</span> Необычно реагирует на звуки (закрывает уши при обычных)?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q21" id="q21-yes" value="yes"><label for="q21-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q21" id="q21-no" value="no"><label for="q21-no">НЕТ</label></div>
-                    </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <i class="fas fa-globe"></i>
                 </div>
-
-                <div class="question" data-q="22">
-                    <p class="question-text"><span class="q-num">22.</span> Необычно реагирует на прикосновения (не любит одежду)?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q22" id="q22-yes" value="yes"><label for="q22-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q22" id="q22-no" value="no"><label for="q22-no">НЕТ</label></div>
-                    </div>
-                </div>
-
-                <div class="question" data-q="23">
-                    <p class="question-text"><span class="q-num">23.</span> Нюхает или облизывает предметы необычно?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q23" id="q23-yes" value="yes"><label for="q23-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q23" id="q23-no" value="no"><label for="q23-no">НЕТ</label></div>
-                    </div>
-                </div>
-
-                <div class="question" data-q="24">
-                    <p class="question-text"><span class="q-num">24.</span> Интересуется визуальными эффектами (вращающиеся предметы, свет)?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q24" id="q24-yes" value="yes"><label for="q24-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q24" id="q24-no" value="no"><label for="q24-no">НЕТ</label></div>
-                    </div>
-                </div>
+                <h3>Онлайн</h3>
+                <p>Работаем дистанционно из любой точки мира. Удобно, гибко, без привязки к месту.</p>
             </div>
-
-            <!-- РАЗДЕЛ 6 -->
-            <div class="section">
-                <div class="section-title">🎭 Имитационное поведение</div>
-
-                <div class="question" data-q="25">
-                    <p class="question-text"><span class="q-num">25.</span> Постоянно копирует персонажей/животных (бегает, кричит как динозавр)?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q25" id="q25-yes" value="yes"><label for="q25-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q25" id="q25-no" value="no"><label for="q25-no">НЕТ</label></div>
-                    </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <i class="fas fa-chart-line"></i>
                 </div>
-
-                <div class="question" data-q="26">
-                    <p class="question-text"><span class="q-num">26.</span> Немедленно воспроизводит увиденное в мультфильмах?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q26" id="q26-yes" value="yes"><label for="q26-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q26" id="q26-no" value="no"><label for="q26-no">НЕТ</label></div>
-                    </div>
-                </div>
-
-                <div class="question" data-q="27">
-                    <p class="question-text"><span class="q-num">27.</span> Это имитационное поведение занимает большую часть времени?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q27" id="q27-yes" value="yes"><label for="q27-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q27" id="q27-no" value="no"><label for="q27-no">НЕТ</label></div>
-                    </div>
-                </div>
-
-                <div class="question" data-q="28">
-                    <p class="question-text"><span class="q-num">28.</span> Может остановить это поведение, если попросить?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q28" id="q28-yes" value="yes"><label for="q28-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q28" id="q28-no" value="no"><label for="q28-no">НЕТ</label></div>
-                    </div>
-                </div>
+                <h3>Системно</h3>
+                <p>Пошаговое сопровождение от первой заявки до устойчивого результата.</p>
             </div>
-
-            <!-- РАЗДЕЛ 7 -->
-            <div class="section">
-                <div class="section-title">😰 Социальная тревожность</div>
-
-                <div class="question" data-q="29">
-                    <p class="question-text"><span class="q-num">29.</span> Сильно расстраивается в новых ситуациях с незнакомыми людьми?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q29" id="q29-yes" value="yes"><label for="q29-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q29" id="q29-no" value="no"><label for="q29-no">НЕТ</label></div>
-                    </div>
-                </div>
-
-                <div class="question" data-q="30">
-                    <p class="question-text"><span class="q-num">30.</span> Отказывается ходить в гости или принимать гостей?</p>
-                    <div class="options">
-                        <div class="option"><input type="radio" name="q30" id="q30-yes" value="yes"><label for="q30-yes">ДА</label></div>
-                        <div class="option"><input type="radio" name="q30" id="q30-no" value="no"><label for="q30-no">НЕТ</label></div>
-                    </div>
-                </div>
-            </div>
-
-        </form>
-
-        <button class="btn" onclick="calculate()">📊 Показать результат</button>
-
-        <div class="results" id="results">
-            <div class="score" id="score-display"></div>
-            <div class="risk-title" id="risk-title"></div>
-            <div class="risk-desc" id="risk-desc"></div>
-
-            <div id="sections" style="margin: 20px 0;"></div>
-
-            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 20px;">
-                <h4 style="margin-bottom: 10px;">Рекомендации:</h4>
-                <ul id="recommendations" style="list-style: none; padding: 0;"></ul>
-            </div>
-
-            <button class="btn" onclick="restart()" style="background: #95a5a6;">🔄 Пройти заново</button>
         </div>
+    </section>
 
-        <footer>
-            ⚠️ Это предварительная оценка, не заменяет врача. При сомнениях обратитесь к специалисту.
-        </footer>
-    </div>
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <h2 class="section-title">Как проходит работа</h2>
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">01</div>
+                <div class="step-content">
+                    <h3>Заявка</h3>
+                    <p>Вы оставляете заявку и выбираете подходящую услугу. Я свяжусь с вами для уточнения деталей.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">02</div>
+                <div class="step-content">
+                    <h3>Анализ</h3>
+                    <p>Вы заполняете анкету о своём питании, привычках и целях. Я внимательно изучаю всю информацию.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">03</div>
+                <div class="step-content">
+                    <h3>Рекомендации</h3>
+                    <p>Вы получаете персональные рекомендации в удобном формате — письменно, с пояснениями и примерами.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">04</div>
+                <div class="step-content">
+                    <h3>Сопровождение</h3>
+                    <p>Я остаюсь на связи, отвечаю на вопросы и помогаю адаптировать рекомендации под вашу жизнь.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <h2 class="section-title">Услуги</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>Онлайн-консультация по питанию (взрослые)</h3>
+                <div class="service-price">15 €</div>
+                <p class="service-description">Индивидуальная онлайн-консультация по вопросам питания и образа жизни. Разбираем цели, текущий рацион, режим дня и привычки. Консультация помогает понять, с чего начать и как выстроить питание без жёстких ограничений.</p>
+                <div class="service-meta">
+                    <span class="service-tag"><i class="fas fa-laptop"></i> Онлайн</span>
+                    <span class="service-tag"><i class="fas fa-user"></i> Взрослым</span>
+                </div>
+                <div class="service-buttons">
+                    <a href="#contact" class="btn-primary">Записаться</a>
+                    <a href="#contact" class="btn-secondary">Подробнее</a>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <h3>Онлайн-консультация по детскому питанию</h3>
+                <div class="service-price">15 €</div>
+                <p class="service-description">Консультация для родителей по вопросам питания ребёнка. Обсуждаем рацион, режим, пищевое поведение и привычки с учётом возраста и образа жизни семьи.</p>
+                <div class="service-meta">
+                    <span class="service-tag"><i class="fas fa-laptop"></i> Онлайн</span>
+                    <span class="service-tag"><i class="fas fa-child"></i> Детям и родителям</span>
+                </div>
+                <div class="service-buttons">
+                    <a href="#contact" class="btn-primary">Записаться</a>
+                    <a href="#contact" class="btn-secondary">Подробнее</a>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <h3>Коррекция текущего питания</h3>
+                <div class="service-price">15 €</div>
+                <p class="service-description">Анализ текущего рациона и рекомендации по его улучшению. Подходит тем, кто уже питается осознанно, но хочет сделать рацион более сбалансированным и удобным.</p>
+                <div class="service-meta">
+                    <span class="service-tag"><i class="fas fa-laptop"></i> Онлайн</span>
+                    <span class="service-tag"><i class="fas fa-user"></i> Взрослым</span>
+                </div>
+                <div class="service-buttons">
+                    <a href="#contact" class="btn-primary">Записаться</a>
+                    <a href="#contact" class="btn-secondary">Подробнее</a>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <h3>Индивидуальное меню</h3>
+                <div class="service-price">от 15 €</div>
+                <p class="service-description">Персональное меню, составленное с учётом целей, вкусовых предпочтений, образа жизни и режима дня. Меню помогает упростить питание и снять ежедневные вопросы «что приготовить».</p>
+                <div class="service-meta">
+                    <span class="service-tag"><i class="fas fa-laptop"></i> Онлайн</span>
+                    <span class="service-tag"><i class="fas fa-users"></i> Взрослым, семьям</span>
+                </div>
+                <div class="service-buttons">
+                    <a href="#contact" class="btn-primary">Записаться</a>
+                    <a href="#contact" class="btn-secondary">Подробнее</a>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <h3>WhatsApp-сопровождение</h3>
+                <div class="service-price">от 15 €</div>
+                <p class="service-description">Поддержка и обратная связь в чате. Корректировки питания, ответы на вопросы и сопровождение в процессе изменений.</p>
+                <div class="service-meta">
+                    <span class="service-tag"><i class="fas fa-laptop"></i> Онлайн</span>
+                    <span class="service-tag"><i class="fas fa-user"></i> Взрослым</span>
+                </div>
+                <div class="service-buttons">
+                    <a href="#contact" class="btn-primary">Записаться</a>
+                    <a href="#contact" class="btn-secondary">Подробнее</a>
+                </div>
+            </div>
+
+            <div class="service-card premium">
+                <h3>Премиальное VIP-сопровождение</h3>
+                <div class="service-price">80 €</div>
+                <p class="service-description">Максимально персональный формат работы. Постоянный контакт, индивидуальный подход, сопровождение и контроль прогресса в комфортном темпе.</p>
+                <div class="service-meta">
+                    <span class="service-tag"><i class="fas fa-laptop"></i> Онлайн</span>
+                    <span class="service-tag"><i class="fas fa-user"></i> Взрослым</span>
+                </div>
+                <div class="service-buttons">
+                    <a href="#contact" class="btn-primary">Записаться</a>
+                    <a href="#contact" class="btn-secondary">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Methods Section -->
+    <section class="payment">
+        <h2 class="section-title">Способы оплаты</h2>
+        <div class="payment-content">
+            <p class="section-text">Оплата услуг происходит онлайн. Доступные способы:</p>
+            <div class="payment-methods">
+                <div class="payment-method">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Банковская карта (Visa, Mastercard)</span>
+                </div>
+                <div class="payment-method">
+                    <i class="fas fa-university"></i>
+                    <span>Банковский перевод (SEPA, международный)</span>
+                </div>
+                <div class="payment-method">
+                    <i class="fas fa-wallet"></i>
+                    <span>Wise</span>
+                </div>
+                <div class="payment-method">
+                    <i class="fab fa-paypal"></i>
+                    <span>PayPal</span>
+                </div>
+            </div>
+            <p class="section-text" style="margin-top: 2rem;">После оплаты вы получите подтверждение на email и ссылку на анкету для начала работы. Все платежи защищены и безопасны.</p>
+            <div class="payment-icons">
+                <i class="fab fa-cc-visa payment-icon"></i>
+                <i class="fab fa-cc-mastercard payment-icon"></i>
+                <i class="fab fa-paypal payment-icon"></i>
+                <i class="fas fa-money-check-alt payment-icon"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq" id="faq">
+        <h2 class="section-title">Частые вопросы</h2>
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Кому подойдут ваши услуги?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Всем, кто хочет разобраться в своём питании, улучшить пищевые привычки или получить индивидуальные рекомендации. Я работаю со взрослыми и консультирую родителей по детскому питанию.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Как проходит работа, если мы не созваниваемся?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Вся работа проходит в письменном формате. Вы заполняете анкету, я анализирую информацию и отправляю вам подробные рекомендации. Общение — через мессенджер или email.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Как оплатить услуги?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Оплата происходит онлайн — банковской картой, переводом, через Wise или PayPal. После оплаты вы получаете доступ к анкете и мы начинаем работу.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Вы даёте медицинские рекомендации?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Нет. Мои услуги носят консультационно-образовательный характер. Я не ставлю диагнозы и не назначаю лечение. Если у вас есть заболевания, рекомендую сначала проконсультироваться с врачом.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Можно ли получить возврат?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Если работа ещё не началась, возврат возможен в течение 14 дней. После отправки рекомендаций услуга считается оказанной.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <h2 class="section-title">Свяжитесь со мной</h2>
+        <p class="section-text">Остались вопросы или хотите записаться? Напишите мне удобным способом — отвечу в течение 24 часов.</p>
+
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3>Контакты</h3>
+                <div class="contact-methods">
+                    <a href="https://wa.me/33667650384" target="_blank" rel="noopener noreferrer" class="contact-method">
+                        <i class="fab fa-whatsapp"></i>
+                        <div class="contact-method-info">
+                            <div class="contact-method-label">WhatsApp</div>
+                            <div class="contact-method-value">+33 6 67 65 03 84</div>
+                        </div>
+                    </a>
+                    <a href="https://t.me/global_aina_nutrition" target="_blank" rel="noopener noreferrer" class="contact-method">
+                        <i class="fab fa-telegram"></i>
+                        <div class="contact-method-info">
+                            <div class="contact-method-label">Telegram</div>
+                            <div class="contact-method-value">@global_aina_nutrition</div>
+                        </div>
+                    </a>
+                    <a href="mailto:globalainanutrition@gmail.com" class="contact-method">
+                        <i class="fas fa-envelope"></i>
+                        <div class="contact-method-info">
+                            <div class="contact-method-label">Email</div>
+                            <div class="contact-method-value">globalainanutrition@gmail.com</div>
+                        </div>
+                    </a>
+                </div>
+                <div style="margin-top: 2rem; padding: 1.5rem; background-color: var(--primary-bg); border-radius: 10px;">
+                    <p style="margin-bottom: 0.5rem;"><strong><i class="fas fa-map-marker-alt" style="color: var(--accent-color);"></i> Локация:</strong></p>
+                    <p style="font-size: 1.1rem;">France</p>
+                </div>
+            </div>
+
+            <div class="contact-form">
+                <form id="contact-form" action="#" method="POST" onsubmit="handleFormSubmit(event)">
+                    <div class="form-group">
+                        <label for="name">Имя <span style="color: red;">*</span></label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email <span style="color: red;">*</span></label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Телефон / мессенджер</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="age-group">Возраст <span style="color: red;">*</span></label>
+                        <select id="age-group" name="age-group" required>
+                            <option value="">Выберите...</option>
+                            <option value="adult">Взрослый</option>
+                            <option value="child">Ребёнок</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="service">Какая услуга интересует?</label>
+                        <select id="service" name="service">
+                            <option value="">Выберите услугу...</option>
+                            <option value="consultation-adult">Онлайн-консультация по питанию (взрослые)</option>
+                            <option value="consultation-child">Онлайн-консультация по детскому питанию</option>
+                            <option value="correction">Коррекция текущего питания</option>
+                            <option value="menu">Индивидуальное меню</option>
+                            <option value="whatsapp">WhatsApp-сопровождение</option>
+                            <option value="vip">Премиальное VIP-сопровождение</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="goal">Цель обращения <span style="color: red;">*</span></label>
+                        <textarea id="goal" name="goal" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="comment">Комментарий (необязательно)</label>
+                        <textarea id="comment" name="comment"></textarea>
+                    </div>
+                    <button type="submit" class="form-submit">Отправить заявку</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="final-cta">
+        <h2>Готовы начать?</h2>
+        <p>Первый шаг к осознанному питанию — это решение. Всё остальное мы сделаем вместе.</p>
+        <a href="#contact" class="cta-button">Записаться на консультацию</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="disclaimer">
+                <strong style="font-size: 1.2rem; color: var(--accent-color); display: block; margin-bottom: 1rem;">
+                    <i class="fas fa-info-circle"></i> Важная информация:
+                </strong>
+                Все услуги предоставляются онлайн и носят консультационно-образовательный характер. Медицинская диагностика и лечение не осуществляются. Рекомендации не заменяют консультацию с врачом. При наличии заболеваний проконсультируйтесь с медицинским специалистом.
+            </div>
+
+            <div class="footer-top">
+                <div class="footer-section">
+                    <h3 class="logo">Global Aina Nutrition</h3>
+                    <p>Эксперт по питанию</p>
+                    <p>Айна Мусхаджиева</p>
+                    <p style="margin-top: 1rem;"><i class="fas fa-map-marker-alt"></i> France</p>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Контакты</h3>
+                    <a href="mailto:globalainanutrition@gmail.com">
+                        <i class="fas fa-envelope"></i> globalainanutrition@gmail.com
+                    </a>
+                    <a href="https://wa.me/33667650384" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-whatsapp"></i> +33 6 67 65 03 84
+                    </a>
+                    <a href="https://t.me/global_aina_nutrition" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-telegram"></i> @global_aina_nutrition
+                    </a>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Информация</h3>
+                    <p>Консультационно-образовательные услуги по питанию</p>
+                    <p>Работаем онлайн</p>
+                    <p>Цены от 15 €</p>
+                </div>
+            </div>
+
+            <div class="footer-policies">
+                <a href="#privacy">Политика конфиденциальности</a>
+                <a href="#terms">Условия использования</a>
+                <a href="#refund">Политика возврата</a>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 Global Aina Nutrition. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        // Reverse scoring questions (NO = 1 point)
-        const reverse = [1,2,3,6,7,8,9,11,12,15,28];
+        // Mobile Menu Toggle
+        const mobileToggle = document.getElementById('mobile-toggle');
+        const nav = document.getElementById('nav');
 
-        // Track progress
-        document.querySelectorAll('input[type="radio"]').forEach(radio => {
-            radio.addEventListener('change', () => {
-                const answered = document.querySelectorAll('input[type="radio"]:checked').length;
-                document.getElementById('answered').textContent = answered;
-                document.getElementById('progress').style.width = (answered/30*100) + '%';
+        mobileToggle.addEventListener('click', () => {
+            mobileToggle.classList.toggle('active');
+            nav.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        const navLinks = nav.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileToggle.classList.remove('active');
+                nav.classList.remove('active');
             });
         });
 
-        function calculate() {
-            let score = 0, missed = [];
-
-            // Check all answered
-            for(let i=1; i<=30; i++) {
-                const q = document.querySelector(`[data-q="${i}"]`);
-                if(!document.querySelector(`input[name="q${i}"]:checked`)) {
-                    missed.push(i);
-                    q.classList.add('unanswered');
-                } else {
-                    q.classList.remove('unanswered');
-                }
-            }
-
-            if(missed.length > 0) {
-                alert(`❌ Ответьте на вопросы: ${missed.join(', ')}`);
-                document.querySelector(`[data-q="${missed[0]}"]`).scrollIntoView({ behavior: 'smooth', block: 'center' });
-                return;
-            }
-
-            // Calculate score
-            for(let i=1; i<=30; i++) {
-                const ans = document.querySelector(`input[name="q${i}"]:checked`).value;
-                if(reverse.includes(i)) {
-                    if(ans === 'no') score++;
-                } else {
-                    if(ans === 'yes') score++;
-                }
-            }
-
-            showResults(score);
-        }
-
-        function showResults(score) {
-            const result = document.getElementById('results');
-            result.style.display = 'block';
-
-            let level, title, desc, color, recs;
-
-            if(score <= 10) {
-                level = 'low';
-                title = '✅ Низкий риск';
-                desc = 'Особенности в пределах нормы';
-                color = '#2ecc71';
-                recs = ['Продолжайте наблюдение', 'Регулярные осмотры у педиатра'];
-            } else if(score <= 14) {
-                level = 'medium';
-                title = '⚠️ Пограничный результат';
-                desc = 'Наблюдение + повторная оценка через 3-6 мес';
-                color = '#f39c12';
-                recs = ['Ведите дневник наблюдений', 'Обсудите с педиатром', 'При усилении — к психологу'];
+        // Header scroll effect
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
             } else {
-                level = 'high';
-                title = '🔴 Высокий риск';
-                desc = 'Необходима консультация детского психиатра/невролога';
-                color = '#e74c3c';
-                recs = ['Направление к психиатру', 'Комплексная диагностика', 'Ранняя диагностика важна'];
+                header.classList.remove('scrolled');
             }
+        });
 
-            document.getElementById('score-display').textContent = score;
-            document.getElementById('score-display').className = 'score ' + level;
-            document.getElementById('risk-title').textContent = title;
-            document.getElementById('risk-title').style.color = color;
-            document.getElementById('risk-desc').textContent = desc;
+        // FAQ Accordion
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            const answer = item.querySelector('.faq-answer');
 
-            // Section breakdown
-            const sectionData = [
-                {name: 'Речь', questions: [1,2,3,4,5]},
-                {name: 'Социальное', questions: [6,7,8,9,10,11]},
-                {name: 'Игра', questions: [12,13,14,15]},
-                {name: 'Поведение', questions: [16,17,18,19,20]},
-                {name: 'Сенсорика', questions: [21,22,23,24]},
-                {name: 'Имитация', questions: [25,26,27,28]},
-                {name: 'Тревожность', questions: [29,30]}
-            ];
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
 
-            let sectionsHTML = '<h4 style="margin-bottom: 10px;">Разбивка по секциям:</h4>';
-            sectionData.forEach(s => {
-                let secScore = 0;
-                s.questions.forEach(qNum => {
-                    const ans = document.querySelector(`input[name="q${qNum}"]:checked`).value;
-                    if(reverse.includes(qNum)) {
-                        if(ans === 'no') secScore++;
-                    } else {
-                        if(ans === 'yes') secScore++;
-                    }
+                // Close all FAQ items
+                faqItems.forEach(faqItem => {
+                    faqItem.classList.remove('active');
+                    faqItem.querySelector('.faq-answer').style.maxHeight = null;
                 });
-                const perc = Math.round(secScore / s.questions.length * 100);
-                const barColor = perc < 33 ? '#2ecc71' : perc < 66 ? '#f39c12' : '#e74c3c';
 
-                sectionsHTML += `
-                    <div class="section-result">
-                        <div class="section-result-title">${s.name}: ${secScore}/${s.questions.length}</div>
-                        <div class="section-result-bar">
-                            <div class="section-result-fill" style="width: ${perc}%; background: ${barColor};"></div>
-                        </div>
-                    </div>
-                `;
+                // Open clicked item if it wasn't active
+                if (!isActive) {
+                    item.classList.add('active');
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                }
             });
-            document.getElementById('sections').innerHTML = sectionsHTML;
+        });
 
-            // Recommendations
-            document.getElementById('recommendations').innerHTML = recs.map(r => `<li style="padding: 5px 0;">→ ${r}</li>`).join('');
+        // Form submission handler
+        function handleFormSubmit(event) {
+            event.preventDefault();
 
-            result.scrollIntoView({ behavior: 'smooth' });
+            const formData = new FormData(event.target);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            // Here you would typically send the data to a server
+            // For now, we'll just show an alert and log to console
+            console.log('Form submitted:', data);
+
+            alert('Спасибо за вашу заявку! Я свяжусь с вами в ближайшее время.\n\nА пока можете написать мне напрямую:\n\nWhatsApp: +33 6 67 65 03 84\nTelegram: @global_aina_nutrition\nEmail: globalainanutrition@gmail.com');
+
+            event.target.reset();
         }
 
-        function restart() {
-            document.getElementById('quiz').reset();
-            document.getElementById('results').style.display = 'none';
-            document.getElementById('answered').textContent = '0';
-            document.getElementById('progress').style.width = '0%';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        // Smooth scroll for all anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && href !== '#privacy' && href !== '#terms' && href !== '#refund') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        const headerOffset = 80;
+                        const elementPosition = target.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe sections for animation
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
     </script>
 </body>
 </html>
