@@ -1406,9 +1406,12 @@
                 data[key] = value;
             });
 
-            // Here you would typically send the data to a server
-            // For now, we'll just show an alert and log to console
-            console.log('Form submitted:', data);
+            // Open the visitor's mail client with the request filled in,
+            // addressed to the business email (no third-party service needed)
+            const lines = Object.entries(data).map(([key, value]) => `${key}: ${value}`);
+            const subject = encodeURIComponent('Новая заявка с сайта');
+            const body = encodeURIComponent(lines.join('\n'));
+            window.location.href = `mailto:globalainanutrition@gmail.com?subject=${subject}&body=${body}`;
 
             alert('Спасибо за вашу заявку! Я свяжусь с вами в ближайшее время.\n\nА пока можете написать мне напрямую:\n\nWhatsApp: +33 6 67 65 03 84\nTelegram: @global_aina_nutrition\nEmail: globalainanutrition@gmail.com');
 
