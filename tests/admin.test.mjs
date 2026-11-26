@@ -43,7 +43,7 @@ test('password hash: correct password verifies, wrong or malformed does not', as
   assert.equal(await verifyPassword('wrong password here', hash), false);
   assert.equal(await verifyPassword(PASSWORD, 'not-a-hash'), false);
   assert.equal(await verifyPassword(PASSWORD, null), false);
-  assert.match(hash, /^scrypt\$/);
+  assert.match(hash, /^scrypt:/);
   assert.ok(!hash.includes(PASSWORD), 'the hash must not contain the password');
 });
 

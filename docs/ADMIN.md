@@ -28,10 +28,10 @@
    ```bash
    read -rs ADMIN_PW && printf '%s' "$ADMIN_PW" | node scripts/admin-password.mjs; unset ADMIN_PW
    ```
-   Скрипт выведет строку `ADMIN_PASSWORD_HASH=scrypt$…`. Её можно передать в `.env` на сервере. Это не секрет в полном смысле, но и не для чата.
+   Скрипт выведет строку `ADMIN_PASSWORD_HASH=scrypt:…`. Её можно передать в `.env` на сервере. Это не секрет в полном смысле, но и не для чата.
 3. **Добавьте в `.env` на сервере** (файл вне git):
    ```
-   ADMIN_PASSWORD_HASH=scrypt$16384$8$1$…
+   ADMIN_PASSWORD_HASH=scrypt:16384:8:1:…
    ```
    Перезапустите API. Если значение похоже на обычный пароль, сервер откажется запускаться в production (проверка в `server/config.mjs`).
 4. Откройте `https://<адрес API>/admin` на iPhone, войдите, при желании добавьте на экран «Домой».

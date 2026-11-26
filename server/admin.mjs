@@ -12,7 +12,7 @@ import { ledgerRows, ledgerTotals, toCsv } from './ledger.mjs';
 
 const scrypt = promisify(scryptCb);
 const HERE = dirname(fileURLToPath(import.meta.url));
-export const ADMIN_HASH_RE = /^scrypt\$(\d+)\$(\d+)\$(\d+)\$([A-Za-z0-9+/=]{16,})\$([A-Za-z0-9+/=]{32,})$/;
+export const ADMIN_HASH_RE = /^scrypt:(\d+):(\d+):(\d+):([A-Za-z0-9+/=]{16,}):([A-Za-z0-9+/=]{32,})$/;
 export const SESSION_MS = 8 * 60 * 60 * 1000;   // 8 hours, then log in again
 const LOGIN_WINDOW_MS = 15 * 60 * 1000;
 const LOGIN_MAX = 5;                             // failed attempts per client per window
@@ -26,7 +26,7 @@ export async function hashPassword(password, { N = 16384, r = 8, p = 1 } = {}) {
   if (typeof password !== 'string' || password.length < 12 || password.length > 200) throw new Error('password must be 12–200 characters');
   const salt = randomBytes(16);
   const key = await scrypt(password, salt, 32, { N, r, p, maxmem: 64 * 1024 * 1024 });
-  return `scrypt$${N}$${r}$${p}$${salt.toString('base64')}$${key.toString('base64')}`;
+  return `scrypt:${N}:${r}:${p}:${salt.toString('base64')}:${key.toString('base64')}`;
 }
 
 export async function verifyPassword(password, stored) {

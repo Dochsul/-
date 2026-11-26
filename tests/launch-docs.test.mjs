@@ -6,12 +6,12 @@ import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const LAUNCH = ['docs/LAUNCH.md'];
+const LAUNCH = ['docs/LAUNCH.md', 'docs/DEPLOY_STEPS.md'];
 // Variables that the owner must put into the server's .env (secrets are entered by the owner only).
 const SETTINGS = [
   'PAYMENTS_ENABLED', 'LIVE_PAYMENTS_APPROVED', 'REVOLUT_ENV', 'REVOLUT_API_KEY', 'REVOLUT_WEBHOOK_SECRET',
   'SMTP_HOST', 'SMTP_PORT', 'SMTP_SECURE', 'SMTP_USER', 'SMTP_PASS', 'MAIL_FROM', 'MAIL_FROM_NAME',
-  'OWNER_CHANNEL', 'CLIENT_CHANNEL', 'BACKUP_PASSPHRASE', 'BACKUP_PING_URL',
+  'OWNER_CHANNEL', 'CLIENT_CHANNEL', 'ALLOWED_ORIGINS', 'CHECKOUT_SUCCESS_URL', 'CHECKOUT_CANCEL_URL', 'ENABLED_CURRENCIES', 'PAYMENT_PROVIDER', 'BACKUP_PASSPHRASE', 'BACKUP_PING_URL',
   'S3_ENDPOINT', 'S3_REGION', 'S3_BUCKET', 'S3_ACCESS_KEY_ID', 'S3_SECRET_ACCESS_KEY',
   'ADMIN_PASSWORD_HASH', 'IP_SALT', 'TRUST_PROXY', 'SITE_URL', 'API_DOMAIN',
 ];
@@ -39,7 +39,7 @@ test('every setting named in the launch guide is read by the code or the deploym
 });
 
 test('the launch guide never contains a value that looks like a real secret', () => {
-  const doc = readFileSync(join(ROOT, 'docs/LAUNCH.md'), 'utf8');
+  const doc = LAUNCH.map((f) => readFileSync(join(ROOT, f), 'utf8')).join('\n');
   assert.doesNotMatch(doc, /wsk_[A-Za-z0-9]{10,}/);
   assert.doesNotMatch(doc, /sk_(test|live)_[A-Za-z0-9]{8,}/);
   assert.doesNotMatch(doc, /\b940094709\b/, 'the SIREN must not be published in the repository');

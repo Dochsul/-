@@ -32,4 +32,6 @@ runcmd:
   - systemctl enable --now fail2ban
   - dpkg-reconfigure -f noninteractive unattended-upgrades
   - systemctl restart ssh
+  # The repository is public and contains no secrets; the server then runs deploy/setup-server.sh (see docs/DEPLOY_STEPS.md).
+  - git clone --depth 50 --branch claude/code-setup-plugin-c368la https://github.com/Dochsul/-.git /opt/aina
   - mkdir -p /opt/aina/private/products && chown -R deploy:deploy /opt/aina

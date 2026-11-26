@@ -87,6 +87,8 @@ docker compose -f deploy/docker-compose.yml logs --tail=100 api
 
 ## Выбранные сервисы и порядок запуска (ноябрь 2026)
 
+Сервер настраивается скриптом `deploy/setup-server.sh` (вопросы и проверка), платежи переключаются `deploy/payments-switch.sh`. Пошагово — `docs/DEPLOY_STEPS.md`.
+
 Пошаговая инструкция для владельца — `docs/LAUNCH.md`. Здесь только то, что относится к серверу:
 
 - Сервер: Hetzner Cloud, Ubuntu 24.04, один общий сервер в ЕС; `deploy/cloud-init.yaml` (замените строку с публичным ключом).
