@@ -10,7 +10,9 @@ export const business = {
   siteUrl: process.env.SITE_URL || null,            // e.g. https://aina-evidence.example (confirm domain)
   contactEmail: 'globalainanutrition@gmail.com',    // known from the previous site; confirm it is the business mailbox
   contactPhone: '+33 6 67 65 03 84',               // known from the previous site; confirm
-  messenger: { whatsapp: 'https://wa.me/33667650384', telegram: 'https://t.me/global_aina_nutrition' },
+  // Channels as given by the owner (ноябрь 2026). TikTok is a handle only: the profile URL is not confirmed.
+  messenger: { whatsapp: 'https://wa.me/33667650384', telegram: 'https://t.me/+kTsVIJ15dAM5YzY0' },
+  social: { instagram: 'https://www.instagram.com/aina_evidence/', tiktok: 'AinaEvidence' },
   owner: {
     displayName: 'Айна Мусхаджиева',               // name as used on the site; confirm spelling for legal documents
     // Owner's own statement of qualification, per language. Diploma details (school, year) are to be confirmed (docs/ANKETA.md).
