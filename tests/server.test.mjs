@@ -18,12 +18,18 @@ const SECRET_KEY = 'sk_test_fake';
 const WEBHOOK = 'whsec_test_fake';
 const PDF = Buffer.from('%PDF-1.4 test content\n%%EOF');
 
-const catalog = [{
-  sku: SKU, currency: 'EUR', priceCents: 1900, published: true, contentConfirmed: true,
-  i18n: { ru: { title: 'Тест', summary: 's', topics: [] }, fr: { title: 'Test', summary: 's', topics: [] }, en: { title: 'Test', summary: 's', topics: [] } },
-}];
+const SKU2 = 'test-guide-2';
+const BUNDLE = 'test-bundle';
+const i18n = (t) => ({ ru: { title: t, summary: 's', topics: [] }, fr: { title: t, summary: 's', topics: [] }, en: { title: t, summary: 's', topics: [] } });
+const catalog = [
+  { sku: SKU, prices: { EUR: 1900, RUB: 190000 }, priceConfirmed: true, published: true, contentConfirmed: true, files: [SKU], i18n: i18n('Guide 1') },
+  { sku: SKU2, prices: { EUR: 900, RUB: null }, priceConfirmed: true, published: true, contentConfirmed: true, files: [SKU2], i18n: i18n('Guide 2') },
+  { sku: BUNDLE, prices: { EUR: 1990, RUB: 200000 }, priceConfirmed: true, published: true, contentConfirmed: true, files: [SKU, SKU2], i18n: i18n('Bundle') },
+  { sku: 'hidden', prices: { EUR: 500, RUB: null }, priceConfirmed: true, published: false, contentConfirmed: true, files: ['hidden'], i18n: i18n('Hidden') },
+  { sku: 'unpriced', prices: { EUR: null, RUB: null }, priceConfirmed: false, published: true, contentConfirmed: true, files: ['unpriced'], i18n: i18n('Unpriced') },
+];
 
-let base, server, db, dir, stripeCalls, sentStripe;
+let base, server, db, dir, stripeCalls, sentStripe, feeCalls = [];
 
 function signed(body, secret = WEBHOOK, t = Math.floor(Date.now() / 1000)) {
   const sig = createHmac('sha256', secret).update(`${t}.${body}`).digest('hex');
@@ -33,7 +39,14 @@ function signed(body, secret = WEBHOOK, t = Math.floor(Date.now() / 1000)) {
 const fakeFetch = async (url, init) => {
   if (String(url).startsWith('https://api.stripe.com/v1/checkout/sessions')) {
     stripeCalls.push({ url, init });
-    return new Response(JSON.stringify({ id: 'cs_test_1', url: 'https://checkout.stripe.test/c/cs_test_1' }), { status: 200, headers: { 'content-type': 'application/json' } });
+    // Stripe returns a unique session id per session; the first one keeps the historical name used by earlier tests.
+    const id = stripeCalls.length === 1 ? 'cs_test_1' : `cs_test_${stripeCalls.length}`;
+    return new Response(JSON.stringify({ id, url: `https://checkout.stripe.test/c/${id}` }), { status: 200, headers: { 'content-type': 'application/json' } });
+  }
+  if (String(url).startsWith('https://api.stripe.com/v1/payment_intents/')) {
+    feeCalls.push(String(url));
+    if (String(url).includes('pi_feefail')) return new Response('{}', { status: 500 });
+    return new Response(JSON.stringify({ latest_charge: { balance_transaction: { fee: 55, net: 1935, currency: 'eur' } } }), { status: 200 });
   }
   if (String(url).startsWith('https://api.telegram.org/')) {
     sentStripe.push(JSON.parse(init.body));
@@ -46,13 +59,16 @@ before(async () => {
   dir = mkdtempSync(join(tmpdir(), 'aina-test-'));
   mkdirSync(join(dir, 'private'), { recursive: true });
   writeFileSync(join(dir, 'private', `${SKU}.pdf`), PDF);
+  writeFileSync(join(dir, 'private', `${SKU2}.pdf`), PDF);
   mkdirSync(join(dir, 'dist'), { recursive: true });
   writeFileSync(join(dir, 'dist', 'index.html'), '<!doctype html><title>x</title>');
   db = openDb(':memory:');
   const config = {
     siteUrl: 'https://site.test', ipSalt: 'salt', ownerEmail: 'owner@test.fr', ownerChannel: 'file', clientChannel: 'file',
     trustProxy: false, paymentsEnabled: true, stripeSecretKey: SECRET_KEY, stripeWebhookSecret: WEBHOOK,
-    privateDir: join(dir, 'private'), distDir: join(dir, 'dist'), dataDir: dir, catalog, pricesConfirmed: true,
+    privateDir: join(dir, 'private'), distDir: join(dir, 'dist'), dataDir: dir, catalog, fileSkus: [SKU, SKU2, 'hidden', 'unpriced'],
+    enabledCurrencies: ['EUR'], allowedOrigins: ['https://tilda.test'],
+    checkoutSuccessUrl: 'https://tilda.test/{locale}/merci', checkoutCancelUrl: 'https://tilda.test/{locale}/panier',
     blockedCountries: ['RU', 'BY'], downloadValidityDays: 7, downloadMaxCount: 5, telegram: {},
   };
   config.transportsFor = () => createTransports({ dataDir: dir, telegram: { token: 't', chatId: '1' }, fetchImpl: fakeFetch });
@@ -176,25 +192,48 @@ test('checkout: unknown or unpublished product cannot be bought', async () => {
 });
 
 test('checkout: price comes from the server catalog, client prices are ignored', async () => {
-  const res = await post('/api/checkout', { locale: 'en', email: 'b@example.com', items: [{ sku: SKU, qty: 2 }], acceptTerms: true, acceptDigital: true, priceCents: 1, amount: 1 });
+  const res = await post('/api/checkout', { locale: 'en', email: 'b@example.com', items: [{ sku: SKU, qty: 1, priceCents: 1 }], acceptTerms: true, acceptDigital: true, amount: 1 });
   assert.equal(res.status, 200);
-  assert.equal((await res.json()).url, 'https://checkout.stripe.test/c/cs_test_1');
+  assert.match((await res.json()).url, /^https:\/\/checkout\.stripe\.test\/c\/cs_test_\d+$/);
   const sent = new URLSearchParams(stripeCalls.at(-1).init.body);
   assert.equal(sent.get('line_items[0][price_data][unit_amount]'), '1900');
-  assert.equal(sent.get('line_items[0][quantity]'), '2');
+  assert.equal(sent.get('line_items[0][quantity]'), '1');
+  assert.equal(sent.get('success_url'), 'https://tilda.test/en/merci');
+  assert.equal(sent.get('cancel_url'), 'https://tilda.test/en/panier');
   assert.match(stripeCalls.at(-1).init.headers['Idempotency-Key'], /^order-/);
   const order = db.prepare('SELECT * FROM orders ORDER BY created_at DESC LIMIT 1').get();
-  assert.equal(order.amount_cents, 3800);
+  assert.equal(order.amount_cents, 1900);
   assert.equal(order.status, 'pending_payment');
 });
 
 test('checkout: duplicate items and too many items are refused', () => {
   assert.throws(() => validateCheckout({ email: 'a@b.fr', acceptTerms: true, acceptDigital: true, items: [{ sku: SKU, qty: 1 }, { sku: SKU, qty: 1 }] }), /duplicate/);
-  assert.throws(() => validateCheckout({ email: 'a@b.fr', acceptTerms: true, acceptDigital: true, items: [{ sku: SKU, qty: 11 }] }), /invalid item/);
+  assert.throws(() => validateCheckout({ email: 'a@b.fr', acceptTerms: true, acceptDigital: true, items: [{ sku: SKU, qty: 2 }] }), /invalid item/);
+  assert.throws(() => validateCheckout({ email: 'a@b.fr', acceptTerms: true, acceptDigital: true, currency: 'USD', items: [{ sku: SKU }] }), /unsupported currency/);
 });
 
-test('checkout: no prices are confirmed means no sale', () => {
-  assert.equal(priceOrder([{ sku: SKU, qty: 1 }], catalog, false).error, 'prices_not_confirmed');
+test('checkout: unconfirmed, unpriced or unpublished products are not sold', () => {
+  assert.equal(priceOrder([{ sku: 'unpriced' }], 'EUR', catalog, ['EUR']).error, 'product_unavailable');
+  assert.equal(priceOrder([{ sku: 'hidden' }], 'EUR', catalog, ['EUR']).error, 'product_unavailable');
+  assert.equal(priceOrder([{ sku: SKU2 }], 'RUB', catalog, ['EUR', 'RUB']).error, 'product_unavailable'); // no RUB price
+});
+
+test('checkout: RUB is refused while the currency is not enabled', async () => {
+  const res = await post('/api/checkout', { locale: 'ru', currency: 'RUB', email: 'r@example.com', items: [{ sku: BUNDLE }], acceptTerms: true, acceptDigital: true });
+  assert.equal(res.status, 409);
+  assert.equal((await res.json()).error, 'currency_not_enabled');
+});
+
+test('checkout: RUB pricing uses the RUB catalog price when the currency is enabled', () => {
+  const r = priceOrder([{ sku: BUNDLE }], 'RUB', catalog, ['EUR', 'RUB']);
+  assert.equal(r.amountCents, 200000);
+  assert.equal(r.currency, 'RUB');
+});
+
+test('checkout: a bundle cannot be bought together with a guide it contains', async () => {
+  const res = await post('/api/checkout', { locale: 'en', email: 'o@example.com', items: [{ sku: BUNDLE }, { sku: SKU }], acceptTerms: true, acceptDigital: true });
+  assert.equal(res.status, 409);
+  assert.equal((await res.json()).error, 'bundle_overlap');
 });
 
 // ---------- Stripe webhook ----------
@@ -334,4 +373,124 @@ test('health endpoint reports payment status without secrets', async () => {
   const body = await (await fetch(base + '/api/health')).json();
   assert.equal(body.ok, true);
   assert.equal(JSON.stringify(body).includes(SECRET_KEY), false);
+});
+
+// ---------- bundle, ledger, refunds ----------
+async function paidBundleOrder(pi) {
+  const res = await post('/api/checkout', { locale: 'fr', email: `bundle-${pi}@example.com`, items: [{ sku: BUNDLE }], acceptTerms: true, acceptDigital: true });
+  assert.equal(res.status, 200);
+  const { orderId } = await res.json();
+  const order = db.prepare('SELECT * FROM orders WHERE id = ?').get(orderId);
+  const body = JSON.stringify({ id: `evt_${pi}`, type: 'checkout.session.completed', data: { object: {
+    id: order.provider_session_id, payment_status: 'paid', amount_total: 1990, currency: 'eur', payment_intent: pi,
+    metadata: { order_id: orderId }, customer_details: { address: { country: 'FR' } } } } });
+  const wh = await post('/api/webhooks/stripe', body, { 'stripe-signature': signed(body) });
+  assert.equal(wh.status, 200);
+  return orderId;
+}
+
+test('bundle: one paid order delivers one personal token per PDF file', async () => {
+  const orderId = await paidBundleOrder('pi_bundle1');
+  const rows = db.prepare('SELECT sku FROM downloads WHERE order_id = ? ORDER BY sku').all(orderId).map((r) => r.sku);
+  assert.deepEqual(rows, [SKU, SKU2].sort());
+  const mail = db.prepare("SELECT body FROM outbox WHERE kind = 'order_delivery' AND related_id = ?").get(orderId).body;
+  assert.equal((mail.match(/\/api\/download\//g) || []).length, 2);
+});
+
+test('ledger: paid order records the payment and the provider fee', async () => {
+  const orderId = await paidBundleOrder('pi_fee1');
+  const pay = db.prepare('SELECT * FROM payments WHERE order_id = ?').get(orderId);
+  assert.equal(pay.amount_cents, 1990);
+  assert.equal(pay.currency, 'EUR');
+  assert.equal(pay.fee_cents, 55);
+  assert.equal(pay.net_cents, 1935);
+  assert.equal(pay.fee_currency, 'EUR');
+  assert.ok(feeCalls.some((u) => u.includes('pi_fee1')));
+});
+
+test('ledger: if the fee cannot be read, the payment is kept with fee = NULL (visible for reconciliation)', async () => {
+  const orderId = await paidBundleOrder('pi_feefail');
+  const pay = db.prepare('SELECT * FROM payments WHERE order_id = ?').get(orderId);
+  assert.equal(pay.fee_cents, null);
+  assert.equal(db.prepare('SELECT status FROM orders WHERE id = ?').get(orderId).status, 'paid'); // delivery not blocked
+});
+
+test('failed payment: async failure marks the order failed and delivers nothing', async () => {
+  const res = await post('/api/checkout', { locale: 'en', email: 'fail@example.com', items: [{ sku: SKU }], acceptTerms: true, acceptDigital: true });
+  const { orderId } = await res.json();
+  const order = db.prepare('SELECT * FROM orders WHERE id = ?').get(orderId);
+  const body = JSON.stringify({ id: 'evt_async_fail', type: 'checkout.session.async_payment_failed', data: { object: { id: order.provider_session_id } } });
+  await post('/api/webhooks/stripe', body, { 'stripe-signature': signed(body) });
+  assert.equal(db.prepare('SELECT status FROM orders WHERE id = ?').get(orderId).status, 'failed');
+  assert.equal(db.prepare('SELECT COUNT(*) n FROM downloads WHERE order_id = ?').get(orderId).n, 0);
+  assert.equal(db.prepare('SELECT COUNT(*) n FROM payments WHERE order_id = ?').get(orderId).n, 0);
+});
+
+test('no duplicate delivery: a second completed event for the same order (new event id) does not issue new tokens', async () => {
+  const orderId = await paidBundleOrder('pi_dup1');
+  const order = db.prepare('SELECT * FROM orders WHERE id = ?').get(orderId);
+  const body = JSON.stringify({ id: 'evt_dup_second', type: 'checkout.session.completed', data: { object: {
+    id: order.provider_session_id, payment_status: 'paid', amount_total: 1990, currency: 'eur', payment_intent: 'pi_dup1', metadata: { order_id: orderId } } } });
+  await post('/api/webhooks/stripe', body, { 'stripe-signature': signed(body) });
+  assert.equal(db.prepare('SELECT COUNT(*) n FROM downloads WHERE order_id = ?').get(orderId).n, 2);
+  assert.equal(db.prepare('SELECT COUNT(*) n FROM payments WHERE order_id = ?').get(orderId).n, 1);
+});
+
+function refundEvent(id, pi, cumulative) {
+  return JSON.stringify({ id, type: 'charge.refunded', data: { object: { id: `ch_${pi}`, payment_intent: pi, amount_refunded: cumulative, refunds: { data: [{ id: `re_${id}`, reason: 'requested_by_customer' }] } } } });
+}
+
+test('refunds: partial refund is recorded, access kept; full refund revokes all download links', async () => {
+  const orderId = await paidBundleOrder('pi_ref1');
+  const tokens = db.prepare('SELECT token_hash FROM downloads WHERE order_id = ?').all(orderId);
+  assert.equal(tokens.length, 2);
+  let b = refundEvent('evt_ref_part', 'pi_ref1', 500);
+  await post('/api/webhooks/stripe', b, { 'stripe-signature': signed(b) });
+  assert.equal(db.prepare('SELECT status FROM orders WHERE id = ?').get(orderId).status, 'partially_refunded');
+  assert.equal(db.prepare('SELECT COUNT(*) n FROM downloads WHERE order_id = ? AND revoked = 1').get(orderId).n, 0);
+  b = refundEvent('evt_ref_full', 'pi_ref1', 1990);
+  await post('/api/webhooks/stripe', b, { 'stripe-signature': signed(b) });
+  assert.equal(db.prepare('SELECT status FROM orders WHERE id = ?').get(orderId).status, 'refunded');
+  assert.equal(db.prepare('SELECT COALESCE(SUM(amount_cents),0) s FROM refunds WHERE order_id = ?').get(orderId).s, 1990);
+  assert.equal(db.prepare('SELECT COUNT(*) n FROM downloads WHERE order_id = ? AND revoked = 1').get(orderId).n, 2);
+  // the same refund event delivered again changes nothing
+  await post('/api/webhooks/stripe', b, { 'stripe-signature': signed(b) });
+  assert.equal(db.prepare('SELECT COUNT(*) n FROM refunds WHERE order_id = ?').get(orderId).n, 2);
+});
+
+test('refunds: download links of a fully refunded order stop working', async () => {
+  const orderId = await paidBundleOrder('pi_ref2');
+  // issue a known token for this order to test the HTTP path
+  const token = randomBytes(32).toString('base64url');
+  db.prepare('INSERT INTO downloads (token_hash, order_id, sku, created_at, expires_at, max_downloads) VALUES (?, ?, ?, ?, ?, 5)')
+    .run(hash(token), orderId, SKU, new Date().toISOString(), new Date(Date.now() + 86400000).toISOString());
+  assert.equal((await fetch(`${base}/api/download/${token}`)).status, 200);
+  const b = refundEvent('evt_ref2_full', 'pi_ref2', 1990);
+  await post('/api/webhooks/stripe', b, { 'stripe-signature': signed(b) });
+  assert.equal((await fetch(`${base}/api/download/${token}`)).status, 404);
+});
+
+// ---------- CORS and public catalog ----------
+test('CORS: allowed Tilda origin gets a preflight answer; other origins are refused', async () => {
+  const ok = await fetch(`${base}/api/checkout`, { method: 'OPTIONS', headers: { origin: 'https://tilda.test', 'access-control-request-method': 'POST' } });
+  assert.equal(ok.status, 204);
+  assert.equal(ok.headers.get('access-control-allow-origin'), 'https://tilda.test');
+  const bad = await fetch(`${base}/api/checkout`, { method: 'OPTIONS', headers: { origin: 'https://evil.test', 'access-control-request-method': 'POST' } });
+  assert.equal(bad.status, 403);
+  assert.equal(bad.headers.get('access-control-allow-origin'), null);
+});
+
+test('CORS: webhooks and downloads never get CORS headers', async () => {
+  const r = await fetch(`${base}/api/download/abc`, { headers: { origin: 'https://tilda.test' } });
+  assert.equal(r.headers.get('access-control-allow-origin'), null);
+});
+
+test('catalog: lists only sellable products with server prices', async () => {
+  const r = await fetch(`${base}/api/catalog`, { headers: { origin: 'https://tilda.test' } });
+  assert.equal(r.headers.get('access-control-allow-origin'), 'https://tilda.test');
+  const body = await r.json();
+  const skus = body.products.map((p) => p.sku).sort();
+  assert.deepEqual(skus, [BUNDLE, SKU, SKU2].sort());
+  assert.equal(body.products.find((p) => p.sku === BUNDLE).prices.EUR, 1990);
+  assert.deepEqual(body.currencies, ['EUR']);
 });

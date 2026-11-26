@@ -42,8 +42,8 @@ test('legal: all three languages have the same document keys and sections', () =
 
 test('build: 3 languages x all routes plus product pages are generated', () => {
   const pages = walk(dist);
-  // 23 routes (incl. legal) + 3 product pages per language = 26 per language
-  assert.equal(pages.length, 3 * 26 + 2, `page count ${pages.length}`); // +404 and chooser
+  // 23 routes (incl. legal) + 4 product pages (3 guides + bundle) per language = 27 per language
+  assert.equal(pages.length, 3 * 27 + 2, `page count ${pages.length}`); // +404 and chooser
 });
 
 test('every page: lang, title, description, canonical, and hreflang for all languages and x-default', () => {
@@ -135,4 +135,31 @@ test('hosting: _headers and robots are generated', () => {
   assert.match(readFileSync(join(dist, '_headers'), 'utf8'), /Strict-Transport-Security/);
   assert.match(readFileSync(join(dist, 'robots.txt'), 'utf8'), /Sitemap: /);
   assert.equal(existsSync(join(dist, 'static', 'fonts', 'fonts.css')), true);
+});
+
+test('draft service pages: noindex, banner, out of sitemap and navigation', () => {
+  const drafts = ['consultations', 'child-nutrition', 'adult-nutrition', 'menus', 'support'];
+  const xml = readFileSync(join(dist, 'sitemap.xml'), 'utf8');
+  const home = readFileSync(join(dist, 'ru', 'index.html'), 'utf8');
+  for (const d of drafts) {
+    for (const l of ['ru', 'fr', 'en']) {
+      const html = readFileSync(join(dist, l, d, 'index.html'), 'utf8');
+      assert.match(html, /name="robots" content="noindex, nofollow"/, `${l}/${d}`);
+      assert.match(html, /class="draft-banner"/, `${l}/${d}`);
+    }
+    assert.equal(xml.includes(`/${d}/`), false, `${d} must not be in sitemap`);
+    assert.equal(home.includes(`href="/ru/${d}/"`), false, `${d} must not be linked from the home page`);
+  }
+});
+
+test('bundle: approved prices are shown (EUR everywhere, RUB on the Russian site), not sold while unpublished', () => {
+  const ru = readFileSync(join(dist, 'ru', 'shop', 'parent-guides-bundle', 'index.html'), 'utf8');
+  assert.match(ru, /19,90\s€/);
+  assert.match(ru, /2\s000\s₽/);
+  const fr = readFileSync(join(dist, 'fr', 'shop', 'parent-guides-bundle', 'index.html'), 'utf8');
+  assert.match(fr, /19,90\s€/);
+  assert.equal(/₽/.test(fr), false);
+  assert.equal(/data-add-sku=/.test(ru), false, 'unpublished bundle must not have a buy button');
+  const guide = readFileSync(join(dist, 'en', 'shop', 'complementary-feeding-guide', 'index.html'), 'utf8');
+  assert.match(guide, /Price to be confirmed/);
 });

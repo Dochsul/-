@@ -16,11 +16,11 @@ export const esc = (s) => String(s ?? '')
 export const ROUTES = [
   { id: 'home', path: '' },
   { id: 'about', path: 'about/' },
-  { id: 'consultations', path: 'consultations/' },
-  { id: 'childNutrition', path: 'child-nutrition/' },
-  { id: 'adultNutrition', path: 'adult-nutrition/' },
-  { id: 'menus', path: 'menus/' },
-  { id: 'support', path: 'support/' },
+  { id: 'consultations', path: 'consultations/', draft: true },
+  { id: 'childNutrition', path: 'child-nutrition/', draft: true },
+  { id: 'adultNutrition', path: 'adult-nutrition/', draft: true },
+  { id: 'menus', path: 'menus/', draft: true },
+  { id: 'support', path: 'support/', draft: true },
   { id: 'shop', path: 'shop/' },
   { id: 'guides', path: 'guides/' },
   { id: 'reviews', path: 'reviews/' },
@@ -39,6 +39,10 @@ export const ROUTES = [
   { id: 'legalCookies', path: 'legal/cookies/' },
 ];
 
+// Draft routes: built for preview but not published (noindex, out of sitemap and navigation).
+// Owner's instruction: consultations, menus and support stay drafts until the legal right to provide them in France is confirmed.
+export const DRAFT_IDS = ROUTES.filter((r) => r.draft).map((r) => r.id);
+
 export const LEGAL_IDS = ['legalMentions', 'legalPrivacy', 'legalTerms', 'legalRefunds', 'legalDigital', 'legalCookies'];
 
 // Canonical site origin. In development a clearly non-production placeholder is used.
@@ -52,14 +56,26 @@ export const absUrl = (locale, path = '') => origin() + localePath(locale, path)
 export function price(cents, currency, locale) {
   if (cents == null) return null;
   const tag = { ru: 'ru-RU', fr: 'fr-FR', en: 'en-GB' }[locale];
-  return new Intl.NumberFormat(tag, { style: 'currency', currency }).format(cents / 100);
+  // Whole-rouble prices are shown without kopecks (2 000 ₽); euros always keep cents (19,90 €).
+  const whole = currency === 'RUB' && cents % 100 === 0;
+  return new Intl.NumberFormat(tag, { style: 'currency', currency, ...(whole ? { minimumFractionDigits: 0, maximumFractionDigits: 0 } : {}) }).format(cents / 100);
+}
+
+// A product can be bought only when it is published, its content and price are confirmed, and it has an EUR price.
+export const isSellable = (p) => !!(p.published && p.contentConfirmed && p.priceConfirmed && p.prices?.EUR != null);
+
+// Confirmed prices: EUR everywhere; the Russian version also shows the approved RUB price.
+export function productPriceText(p, locale, c) {
+  if (!p.priceConfirmed || p.prices?.EUR == null) return c.ui.priceToConfirm;
+  const eur = price(p.prices.EUR, 'EUR', locale);
+  return locale === 'ru' && p.prices.RUB != null ? `${eur} · ${price(p.prices.RUB, 'RUB', locale)}` : eur;
 }
 
 // ---------- Layout pieces ----------
 
 function header(c, locale, route) {
   const u = c.ui;
-  const navLinks = c.nav.filter((n) => n.primary).map((n) => {
+  const navLinks = c.nav.filter((n) => n.primary && !DRAFT_IDS.includes(n.id)).map((n) => {
     const href = localePath(locale, n.path);
     const current = n.id === route.id ? ' aria-current="page"' : '';
     return `<a href="${href}"${current}>${esc(n.label)}</a>`;
@@ -120,7 +136,7 @@ function footer(c, locale) {
         <nav class="footer-legal" aria-label="${esc(f.legal)}">${legal}</nav>
       </div>
     </div>
-    <nav class="footer-sections" aria-label="${esc(c.ui.menu)}">${c.nav.map((n) => `<a href="${localePath(locale, n.path)}">${esc(n.label)}</a>`).join('')}</nav>
+    <nav class="footer-sections" aria-label="${esc(c.ui.menu)}">${c.nav.filter((n) => !DRAFT_IDS.includes(n.id)).map((n) => `<a href="${localePath(locale, n.path)}">${esc(n.label)}</a>`).join('')}</nav>
     <p class="copyright">&copy; ${new Date().getFullYear()} ${esc(business.brand)}. ${esc(f.rights)}</p>
   </div>
 </footer>`;
@@ -231,10 +247,8 @@ function renderProductGrid(ctx, s) {
 export function productCard(p, ctx, dimmed = false) {
   const { c, locale } = ctx;
   const t = p.i18n[locale];
-  const priceText = p.priceCents != null && business.pricesConfirmed
-    ? price(p.priceCents, p.currency, locale)
-    : c.ui.priceToConfirm;
-  const buy = p.published && p.priceCents != null
+  const priceText = productPriceText(p, locale, c);
+  const buy = isSellable(p)
     ? `<button class="btn btn-primary" type="button" data-add-sku="${p.sku}">${esc(c.ui.addToCart)}</button>`
     : `<span class="pill">${esc(c.ui.comingSoon)}</span>`;
   return `<article class="card product${dimmed ? ' dimmed' : ''}">
@@ -252,7 +266,7 @@ export function layout({ c, locale, route, title, description, body, jsonld = []
   const canonical = absUrl(locale, path);
   const alternates = LOCALES.map((l) => `<link rel="alternate" hreflang="${l}" href="${absUrl(l, path)}">`).join('\n  ');
   const xdef = `<link rel="alternate" hreflang="x-default" href="${absUrl(DEFAULT_LOCALE, path)}">`;
-  const robots = route.noindex ? 'noindex, nofollow' : 'index, follow';
+  const robots = route.noindex || route.draft ? 'noindex, nofollow' : 'index, follow';
   const ld = [...jsonld];
   if (breadcrumbs) {
     ld.push({
@@ -286,7 +300,7 @@ export function layout({ c, locale, route, title, description, body, jsonld = []
   <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
   <link rel="stylesheet" href="/static/fonts/fonts.css">
   <link rel="stylesheet" href="/static/styles.css">
-  <meta name="theme-color" content="#F7F1E8">
+  <meta name="theme-color" content="#FFF4E9">
   ${ldHtml}
 </head>
 <body>
@@ -306,18 +320,19 @@ ${footer(c, locale)}
 export function renderPage(c, locale, route, page) {
   const ctx = { c, locale, route };
   const sections = page.sections.map((s) => renderSection(s, ctx)).join('\n');
-  return sections;
+  const banner = route.draft ? `<div class="draft-banner" role="note">${esc(c.ui.draftPage)}</div>` : '';
+  return banner + sections;
 }
 
 function renderCart(ctx) {
   const { c, locale } = ctx;
   const f = c.checkoutForms;
   const disabled = !business.payments.enabled;
-  return `<section class="block cart reveal" data-cart-page data-locale="${locale}" data-payments="${disabled ? 'off' : 'on'}" data-qty-label="${esc(c.ui.qty)}" data-remove-label="${esc(c.ui.cartRemove)}" data-load-error="${esc(c.ui.cartLoadError)}">
+  return `<section class="block cart reveal" data-cart-page data-locale="${locale}" data-payments="${disabled ? 'off' : 'on'}" data-remove-label="${esc(c.ui.cartRemove)}" data-load-error="${esc(c.ui.cartLoadError)}">
   <h1>${esc(c.ui.cartTitle)}</h1>
   <p class="cart-empty" data-cart-empty>${esc(c.ui.cartEmpty)}</p>
   <table class="cart-table" data-cart-table hidden>
-    <thead><tr><th scope="col">${esc(c.ui.cartTitle)}</th><th scope="col">${esc(c.ui.qty)}</th><th scope="col">${esc(c.ui.cartTotal)}</th><th scope="col"><span class="sr-only">${esc(c.ui.cartRemove)}</span></th></tr></thead>
+    <thead><tr><th scope="col">${esc(c.ui.cartTitle)}</th><th scope="col">${esc(c.ui.cartTotal)}</th><th scope="col"><span class="sr-only">${esc(c.ui.cartRemove)}</span></th></tr></thead>
     <tbody data-cart-rows></tbody>
   </table>
   <p class="cart-total" data-cart-total hidden><strong>${esc(c.ui.cartTotal)}:</strong> <span data-cart-sum></span></p>
@@ -343,9 +358,8 @@ function renderCart(ctx) {
 export function productPageBody(c, locale, product) {
   const t = product.i18n[locale];
   const ctx = { c, locale };
-  const priceText = product.priceCents != null && business.pricesConfirmed
-    ? price(product.priceCents, product.currency, locale) : c.ui.priceToConfirm;
-  const buy = product.published && product.priceCents != null
+  const priceText = productPriceText(product, locale, c);
+  const buy = isSellable(product)
     ? `<button class="btn btn-primary" type="button" data-add-sku="${product.sku}">${esc(c.ui.addToCart)}</button>`
     : `<span class="pill">${esc(c.ui.productNotPublished)}</span>`;
   const how = c.productPage.how.map((h, i) => `<li><span class="step-n">${i + 1}</span><div><strong>${esc(h.t)}</strong><p>${esc(h.p)}</p></div></li>`).join('');

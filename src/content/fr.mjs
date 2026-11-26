@@ -19,6 +19,7 @@ export default {
     { id: 'contact', label: 'Contact', path: 'contact/', primary: true },
   ],
   ui: {
+    draftPage: 'Brouillon : cette section n’est pas publiée. Les consultations, menus et accompagnements ouvriront après confirmation du droit d’exercer ces services en France.',
     cartLoadError: 'Le panier n’a pas pu être chargé. Actualisez la page.',
     skip: 'Aller au contenu',
     menu: 'Menu',
@@ -123,7 +124,7 @@ export default {
       title: 'AINA Évidence — nutrition fondée sur les données et alimentation familiale',
       description: 'Alimentation personnalisée des adultes et des enfants, maternité et développement de l’enfant, guides pour parents. Conseil en diététique et nutrition diplômé(e), accompagnement en ligne depuis la France.',
       sections: [
-        { type: 'hero', eyebrow: 'Nutrition fondée sur les données', h1: 'Une alimentation adaptée à vous et à votre famille', lead: 'Une approche personnalisée, sans régimes stricts. Accompagnement en ligne pour adultes, enfants et périodes de maternité.', actions: [{ label: 'Prendre rendez-vous', href: 'consultations/', primary: true }, { label: 'Guides parents', href: 'guides/' }] },
+        { type: 'hero', eyebrow: 'Nutrition fondée sur les données', h1: 'Une alimentation adaptée à vous et à votre famille', lead: 'Une approche personnalisée, sans régimes stricts. Accompagnement en ligne pour adultes, enfants et périodes de maternité.', actions: [{ label: 'Boutique des guides', href: 'shop/', primary: true }, { label: 'Guides parents', href: 'guides/' }] },
         { type: 'cards', h: 'Domaines d’accompagnement', items: [
           { t: 'Alimentation de l’adulte', p: 'Recommandations personnalisées sur le rythme et l’alimentation, sans restrictions rigides.' },
           { t: 'Alimentation de l’enfant', p: 'Alimentation selon l’âge : diversification, rythme, questions fréquentes des parents.' },
@@ -144,7 +145,7 @@ export default {
         { type: 'text', h: 'Mon approche', paras: ['Je m’appuie sur les données scientifiques et j’explique pourquoi une recommandation fonctionne. L’objectif n’est pas un régime, mais une alimentation durable, compatible avec la vie quotidienne.', 'Chaque demande est individuelle : l’âge, le contexte familial, le rythme et les préférences sont pris en compte.'] },
         { type: 'list', h: 'Ce que je fais', items: ['Nutrition fondée sur les données', 'Alimentation personnalisée des adultes et des enfants', 'Maternité et développement de l’enfant', 'Supports pédagogiques pour les parents', 'Menus personnalisés et accompagnement', 'Soutien psychologique dans les limites de ma compétence professionnelle'] },
         { type: 'notice', p: 'Je ne suis pas médecin. Je ne pose pas de diagnostic et je ne promets pas la guérison d’une maladie. En cas de maladie, consultez votre médecin.' },
-        { type: 'cta', h: 'On commence ensemble ?', label: 'Prendre rendez-vous', href: 'consultations/' },
+        { type: 'cta', h: 'Commencez par les guides pour parents', label: 'Guides parents', href: 'guides/' },
       ],
     },
     consultations: {

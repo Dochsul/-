@@ -7,7 +7,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { business } from './config/business.mjs';
 import { products } from './config/catalog.mjs';
-import { ROUTES, LEGAL_IDS, LOCALES, DEFAULT_LOCALE, esc, origin, absUrl, localePath, layout, renderPage, productPageBody, price } from './render.mjs';
+import { ROUTES, LEGAL_IDS, LOCALES, DEFAULT_LOCALE, esc, origin, absUrl, localePath, layout, renderPage, productPageBody, isSellable } from './render.mjs';
 import contentRu from './content/ru.mjs';
 import contentFr from './content/fr.mjs';
 import contentEn from './content/en.mjs';
@@ -83,7 +83,7 @@ for (const [name, value] of REQUIRED) {
 if (!business.pricesConfirmed) gateIssues.push('цены консультаций не подтверждены (business.pricesConfirmed)');
 if (!business.legalReviewed) gateIssues.push('юридические документы не проверены юристом (business.legalReviewed)');
 for (const p of products) {
-  if (p.published && (p.priceCents == null || !p.contentConfirmed)) gateIssues.push(`товар ${p.sku} опубликован без цены или без подтверждения содержания`);
+  if (p.published && !isSellable(p)) gateIssues.push(`товар ${p.sku} опубликован без подтверждённой цены или содержания`);
 }
 
 // ---------- Layout helpers ----------
@@ -179,16 +179,16 @@ function build() {
       }
       const html = layout({ c, locale, route, title, description, body, jsonld, ogType, breadcrumbs });
       writePage(locale, route.path, html);
-      if (!route.noindex) pages.push({ locale, path: route.path });
+      if (!route.noindex && !route.draft) pages.push({ locale, path: route.path });
     }
 
     // Product detail pages (noindex until published)
     for (const p of products) {
       const t = p.i18n[locale];
       const route = { id: 'product', path: `shop/${p.sku}/`, noindex: !p.published };
-      const ldProduct = p.published && p.priceCents != null && business.pricesConfirmed ? [{
+      const ldProduct = isSellable(p) ? [{
         '@context': 'https://schema.org', '@type': 'Product', name: t.title, description: t.summary,
-        url: absUrl(locale, route.path), offers: { '@type': 'Offer', price: (p.priceCents / 100).toFixed(2), priceCurrency: p.currency, availability: 'https://schema.org/InStock', url: absUrl(locale, route.path) },
+        url: absUrl(locale, route.path), offers: { '@type': 'Offer', price: (p.prices.EUR / 100).toFixed(2), priceCurrency: 'EUR', availability: 'https://schema.org/InStock', url: absUrl(locale, route.path) },
       }] : [];
       const body = productPageBody(c, locale, p);
       const html = layout({
@@ -222,11 +222,11 @@ ${LOCALES.map((l) => `<li><a href="${localePath(l)}" hreflang="${l}" lang="${l}"
 </ul></nav></main></body></html>`, 'utf8');
 
   // Catalog for the client (published products only, prices as stored)
-  const catalog = products.filter((p) => p.published).map((p) => ({
-    sku: p.sku, currency: p.currency, priceCents: p.priceCents,
+  const catalog = products.filter(isSellable).map((p) => ({
+    sku: p.sku, prices: p.prices,
     title: Object.fromEntries(LOCALES.map((l) => [l, p.i18n[l].title])),
   }));
-  writeFileSync(join(dist, 'static', 'catalog.json'), JSON.stringify({ products: catalog, pricesConfirmed: business.pricesConfirmed }), 'utf8');
+  writeFileSync(join(dist, 'static', 'catalog.json'), JSON.stringify({ products: catalog, checkoutCurrency: 'EUR' }), 'utf8');
 
   // Sitemap with hreflang alternates
   const urls = [];

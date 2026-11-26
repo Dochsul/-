@@ -6,7 +6,8 @@ import { join, normalize, extname, resolve, sep, basename } from 'node:path';
 import { createHash, randomBytes } from 'node:crypto';
 import { pipeline } from 'node:stream/promises';
 import { validateLead, validateCheckout, priceOrder, ValidationError } from './validate.mjs';
-import { verifyStripeSignature, createCheckoutSession } from './stripe.mjs';
+import { verifyStripeSignature, createCheckoutSession, fetchStripeFee } from './stripe.mjs';
+import { fileSkus } from '../src/config/catalog.mjs';
 import { enqueue } from './outbox.mjs';
 import { nowIso } from './db.mjs';
 
@@ -79,6 +80,19 @@ function clientIp(req, trustProxy) {
   return req.socket.remoteAddress || 'unknown';
 }
 
+// ---------- CORS (only for explicitly allowed origins, e.g. the Tilda site) ----------
+function corsHeaders(req, allowedOrigins) {
+  const origin = req.headers.origin;
+  if (!origin || !allowedOrigins.includes(origin)) return {};
+  return {
+    'Access-Control-Allow-Origin': origin,
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Accept',
+    'Access-Control-Max-Age': '600',
+    Vary: 'Origin',
+  };
+}
+
 // ---------- application factory ----------
 export function createApp({ config, db, transports, fetchImpl = fetch, now = () => new Date() }) {
   const limiter = new RateLimiter({
@@ -126,22 +140,25 @@ export function createApp({ config, db, transports, fetchImpl = fetch, now = () 
     if (!limiter.allow(ipHash(req), 'checkout')) return send(res, 429, { error: 'rate_limited' });
     const body = await readJson(req);
     const input = validateCheckout(body);
-    const priced = priceOrder(input.items, config.catalog, config.pricesConfirmed);
+    const priced = priceOrder(input.items, input.currency, config.catalog, config.enabledCurrencies);
     if (priced.error) return send(res, 409, { error: priced.error, sku: priced.sku });
 
     const id = randomBytes(12).toString('hex');
     const t = now().toISOString();
+    const itemsJson = JSON.stringify(priced.lines.map((l) => ({ sku: l.sku, unitCents: l.unitCents, files: l.files })));
     db.prepare(`INSERT INTO orders (id, created_at, updated_at, locale, email, items_json, amount_cents, currency, status, provider,
                  terms_accepted_at, digital_waiver_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending_payment', 'stripe', ?, ?)`)
-      .run(id, t, t, input.locale, input.email, JSON.stringify(priced.lines.map((l) => ({ sku: l.sku, qty: l.qty, unitCents: l.unitCents }))),
-        priced.amountCents, priced.currency, t, t);
+      .run(id, t, t, input.locale, input.email, itemsJson, priced.amountCents, priced.currency, t, t);
     try {
       const session = await createCheckoutSession({
         secretKey: config.stripeSecretKey, fetchImpl, order: { id, email: input.email }, lines: priced.lines,
-        locale: input.locale, siteUrl, idempotencyKey: `order-${id}`,
+        locale: input.locale, idempotencyKey: `order-${id}`,
+        // Return pages: the Tilda site in production ({locale} is replaced), the static site by default.
+        successUrl: (config.checkoutSuccessUrl || `${siteUrl}/{locale}/checkout/success/`).replace('{locale}', input.locale),
+        cancelUrl: (config.checkoutCancelUrl || `${siteUrl}/{locale}/checkout/cancel/`).replace('{locale}', input.locale),
       });
       db.prepare('UPDATE orders SET provider_session_id = ?, updated_at = ? WHERE id = ?').run(session.id, nowIso(), id);
-      return send(res, 200, { url: session.url });
+      return send(res, 200, { url: session.url, orderId: id });
     } catch (e) {
       db.prepare("UPDATE orders SET status = 'failed', updated_at = ? WHERE id = ?").run(nowIso(), id);
       return send(res, 502, { error: 'payment_provider_error' });
@@ -158,15 +175,18 @@ export function createApp({ config, db, transports, fetchImpl = fetch, now = () 
     if (db.prepare('SELECT 1 FROM processed_events WHERE event_id = ?').get(event.id)) {
       return send(res, 200, { duplicate: true });
     }
+    let feeLookup = null;
     db.exec('BEGIN IMMEDIATE');
     try {
       const obj = event.data?.object || {};
       if (event.type === 'checkout.session.completed' || event.type === 'checkout.session.async_payment_succeeded') {
-        settleOrder(obj);
+        feeLookup = settleOrder(obj);
       } else if (event.type === 'checkout.session.expired') {
         db.prepare("UPDATE orders SET status = 'expired', updated_at = ? WHERE provider_session_id = ? AND status = 'pending_payment'").run(nowIso(), obj.id);
       } else if (event.type === 'checkout.session.async_payment_failed') {
         db.prepare("UPDATE orders SET status = 'failed', updated_at = ? WHERE provider_session_id = ? AND status = 'pending_payment'").run(nowIso(), obj.id);
+      } else if (event.type === 'charge.refunded') {
+        recordRefund(obj);
       }
       db.prepare('INSERT INTO processed_events (event_id, type, received_at) VALUES (?, ?, ?)').run(event.id, event.type, nowIso());
       db.exec('COMMIT');
@@ -174,14 +194,41 @@ export function createApp({ config, db, transports, fetchImpl = fetch, now = () 
       db.exec('ROLLBACK');
       throw e; // 500 makes Stripe retry the event later
     }
+    // Fee lookup happens after the commit: a slow or failing provider call never blocks delivery.
+    if (feeLookup) {
+      const fee = await fetchStripeFee({ secretKey: config.stripeSecretKey, fetchImpl, paymentIntentId: feeLookup });
+      if (fee) {
+        db.prepare('UPDATE payments SET fee_cents = ?, net_cents = ?, fee_currency = ? WHERE provider_payment_id = ?')
+          .run(fee.feeCents, fee.netCents, fee.currency, feeLookup);
+      }
+    }
     return send(res, 200, { received: true });
   }
 
+  // Refunds are made in the Stripe Dashboard; Stripe then sends charge.refunded (amount_refunded is cumulative).
+  function recordRefund(charge) {
+    const pi = charge.payment_intent;
+    const payment = pi && db.prepare('SELECT * FROM payments WHERE provider_payment_id = ?').get(pi);
+    if (!payment) return;
+    const order = db.prepare('SELECT * FROM orders WHERE id = ?').get(payment.order_id);
+    const already = db.prepare('SELECT COALESCE(SUM(amount_cents), 0) AS s FROM refunds WHERE order_id = ?').get(order.id).s;
+    const delta = Number(charge.amount_refunded || 0) - already;
+    if (delta <= 0) return;
+    const latest = charge.refunds?.data?.[0]?.id;
+    db.prepare('INSERT INTO refunds (order_id, provider, provider_refund_id, amount_cents, currency, reason, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)')
+      .run(order.id, 'stripe', latest || `${charge.id}:${charge.amount_refunded}`, delta, order.currency, charge.refunds?.data?.[0]?.reason || null, nowIso());
+    const full = already + delta >= order.amount_cents;
+    db.prepare('UPDATE orders SET status = ?, updated_at = ? WHERE id = ?').run(full ? 'refunded' : 'partially_refunded', nowIso(), order.id);
+    // A fully refunded order loses access to its files.
+    if (full) db.prepare('UPDATE downloads SET revoked = 1 WHERE order_id = ?').run(order.id);
+    enqueue(db, { kind: 'order_owner', recipient: config.ownerEmail, subject: full ? 'Возврат: полный' : 'Возврат: частичный', body: `Заказ ${order.id}: возвращено ${((already + delta) / 100).toFixed(2)} ${order.currency} из ${(order.amount_cents / 100).toFixed(2)}.${full ? ' Доступ к файлам отозван.' : ''}`, relatedId: order.id });
+  }
+
   function settleOrder(session) {
-    if (session.payment_status !== 'paid') return; // asynchronous method: wait for async_payment_succeeded
+    if (session.payment_status !== 'paid') return null; // asynchronous method: wait for async_payment_succeeded
     const orderId = session.metadata?.order_id || session.client_reference_id;
     const order = orderId && db.prepare('SELECT * FROM orders WHERE id = ?').get(orderId);
-    if (!order || order.status === 'paid' || order.status === 'review_sanctions') return;
+    if (!order || order.status !== 'pending_payment') return null; // idempotent: settle each order once
     // The amount paid must match the server-side price. Otherwise nothing is delivered.
     if (session.amount_total !== order.amount_cents || String(session.currency).toUpperCase() !== order.currency) {
       db.prepare("UPDATE orders SET status = 'review_amount', updated_at = ? WHERE id = ?").run(nowIso(), order.id);
@@ -198,22 +245,29 @@ export function createApp({ config, db, transports, fetchImpl = fetch, now = () 
     }
     db.prepare("UPDATE orders SET status = 'paid', paid_at = ?, updated_at = ?, customer_country = ?, provider_session_id = COALESCE(provider_session_id, ?) WHERE id = ?")
       .run(t, t, country, session.id, order.id);
+    const paymentId = typeof session.payment_intent === 'string' ? session.payment_intent : `cs:${session.id}`;
+    db.prepare(`INSERT OR IGNORE INTO payments (order_id, provider, provider_payment_id, amount_cents, currency, status, created_at)
+                VALUES (?, 'stripe', ?, ?, ?, 'succeeded', ?)`).run(order.id, paymentId, order.amount_cents, order.currency, t);
     const items = JSON.parse(order.items_json);
     const links = [];
     const expires = new Date(Date.now() + config.downloadValidityDays * 86400000).toISOString();
-    for (const it of items) {
+    // One personal token per PDF file (a bundle delivers three files).
+    const files = [...new Set(items.flatMap((it) => it.files || [it.sku]))];
+    for (const fileSku of files) {
       const token = randomBytes(32).toString('base64url');
       db.prepare('INSERT INTO downloads (token_hash, order_id, sku, created_at, expires_at, max_downloads) VALUES (?, ?, ?, ?, ?, ?)')
-        .run(sha256(token), order.id, it.sku, t, expires, config.downloadMaxCount);
-      const p = products.find((x) => x.sku === it.sku);
-      links.push(`${p.i18n[order.locale]?.title || p.i18n.en.title}: ${siteUrl}/api/download/${token}`);
+        .run(sha256(token), order.id, fileSku, t, expires, config.downloadMaxCount);
+      const p = products.find((x) => x.sku === fileSku);
+      const title = p ? (p.i18n[order.locale]?.title || p.i18n.en.title) : fileSku;
+      links.push(`${title}: ${siteUrl}/api/download/${token}`);
     }
     enqueue(db, {
       kind: 'order_delivery', recipient: order.email, subject: 'AINA Évidence: your files',
       body: `Payment confirmed. Your personal download links (valid ${config.downloadValidityDays} days, up to ${config.downloadMaxCount} downloads each):\n\n${links.join('\n')}\n\nKeep this email private.`,
       relatedId: order.id,
     });
-    enqueue(db, { kind: 'order_owner', recipient: config.ownerEmail, subject: 'Новый оплаченный заказ', body: `Заказ ${order.id}\nСумма: ${(order.amount_cents / 100).toFixed(2)} ${order.currency}\nПозиции: ${items.map((i) => `${i.sku} × ${i.qty}`).join(', ')}`, relatedId: order.id });
+    enqueue(db, { kind: 'order_owner', recipient: config.ownerEmail, subject: 'Новый оплаченный заказ', body: `Заказ ${order.id}\nСумма: ${(order.amount_cents / 100).toFixed(2)} ${order.currency}\nПозиции: ${items.map((i) => i.sku).join(', ')}`, relatedId: order.id });
+    return paymentId.startsWith('pi_') ? paymentId : null;
   }
 
   // ----- GET /api/download/:token -----
@@ -229,8 +283,8 @@ export function createApp({ config, db, transports, fetchImpl = fetch, now = () 
     // Atomic increment: concurrent requests cannot exceed the limit.
     const upd = db.prepare('UPDATE downloads SET download_count = download_count + 1 WHERE token_hash = ? AND download_count < max_downloads AND revoked = 0').run(row.token_hash);
     if (upd.changes !== 1) return notFound();
-    const product = products.find((p) => p.sku === row.sku);
-    const file = product && join(resolve(config.privateDir), `${basename(product.sku)}.pdf`);
+    const known = config.fileSkus.includes(row.sku);
+    const file = known && join(resolve(config.privateDir), `${basename(row.sku)}.pdf`);
     if (!file || !file.startsWith(resolve(config.privateDir) + sep) || !existsSync(file)) {
       db.prepare('UPDATE downloads SET download_count = download_count - 1 WHERE token_hash = ?').run(row.token_hash);
       return send(res, 503, { error: 'file_unavailable' });
@@ -268,13 +322,32 @@ export function createApp({ config, db, transports, fetchImpl = fetch, now = () 
     return createReadStream(file).pipe(res);
   }
 
+  // ----- GET /api/catalog: prices the shop block may show (server is the source of truth) -----
+  function publicCatalog() {
+    return {
+      payments: config.paymentsEnabled && !!config.stripeSecretKey,
+      currencies: config.enabledCurrencies,
+      products: products.filter((p) => p.published && p.contentConfirmed && p.priceConfirmed).map((p) => ({
+        sku: p.sku, prices: p.prices, files: p.files.length,
+        title: Object.fromEntries(Object.entries(p.i18n).map(([l, t]) => [l, t.title])),
+      })),
+    };
+  }
+
   // ----- router -----
   return async function handle(req, res) {
     try {
       const url = new URL(req.url, 'http://local');
       const p = url.pathname;
       const m = req.method;
-      if (p === '/api/health' && m === 'GET') return send(res, 200, { ok: true, payments: config.paymentsEnabled && !!config.stripeSecretKey });
+      const cors = p.startsWith('/api/') && !p.startsWith('/api/webhooks/') && !p.startsWith('/api/download/') ? corsHeaders(req, config.allowedOrigins || []) : {};
+      for (const [k, v] of Object.entries(cors)) res.setHeader(k, v);
+      if (m === 'OPTIONS' && p.startsWith('/api/')) {
+        if (!cors['Access-Control-Allow-Origin']) return send(res, 403, { error: 'origin_not_allowed' });
+        res.writeHead(204); return res.end();
+      }
+      if (p === '/api/health' && m === 'GET') return send(res, 200, { ok: true, payments: config.paymentsEnabled && !!config.stripeSecretKey, currencies: config.enabledCurrencies });
+      if (p === '/api/catalog' && m === 'GET') return send(res, 200, publicCatalog(), { 'Cache-Control': 'public, max-age=300' });
       if (p === '/api/leads' && m === 'POST') return await leads(req, res);
       if (p === '/api/checkout' && m === 'POST') return await checkout(req, res);
       if (p === '/api/webhooks/stripe' && m === 'POST') return await stripeWebhook(req, res);

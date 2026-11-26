@@ -1,7 +1,6 @@
 // Input validation. Everything from the client is untrusted. Prices are never read from the client.
 
-import { products } from '../src/config/catalog.mjs';
-import { business } from '../src/config/business.mjs';
+import { products, CURRENCIES } from '../src/config/catalog.mjs';
 
 export const LOCALES = ['ru', 'fr', 'en'];
 export const TOPICS = ['consultation-adult', 'consultation-child', 'correction', 'menu', 'support', 'support-premium', 'community', 'general'];
@@ -49,6 +48,8 @@ export function validateLead(body) {
 export function validateCheckout(body) {
   if (!body || typeof body !== 'object' || Array.isArray(body)) throw new ValidationError('body', 'JSON object expected');
   const locale = LOCALES.includes(body.locale) ? body.locale : 'en';
+  const currency = body.currency === undefined ? 'EUR' : body.currency;
+  if (!CURRENCIES.includes(currency)) throw new ValidationError('currency', 'unsupported currency');
   const email = str(body.email, 'email', { max: 200, required: true }).toLowerCase();
   if (!EMAIL.test(email)) throw new ValidationError('email', 'email is invalid');
   if (body.acceptTerms !== true) throw new ValidationError('acceptTerms', 'terms must be accepted');
@@ -58,27 +59,33 @@ export function validateCheckout(body) {
   }
   const seen = new Set();
   const items = body.items.map((it) => {
-    if (!it || typeof it.sku !== 'string' || !Number.isInteger(it.qty) || it.qty < 1 || it.qty > 10) {
+    // A digital product is bought once: quantity is always 1.
+    if (!it || typeof it.sku !== 'string' || it.sku.length > 80 || (it.qty !== undefined && it.qty !== 1)) {
       throw new ValidationError('items', 'invalid item');
     }
     if (seen.has(it.sku)) throw new ValidationError('items', 'duplicate item');
     seen.add(it.sku);
-    return { sku: it.sku, qty: it.qty };
+    return { sku: it.sku, qty: 1 };
   });
-  return { locale, email, items };
+  return { locale, email, items, currency };
 }
 
-// Server-side pricing from the catalog. Unpublished products or unconfirmed prices cannot be bought.
-export function priceOrder(items, catalog = products, pricesConfirmed = business.pricesConfirmed) {
-  if (!pricesConfirmed) return { error: 'prices_not_confirmed' };
+// Server-side pricing from the catalog. A product can be sold only if it is published, its content is confirmed,
+// the owner confirmed its price, and the price exists in the requested (and enabled) currency.
+export function priceOrder(items, currency = 'EUR', catalog = products, enabledCurrencies = ['EUR']) {
+  if (!enabledCurrencies.includes(currency)) return { error: 'currency_not_enabled' };
   const lines = [];
   for (const it of items) {
     const p = catalog.find((x) => x.sku === it.sku);
-    if (!p || !p.published || p.priceCents == null || !p.contentConfirmed) return { error: 'product_unavailable', sku: it.sku };
-    lines.push({ sku: p.sku, qty: it.qty, unitCents: p.priceCents, currency: p.currency, titles: p.i18n });
+    const unit = p?.prices?.[currency];
+    if (!p || !p.published || !p.contentConfirmed || !p.priceConfirmed || unit == null) {
+      return { error: 'product_unavailable', sku: it.sku };
+    }
+    lines.push({ sku: p.sku, qty: 1, unitCents: unit, currency, titles: p.i18n, files: p.files });
   }
-  const currencies = new Set(lines.map((l) => l.currency));
-  if (currencies.size !== 1) return { error: 'mixed_currency' };
-  const amountCents = lines.reduce((s, l) => s + l.unitCents * l.qty, 0);
-  return { lines, amountCents, currency: lines[0].currency };
+  // Buying a bundle together with a guide it already contains would sell the same file twice.
+  const files = lines.flatMap((l) => l.files);
+  if (new Set(files).size !== files.length) return { error: 'bundle_overlap' };
+  const amountCents = lines.reduce((s, l) => s + l.unitCents, 0);
+  return { lines, amountCents, currency };
 }

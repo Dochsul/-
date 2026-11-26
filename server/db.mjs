@@ -69,6 +69,32 @@ export function openDb(file) {
       sent_at TEXT
     );
     CREATE INDEX IF NOT EXISTS outbox_status ON outbox(status, id);
+    -- Accounting ledger. Amounts in minor units of the order currency. One row per provider payment / refund.
+    CREATE TABLE IF NOT EXISTS payments (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      order_id TEXT NOT NULL REFERENCES orders(id),
+      provider TEXT NOT NULL,
+      provider_payment_id TEXT NOT NULL UNIQUE,
+      amount_cents INTEGER NOT NULL,
+      currency TEXT NOT NULL,
+      fee_cents INTEGER,               -- NULL until the provider reports the fee (reconcile before closing books)
+      net_cents INTEGER,
+      fee_currency TEXT,               -- settlement currency of fee/net (may differ from the order currency)
+      status TEXT NOT NULL,
+      created_at TEXT NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS refunds (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      order_id TEXT NOT NULL REFERENCES orders(id),
+      provider TEXT NOT NULL,
+      provider_refund_id TEXT NOT NULL UNIQUE,
+      amount_cents INTEGER NOT NULL,
+      currency TEXT NOT NULL,
+      reason TEXT,
+      created_at TEXT NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS payments_created ON payments(created_at);
+    CREATE INDEX IF NOT EXISTS refunds_created ON refunds(created_at);
   `);
   return db;
 }

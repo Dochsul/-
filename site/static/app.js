@@ -22,7 +22,7 @@
       var raw = window.localStorage.getItem(CART_KEY);
       var items = raw ? JSON.parse(raw) : [];
       return Array.isArray(items) ? items.filter(function (i) {
-        return i && typeof i.sku === 'string' && Number.isInteger(i.qty) && i.qty > 0 && i.qty <= 10;
+        return i && typeof i.sku === 'string' && i.sku.length < 80;
       }) : [];
     } catch (e) { return []; } // storage blocked or corrupt: behave as an empty cart
   }
@@ -30,7 +30,7 @@
     try { window.localStorage.setItem(CART_KEY, JSON.stringify(items)); } catch (e) { /* storage unavailable */ }
     updateBadge();
   }
-  function cartCount(items) { return items.reduce(function (n, i) { return n + i.qty; }, 0); }
+  function cartCount(items) { return items.length; }
   function updateBadge() {
     var n = cartCount(readCart());
     $$('[data-cart-count]').forEach(function (b) { b.textContent = String(n); b.hidden = n === 0; });
@@ -80,7 +80,8 @@
       var sku = btn.getAttribute('data-add-sku');
       var items = readCart();
       var found = items.find(function (i) { return i.sku === sku; });
-      if (found) { if (found.qty < 10) found.qty += 1; } else { items.push({ sku: sku, qty: 1 }); }
+      // A digital product is bought once: adding it again does nothing.
+      if (!found) items.push({ sku: sku, qty: 1 });
       writeCart(items);
       live.textContent = btn.getAttribute('data-added') || 'OK';
       var old = btn.textContent;
@@ -152,28 +153,19 @@
         var total = 0;
         items.forEach(function (it) {
           var p = bySku[it.sku];
-          var line = (p.priceCents || 0) * it.qty;
+          var line = p.prices.EUR || 0;
           total += line;
           var tr = document.createElement('tr');
           var td1 = document.createElement('td'); td1.textContent = p.title[locale] || p.title.en;
-          var td2 = document.createElement('td');
-          var input = document.createElement('input'); input.type = 'number'; input.min = '1'; input.max = '10'; input.value = String(it.qty);
-          input.setAttribute('aria-label', (p.title[locale] || p.title.en) + ' — ' + cartPage.getAttribute('data-qty-label'));
-          input.addEventListener('change', function () {
-            var v = Math.min(10, Math.max(1, parseInt(input.value, 10) || 1));
-            var cur = readCart().map(function (x) { return x.sku === it.sku ? { sku: x.sku, qty: v } : x; });
-            writeCart(cur); render();
-          });
-          td2.appendChild(input);
-          var td3 = document.createElement('td'); td3.textContent = fmt(line, p.currency);
+          var td3 = document.createElement('td'); td3.textContent = fmt(line, 'EUR');
           var td4 = document.createElement('td');
           var rm = document.createElement('button'); rm.type = 'button'; rm.textContent = cartPage.getAttribute('data-remove-label');
           rm.addEventListener('click', function () { writeCart(readCart().filter(function (x) { return x.sku !== it.sku; })); render(); });
           td4.appendChild(rm);
-          tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3); tr.appendChild(td4);
+          tr.appendChild(td1); tr.appendChild(td3); tr.appendChild(td4);
           rows.appendChild(tr);
         });
-        sumEl.textContent = fmt(total, cat.products[0] ? cat.products[0].currency : 'EUR');
+        sumEl.textContent = fmt(total, 'EUR');
       }
       render();
       window.addEventListener('storage', render);
@@ -194,7 +186,8 @@
             body: JSON.stringify({
               locale: cartPage.getAttribute('data-locale') || locale,
               email: fd.email,
-              items: readCart(),
+              currency: 'EUR',
+              items: readCart().map(function (i) { return { sku: i.sku }; }),
               acceptTerms: fd.acceptTerms === 'on',
               acceptDigital: fd.acceptDigital === 'on'
             })

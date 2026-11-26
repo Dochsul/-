@@ -1,16 +1,18 @@
-// Digital products. Prices are NOT invented: `priceCents` stays null until the owner sets it.
-// `published: false` keeps a product off the shop and out of checkout.
-// `contentConfirmed: false` means the content outline has not yet been confirmed by the author.
-// Files live in private/products/<sku>.pdf (never committed, never served statically).
+// Digital products. Prices are NOT invented: a price stays null until the owner states it.
+// prices: minor units per currency (EUR cents, RUB kopecks). priceConfirmed: the owner approved these prices.
+// published:false keeps a product off the shop and out of checkout.
+// contentConfirmed:false means the author has not yet confirmed the content outline.
+// files: SKUs of the PDF files delivered for this product. Files live in private/products/<file-sku>.pdf
+// (never committed, never served statically, delivered only through /api/download/<token>).
 
 export const products = [
   {
     sku: 'cow-milk-protein-allergy-guide',
-    currency: 'EUR',
-    priceCents: null,
+    prices: { EUR: null, RUB: null }, // individual price: not stated by the owner yet
+    priceConfirmed: false,
     published: false,
     contentConfirmed: false,
-    file: 'private/products/cow-milk-protein-allergy-guide.pdf',
+    files: ['cow-milk-protein-allergy-guide'],
     preview: null, // path to a public preview PDF, added only after the author approves it
     i18n: {
       ru: { title: 'Аллергия на белок коровьего молока', summary: 'Практический гайд для родителей: как организовать питание ребёнка и ориентироваться в продуктах. Не заменяет консультацию врача.', topics: ['Организация питания', 'Чтение состава продуктов', 'Вопросы для врача'] },
@@ -20,11 +22,11 @@ export const products = [
   },
   {
     sku: 'complementary-feeding-guide',
-    currency: 'EUR',
-    priceCents: null,
+    prices: { EUR: null, RUB: null }, // individual price: not stated by the owner yet
+    priceConfirmed: false,
     published: false,
     contentConfirmed: false,
-    file: 'private/products/complementary-feeding-guide.pdf',
+    files: ['complementary-feeding-guide'],
     preview: null,
     i18n: {
       ru: { title: 'Прикорм: каши и пюре', summary: 'Гайд для родителей о введении прикорма: первые блюда, консистенция, режим и наблюдение за реакцией ребёнка.', topics: ['Первые блюда', 'Консистенция и текстуры', 'Режим и наблюдение'] },
@@ -34,11 +36,11 @@ export const products = [
   },
   {
     sku: 'child-sleep-guide-0-18',
-    currency: 'EUR',
-    priceCents: null,
+    prices: { EUR: null, RUB: null }, // individual price: not stated by the owner yet
+    priceConfirmed: false,
     published: false,
     contentConfirmed: false,
-    file: 'private/products/child-sleep-guide-0-18.pdf',
+    files: ['child-sleep-guide-0-18'],
     preview: null,
     i18n: {
       ru: { title: 'Сон ребёнка от рождения до 18 лет', summary: 'Гайд о детском сне по возрастным этапам: ориентиры, режим дня и организация сна в семье.', topics: ['Возрастные этапы', 'Режим дня', 'Организация сна в семье'] },
@@ -46,4 +48,22 @@ export const products = [
       en: { title: 'Child sleep from birth to 18 years', summary: 'A guide to children\'s sleep by age stage: reference points, daily rhythm and organising sleep at home.', topics: ['Age stages', 'Daily rhythm', 'Organising sleep at home'] },
     },
   },
+  {
+    sku: 'parent-guides-bundle',
+    // Approved by the owner: 19,90 € and 2 000 ₽ for the bundle of the three guides.
+    prices: { EUR: 1990, RUB: 200000 },
+    priceConfirmed: true,
+    published: false,          // stays hidden until the three PDF files exist and their content is confirmed
+    contentConfirmed: false,
+    files: ['cow-milk-protein-allergy-guide', 'complementary-feeding-guide', 'child-sleep-guide-0-18'],
+    preview: null,
+    i18n: {
+      ru: { title: 'Комплект из трёх гайдов для родителей', summary: 'Три гайда в одном заказе: аллергия на белок коровьего молока, прикорм (каши и пюре), сон ребёнка от рождения до 18 лет.', topics: ['Аллергия на белок коровьего молока', 'Прикорм: каши и пюре', 'Сон ребёнка от рождения до 18 лет'] },
+      fr: { title: 'Pack des trois guides pour parents', summary: "Les trois guides en une seule commande : allergie aux protéines du lait de vache, première alimentation (bouillies et purées), sommeil de l'enfant de la naissance à 18 ans.", topics: ['Allergie aux protéines du lait de vache', 'Première alimentation : bouillies et purées', "Sommeil de l'enfant, de la naissance à 18 ans"] },
+      en: { title: 'Bundle of the three parent guides', summary: "All three guides in one order: cow's milk protein allergy, complementary feeding (cereals and purées), child sleep from birth to 18 years.", topics: ["Cow's milk protein allergy", 'Complementary feeding: cereals and purées', 'Child sleep from birth to 18 years'] },
+    },
+  },
 ];
+
+export const CURRENCIES = ['EUR', 'RUB'];
+export const fileSkus = () => [...new Set(products.flatMap((p) => p.files))];

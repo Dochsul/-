@@ -41,3 +41,6 @@ data/
 dist/
 private/
 .env
+
+# Accounting exports contain personal and financial data
+exports/

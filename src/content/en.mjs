@@ -19,6 +19,7 @@ export default {
     { id: 'contact', label: 'Contact', path: 'contact/', primary: true },
   ],
   ui: {
+    draftPage: 'Draft: this section is not published. Consultations, menus and support will open once the right to provide these services in France is confirmed.',
     cartLoadError: 'The basket could not be loaded. Please refresh the page.',
     skip: 'Skip to content',
     menu: 'Menu',
@@ -123,7 +124,7 @@ export default {
       title: 'AINA Évidence — evidence-based nutrition for individuals and families',
       description: 'Personalised nutrition for adults and children, maternity and child development, guides for parents. Qualified dietitian-nutritionist working online from France.',
       sections: [
-        { type: 'hero', eyebrow: 'Evidence-based nutrition', h1: 'Nutrition that fits you and your family', lead: 'A personal approach without strict diets. Online work with clients in several countries: adults, children and maternity.', actions: [{ label: 'Book a consultation', href: 'consultations/', primary: true }, { label: 'Parent guides', href: 'guides/' }] },
+        { type: 'hero', eyebrow: 'Evidence-based nutrition', h1: 'Nutrition that fits you and your family', lead: 'A personal approach without strict diets. Online work with clients in several countries: adults, children and maternity.', actions: [{ label: 'Shop the guides', href: 'shop/', primary: true }, { label: 'Parent guides', href: 'guides/' }] },
         { type: 'cards', h: 'Areas of work', items: [
           { t: 'Adult nutrition', p: 'Personal recommendations on diet and routine, without rigid restrictions.' },
           { t: 'Child nutrition', p: 'Nutrition by age: complementary feeding, routine and the questions parents ask most.' },
@@ -144,7 +145,7 @@ export default {
         { type: 'text', h: 'My approach', paras: ['I rely on scientific evidence and explain why a recommendation works. The goal is not a diet, but sustainable eating that fits everyday life.', 'Every request is individual: age, family context, routine and preferences all shape the work.'] },
         { type: 'list', h: 'What I do', items: ['Evidence-based nutrition', 'Personalised nutrition for adults and children', 'Maternity and child development', 'Educational materials for parents', 'Personalised menus and ongoing support', 'Psychological support within my professional competence'] },
         { type: 'notice', p: 'I am not a doctor. I do not make diagnoses or promise to cure any disease. If you have a medical condition, please see your doctor.' },
-        { type: 'cta', h: 'Shall we work together?', label: 'Book a consultation', href: 'consultations/' },
+        { type: 'cta', h: 'Start with the parent guides', label: 'Parent guides', href: 'guides/' },
       ],
     },
     consultations: {

@@ -25,14 +25,14 @@ export function verifyStripeSignature(rawBody, header, secret, { now = Math.floo
 const STRIPE_LOCALE = { ru: 'ru', fr: 'fr', en: 'en' };
 
 // Creates a Stripe Checkout Session. `fetchImpl` is injectable for tests.
-export async function createCheckoutSession({ secretKey, fetchImpl = fetch, order, lines, locale, siteUrl, idempotencyKey }) {
+export async function createCheckoutSession({ secretKey, fetchImpl = fetch, order, lines, locale, successUrl, cancelUrl, idempotencyKey }) {
   const form = new URLSearchParams();
   form.set('mode', 'payment');
   form.set('client_reference_id', order.id);
   form.set('customer_email', order.email);
   form.set('locale', STRIPE_LOCALE[locale] || 'en');
-  form.set('success_url', `${siteUrl}/${locale}/checkout/success/?session_id={CHECKOUT_SESSION_ID}`);
-  form.set('cancel_url', `${siteUrl}/${locale}/checkout/cancel/`);
+  form.set('success_url', successUrl);
+  form.set('cancel_url', cancelUrl);
   form.set('billing_address_collection', 'required');
   form.set('metadata[order_id]', order.id);
   lines.forEach((l, i) => {
@@ -59,4 +59,22 @@ export async function createCheckoutSession({ secretKey, fetchImpl = fetch, orde
     throw err;
   }
   return { id: body.id, url: body.url };
+}
+
+// Reads the provider fee for a payment (Stripe balance transaction). Best effort: returns null on any failure,
+// and the ledger keeps fee_cents = NULL so the gap is visible in the accounting export.
+export async function fetchStripeFee({ secretKey, fetchImpl = fetch, paymentIntentId }) {
+  if (!secretKey || !paymentIntentId || !/^pi_[A-Za-z0-9]+$/.test(paymentIntentId)) return null;
+  try {
+    const url = `https://api.stripe.com/v1/payment_intents/${paymentIntentId}?expand[]=latest_charge.balance_transaction`;
+    const res = await fetchImpl(url, { headers: { Authorization: `Bearer ${secretKey}` }, signal: AbortSignal.timeout(10000) });
+    if (!res.ok) return null;
+    const pi = await res.json();
+    const bt = pi?.latest_charge?.balance_transaction;
+    if (!bt || typeof bt.fee !== 'number' || typeof bt.net !== 'number') return null;
+    // Stripe reports fee/net in the balance (settlement) currency, which can differ from the order currency.
+    return { feeCents: bt.fee, netCents: bt.net, currency: String(bt.currency || '').toUpperCase() };
+  } catch {
+    return null;
+  }
 }
