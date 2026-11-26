@@ -63,6 +63,7 @@ function lookup(path, lang) {
     'contact.email': business.contactEmail, 'contact.phone': business.contactPhone,
     'owner.displayName': business.owner.displayName, 'owner.qualification': business.owner.qualification[lang],
     'business.paymentMethods': business.paymentMethods,
+    'business.paymentProviderEntity': business.paymentProviderEntity,
   };
   if (path in map) return map[path];
   const [g, k] = path.split('.');

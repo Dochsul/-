@@ -92,7 +92,7 @@ Les produits numériques (guides au format PDF) sont fournis par téléchargemen
 
 #### 5. Paiement
 
-Le paiement s’effectue en ligne auprès d’un prestataire sécurisé **[À COMPLÉTER: moyens de paiement proposés]**. La commande n’est validée qu’après confirmation du paiement.
+Le paiement s’effectue en ligne sur la page sécurisée du prestataire de paiement Revolut (**[À COMPLÉTER: entité Revolut contractante]**). Moyens de paiement : **[À COMPLÉTER: moyens de paiement proposés]**. La commande n’est validée qu’après confirmation du paiement par le prestataire. Le montant payé est celui affiché au moment de la commande.
 
 #### 6. Droit de rétractation
 
@@ -170,7 +170,7 @@ Digital products (PDF guides) are delivered by download after payment is confirm
 
 #### 5. Payment
 
-Payment is made online through a secure provider: **[TO COMPLETE: payment methods]**. An order is validated only once payment is confirmed.
+Payment is made online on the secure page of the payment provider Revolut (**[TO COMPLETE: Revolut contracting entity]**). Payment methods: **[TO COMPLETE: payment methods]**. An order is validated only once the provider confirms the payment. The amount paid is the amount shown at checkout.
 
 #### 6. Right of withdrawal
 

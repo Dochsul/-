@@ -34,7 +34,7 @@ test('startup guard: weak or default settings are refused', () => {
 });
 
 test('startup guard: enabling payments needs both Stripe secrets and email delivery to buyers', () => {
-  const pay = { ...good, PAYMENTS_ENABLED: 'true', STRIPE_SECRET_KEY: 'sk_test_' + 'a'.repeat(24), STRIPE_WEBHOOK_SECRET: 'whsec_' + 'b'.repeat(24) };
+  const pay = { ...good, PAYMENT_PROVIDER: 'stripe', PAYMENTS_ENABLED: 'true', STRIPE_SECRET_KEY: 'sk_test_' + 'a'.repeat(24), STRIPE_WEBHOOK_SECRET: 'whsec_' + 'b'.repeat(24) };
   assert.deepEqual(errs(pay), []);
   assert.match(errs({ ...pay, STRIPE_WEBHOOK_SECRET: '' }).join('|'), /WEBHOOK_SECRET/);
   assert.match(errs({ ...pay, STRIPE_SECRET_KEY: 'not-a-key' }).join('|'), /STRIPE_SECRET_KEY/);
@@ -42,7 +42,7 @@ test('startup guard: enabling payments needs both Stripe secrets and email deliv
 });
 
 test('startup guard: a LIVE Stripe key and RUB payments each need an explicit owner approval switch', () => {
-  const live = { ...good, PAYMENTS_ENABLED: 'true', STRIPE_SECRET_KEY: 'sk_live_' + 'a'.repeat(24), STRIPE_WEBHOOK_SECRET: 'whsec_' + 'b'.repeat(24) };
+  const live = { ...good, PAYMENT_PROVIDER: 'stripe', PAYMENTS_ENABLED: 'true', STRIPE_SECRET_KEY: 'sk_live_' + 'a'.repeat(24), STRIPE_WEBHOOK_SECRET: 'whsec_' + 'b'.repeat(24) };
   assert.match(errs(live).join('|'), /LIVE_PAYMENTS_APPROVED/);
   assert.deepEqual(errs({ ...live, LIVE_PAYMENTS_APPROVED: 'owner-approved' }), []);
   assert.match(errs({ ...good, ENABLED_CURRENCIES: 'EUR,RUB' }).join('|'), /RUB_PAYMENTS_APPROVED/);
@@ -66,7 +66,7 @@ before(async () => {
   db = openDb(':memory:');
   const i18n = { ru: { title: 'T', summary: 's', topics: [] }, fr: { title: 'T', summary: 's', topics: [] }, en: { title: 'T', summary: 's', topics: [] } };
   const config = { ...loadConfig({}), siteUrl: 'https://api.aina.test', dataDir: dir, privateDir: join(dir, 'private'), distDir: join(dir, 'dist'),
-    paymentsEnabled: true, stripeSecretKey: 'sk_test_x', stripeWebhookSecret: WEBHOOK, catalog: [{ sku: SKU, prices: { EUR: 990, RUB: 100000 }, priceConfirmed: true, published: true, contentConfirmed: true, files: [SKU], i18n }],
+    paymentsEnabled: true, paymentProvider: 'stripe', stripeSecretKey: 'sk_test_x', stripeWebhookSecret: WEBHOOK, catalog: [{ sku: SKU, prices: { EUR: 990, RUB: 100000 }, priceConfirmed: true, published: true, contentConfirmed: true, files: [SKU], i18n }],
     fileSkus: [SKU], allowedOrigins: [] };
   let n = 0; // Stripe session ids are unique
   const fetchImpl = async () => { n += 1; return new Response(JSON.stringify({ id: `cs_${n}`, url: `https://checkout.stripe.test/c/${n}` }), { status: 200 }); };
@@ -87,7 +87,7 @@ test('HSTS is sent when the public address is https; health checks the database'
 });
 
 test('checkout is rate limited per client (20 per 10 minutes)', async () => {
-  const body = { locale: 'en', email: 'rl@example.com', items: [{ sku: SKU }], acceptTerms: true, acceptDigital: true };
+  const body = { locale: 'en', email: 'rl@example.com', items: [{ sku: SKU }], acceptTerms: true, acceptDigital: true, country: 'FR' };
   const codes = [];
   for (let i = 0; i < 23; i++) codes.push((await post('/api/checkout', body)).status);
   assert.equal(codes.filter((c) => c === 200).length, 20);

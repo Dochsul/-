@@ -93,7 +93,7 @@ test('check-env: accepts a complete production environment and refuses unsafe on
   assert.match(good.stdout, /Payments: off/);
   const bad = await run('scripts/check-env.mjs', [], { ...ok, IP_SALT: 'weak', PAYMENTS_ENABLED: 'true' });
   assert.equal(bad.status, 1);
-  assert.match(bad.stderr, /IP_SALT/); assert.match(bad.stderr, /STRIPE_SECRET_KEY/);
+  assert.match(bad.stderr, /IP_SALT/); assert.match(bad.stderr, /REVOLUT_API_KEY/, 'Revolut is the default provider');
 });
 
 test('verify-files reports missing and non-PDF files and prints checksums for real ones', async () => {

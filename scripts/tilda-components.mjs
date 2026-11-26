@@ -37,7 +37,7 @@ const SHOP_I18N = {
   ru: {
     title: 'Гайды для родителей', add: 'В корзину', inCart: 'В корзине', remove: 'Убрать', cart: 'Корзина', empty: 'Корзина пуста.',
     total: 'Итого', email: 'Email для получения файлов', terms: 'Я принимаю условия продажи и политику возврата', digital: 'Я прошу немедленно предоставить цифровой продукт и понимаю, что после получения доступа право на отказ от покупки не применяется',
-    rules: 'Правила', submit: 'Перейти к оплате', payNote: 'Оплата проходит на защищённой странице Stripe. Ссылки на файлы приходят на email только после подтверждения оплаты.',
+    rules: 'Правила', submit: 'Перейти к оплате', payNote: 'Оплата проходит на защищённой странице Revolut. Ссылки на файлы приходят на email только после подтверждения оплаты.', country: 'Страна плательщика (для оплаты)', countryPick: 'Выберите страну',
     soon: 'Скоро', priceTbc: 'Цена уточняется', paymentsOff: 'Оплата пока не подключена. Магазин откроется после запуска платежей.',
     apiDown: 'Магазин временно недоступен. Попробуйте позже или напишите нам.', bundleSwap: 'Комплект уже включает этот гайд: выбран только комплект.',
     rubNote: 'Оплата в рублях пока недоступна, заказ оплачивается в евро.', redirecting: 'Переход к оплате…',
@@ -46,7 +46,7 @@ const SHOP_I18N = {
   fr: {
     title: 'Guides pour parents', add: 'Ajouter au panier', inCart: 'Dans le panier', remove: 'Retirer', cart: 'Panier', empty: 'Votre panier est vide.',
     total: 'Total', email: 'E-mail pour recevoir les fichiers', terms: 'J’accepte les conditions générales de vente et la politique de remboursement', digital: 'Je demande la fourniture immédiate du contenu numérique et je reconnais perdre mon droit de rétractation une fois le contenu fourni',
-    rules: 'Conditions', submit: 'Passer au paiement', payNote: 'Le paiement a lieu sur une page sécurisée Stripe. Les liens vers les fichiers sont envoyés par e-mail uniquement après confirmation du paiement.',
+    rules: 'Conditions', submit: 'Passer au paiement', payNote: 'Le paiement a lieu sur une page sécurisée Revolut. Les liens vers les fichiers sont envoyés par e-mail uniquement après confirmation du paiement.', country: 'Pays de facturation', countryPick: 'Choisissez un pays',
     soon: 'Bientôt disponible', priceTbc: 'Prix à confirmer', paymentsOff: 'Le paiement n’est pas encore activé. La boutique ouvrira au lancement des paiements.',
     apiDown: 'La boutique est temporairement indisponible. Réessayez plus tard ou écrivez-nous.', bundleSwap: 'Le pack contient déjà ce guide : seul le pack est conservé.',
     rubNote: '', redirecting: 'Redirection vers le paiement…',
@@ -55,7 +55,7 @@ const SHOP_I18N = {
   en: {
     title: 'Parent guides', add: 'Add to basket', inCart: 'In basket', remove: 'Remove', cart: 'Basket', empty: 'Your basket is empty.',
     total: 'Total', email: 'Email to receive the files', terms: 'I accept the terms of sale and the refund policy', digital: 'I request immediate supply of the digital content and acknowledge that I lose my right of withdrawal once it is supplied',
-    rules: 'Terms', submit: 'Continue to payment', payNote: 'Payment takes place on a secure Stripe page. File links are emailed only after the payment is confirmed.',
+    rules: 'Terms', submit: 'Continue to payment', payNote: 'Payment takes place on a secure Revolut page. File links are emailed only after the payment is confirmed.', country: 'Billing country', countryPick: 'Choose a country',
     soon: 'Coming soon', priceTbc: 'Price to be confirmed', paymentsOff: 'Payments are not switched on yet. The shop opens when payments launch.',
     apiDown: 'The shop is temporarily unavailable. Please try later or write to us.', bundleSwap: 'The bundle already includes this guide: only the bundle is kept.',
     rubNote: '', redirecting: 'Redirecting to payment…',
@@ -202,7 +202,7 @@ const SHOP_JS = `
       if (!form.checkValidity()) { form.reportValidity(); setStatus(t.errors.validation, true); return; }
       var btn = form.querySelector('button[type=submit]');
       btn.disabled = true; setStatus(t.redirecting, false);
-      var body = { locale: lang, currency: 'EUR', email: form.elements.email.value, acceptTerms: form.elements.terms.checked, acceptDigital: form.elements.digital.checked,
+      var body = { locale: lang, currency: 'EUR', email: form.elements.email.value, country: form.elements.country.value, acceptTerms: form.elements.terms.checked, acceptDigital: form.elements.digital.checked,
         items: cart().filter(sellable).map(function (s) { return { sku: s }; }) };
       fetch(api + '/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(body) })
         .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, j: j }; }); })
@@ -232,6 +232,12 @@ const SHOP_JS = `
 })();
 `.trim();
 
+import { offeredCountries } from '../src/config/countries.mjs';
+const countryOptions = (lang) => {
+  const dn = new Intl.DisplayNames([lang === 'ru' ? 'ru' : lang === 'fr' ? 'fr' : 'en'], { type: 'region' });
+  return offeredCountries.map((c) => `<option value="${c}">${dn.of(c)}</option>`).join('');
+};
+
 function shopHtml(lang) {
   const t = SHOP_I18N[lang];
   const legal = (slug) => `/${lang}/legal/${slug}/`;
@@ -251,6 +257,7 @@ function shopHtml(lang) {
       <p class="ae-total" data-ae-total></p>
       <form data-ae-form novalidate hidden>
         <div class="ae-field"><label for="ae-email-${lang}">${t.email} *</label><input id="ae-email-${lang}" name="email" type="email" autocomplete="email" required maxlength="200"></div>
+        <div class="ae-field"><label for="ae-country-${lang}">${t.country} *</label><select id="ae-country-${lang}" name="country" required><option value="">${t.countryPick}</option>${countryOptions(lang)}</select></div>
         <label class="ae-check"><input name="terms" type="checkbox" required><span>${t.terms} (<a href="${legal('terms-of-sale')}" target="_blank" rel="noopener">${t.rules}</a>, <a href="${legal('refunds')}" target="_blank" rel="noopener">${{ ru: 'возврат', fr: 'remboursement', en: 'refunds' }[lang]}</a>) *</span></label>
         <label class="ae-check"><input name="digital" type="checkbox" required><span>${t.digital} (<a href="${legal('digital-products')}" target="_blank" rel="noopener">${t.rules}</a>) *</span></label>
         <p class="ae-note">${t.payNote}</p>

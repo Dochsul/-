@@ -52,6 +52,9 @@ export function validateCheckout(body) {
   if (!CURRENCIES.includes(currency)) throw new ValidationError('currency', 'unsupported currency');
   const email = str(body.email, 'email', { max: 200, required: true }).toLowerCase();
   if (!EMAIL.test(email)) throw new ValidationError('email', 'email is invalid');
+  // Billing country (ISO 3166-1 alpha-2): needed for the sanctions control before any payment is created.
+  const country = typeof body.country === 'string' ? body.country.trim().toUpperCase() : '';
+  if (!/^[A-Z]{2}$/.test(country)) throw new ValidationError('country', 'country is required');
   if (body.acceptTerms !== true) throw new ValidationError('acceptTerms', 'terms must be accepted');
   if (body.acceptDigital !== true) throw new ValidationError('acceptDigital', 'digital waiver must be accepted');
   if (!Array.isArray(body.items) || body.items.length < 1 || body.items.length > 10) {
@@ -67,7 +70,7 @@ export function validateCheckout(body) {
     seen.add(it.sku);
     return { sku: it.sku, qty: 1 };
   });
-  return { locale, email, items, currency };
+  return { locale, email, items, currency, country };
 }
 
 // Server-side pricing from the catalog. A product can be sold only if it is published, its content is confirmed,

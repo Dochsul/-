@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // End-to-end test of the Tilda shop integration in a real browser (Playwright + Chromium).
 // Two origins like production: a "Tilda" page origin serving the generated T123 block, and the API origin.
-// Stripe is a STUB (no network, no real payment): this verifies our code path, not Stripe itself.
+// STRIPE FALLBACK variant (provider 'stripe', disabled by default). Stripe is a STUB: no network, no real payment.
+// The primary Revolut flow is in scripts/tilda-e2e-revolut.mjs.
 // Usage: npm run e2e:tilda   (needs Playwright; CHROMIUM_PATH optional)
 import { createRequire } from 'node:module';
 import { createServer } from 'node:http';
@@ -51,7 +52,7 @@ async function startApi({ paymentsEnabled, pageOrigin }) {
   const db = openDb(':memory:');
   const config = {
     siteUrl: 'https://api.test', ipSalt: 'e2e', ownerEmail: 'owner@test', ownerChannel: 'file', clientChannel: 'file', trustProxy: false,
-    paymentsEnabled, stripeSecretKey: 'sk_test_e2e_stub', stripeWebhookSecret: WEBHOOK, privateDir: join(dir, 'private'), distDir: join(dir, 'dist'),
+    paymentsEnabled, paymentProvider: 'stripe', stripeSecretKey: 'sk_test_e2e_stub', stripeWebhookSecret: WEBHOOK, privateDir: join(dir, 'private'), distDir: join(dir, 'dist'),
     dataDir: dir, catalog, fileSkus: fileSkus(), enabledCurrencies: ['EUR'], allowedOrigins: [pageOrigin], blockedCountries: ['RU', 'BY'],
     downloadValidityDays: 7, downloadMaxCount: 5, checkoutSuccessUrl: `${pageOrigin}/{locale}/merci`, checkoutCancelUrl: `${pageOrigin}/{locale}/panier`, telegram: {},
   };
@@ -120,6 +121,7 @@ const sign = (body) => { const t = Math.floor(Date.now() / 1000); return `t=${t}
     ok(/19,90/.test(await page.textContent('[data-ae-total]')), 'cart: total 19,90 € (EUR)');
     // Consents are mandatory: no request without them
     await page.fill('[data-ae-form] input[name=email]', 'buyer@example.com');
+    await page.selectOption('[data-ae-form] select[name=country]', 'FR');
     const before = stripeForms.length;
     await page.click('[data-ae-form] button[type=submit]');
     await page.waitForTimeout(300);
@@ -136,7 +138,7 @@ const sign = (body) => { const t = Math.floor(Date.now() / 1000); return `t=${t}
 
   // 2b. Single guide purchase: one PDF, server price 7,90 EUR
   {
-    const res = await fetch(`${api.base}/api/checkout`, { method: 'POST', headers: { 'content-type': 'application/json', origin: pageOrigin }, body: JSON.stringify({ locale: 'ru', email: 'single@example.com', items: [{ sku: 'complementary-feeding-guide' }], acceptTerms: true, acceptDigital: true }) });
+    const res = await fetch(`${api.base}/api/checkout`, { method: 'POST', headers: { 'content-type': 'application/json', origin: pageOrigin }, body: JSON.stringify({ locale: 'ru', email: 'single@example.com', items: [{ sku: 'complementary-feeding-guide' }], acceptTerms: true, acceptDigital: true, country: 'FR' }) });
     const { orderId } = await res.json();
     const f = stripeForms.at(-1);
     ok(f.get('line_items[0][price_data][unit_amount]') === '790' && f.get('line_items[0][price_data][currency]') === 'eur', 'single guide: Stripe receives 7,90 EUR');
@@ -144,9 +146,9 @@ const sign = (body) => { const t = Math.floor(Date.now() / 1000); return `t=${t}
     const body = JSON.stringify({ id: 'evt_e2e_single', type: 'checkout.session.completed', data: { object: { id: o.provider_session_id, payment_status: 'paid', amount_total: 790, currency: 'eur', payment_intent: 'pi_e2e_single', metadata: { order_id: orderId }, customer_details: { address: { country: 'DE' } } } } });
     await fetch(`${api.base}/api/webhooks/stripe`, { method: 'POST', headers: { 'content-type': 'application/json', 'stripe-signature': sign(body) }, body });
     ok(api.db.prepare('SELECT COUNT(*) n FROM downloads WHERE order_id = ?').get(orderId).n === 1, 'single guide: exactly one personal link');
-    const overlap = await fetch(`${api.base}/api/checkout`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ locale: 'ru', email: 'o@example.com', items: [{ sku: 'parent-guides-bundle' }, { sku: 'child-sleep-guide-0-18' }], acceptTerms: true, acceptDigital: true }) });
+    const overlap = await fetch(`${api.base}/api/checkout`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ locale: 'ru', email: 'o@example.com', items: [{ sku: 'parent-guides-bundle' }, { sku: 'child-sleep-guide-0-18' }], acceptTerms: true, acceptDigital: true, country: 'FR' }) });
     ok(overlap.status === 409, 'server: bundle together with its own guide is refused');
-    const rub = await fetch(`${api.base}/api/checkout`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ locale: 'ru', currency: 'RUB', email: 'rub@example.com', items: [{ sku: 'parent-guides-bundle' }], acceptTerms: true, acceptDigital: true }) });
+    const rub = await fetch(`${api.base}/api/checkout`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ locale: 'ru', currency: 'RUB', email: 'rub@example.com', items: [{ sku: 'parent-guides-bundle' }], acceptTerms: true, acceptDigital: true, country: 'FR' }) });
     ok(rub.status === 409 && (await rub.json()).error === 'currency_not_enabled', 'server: payment in RUB is refused (channel not confirmed)');
   }
 
@@ -181,7 +183,7 @@ const sign = (body) => { const t = Math.floor(Date.now() / 1000); return `t=${t}
 
   // 4. Failed payment: nothing delivered
   {
-    const res = await fetch(`${api.base}/api/checkout`, { method: 'POST', headers: { 'content-type': 'application/json', origin: pageOrigin }, body: JSON.stringify({ locale: 'fr', email: 'f@example.com', items: [{ sku: 'parent-guides-bundle' }], acceptTerms: true, acceptDigital: true }) });
+    const res = await fetch(`${api.base}/api/checkout`, { method: 'POST', headers: { 'content-type': 'application/json', origin: pageOrigin }, body: JSON.stringify({ locale: 'fr', email: 'f@example.com', items: [{ sku: 'parent-guides-bundle' }], acceptTerms: true, acceptDigital: true, country: 'FR' }) });
     const { orderId } = await res.json();
     const o = api.db.prepare('SELECT * FROM orders WHERE id = ?').get(orderId);
     const fail = JSON.stringify({ id: 'evt_e2e_fail', type: 'checkout.session.async_payment_failed', data: { object: { id: o.provider_session_id } } });

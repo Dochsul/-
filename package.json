@@ -15,7 +15,11 @@
     "check": "node scripts/check.mjs",
     "smoke": "node scripts/smoke.cjs",
     "tilda": "node scripts/tilda-export.mjs && node scripts/tilda-components.mjs",
-    "e2e:tilda": "node scripts/tilda-e2e.mjs",
-    "accounting:export": "node scripts/export-accounting.mjs"
+    "e2e:tilda": "node scripts/tilda-e2e-revolut.mjs",
+    "accounting:export": "node scripts/export-accounting.mjs",
+    "e2e:tilda:stripe": "node scripts/tilda-e2e.mjs",
+    "revolut:sandbox-check": "node scripts/revolut-test.mjs check",
+    "fees:import": "node scripts/import-revolut-fees.mjs",
+    "refund:record": "node scripts/record-refund.mjs"
   }
 }

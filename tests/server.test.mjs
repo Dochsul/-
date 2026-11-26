@@ -67,7 +67,7 @@ before(async () => {
     siteUrl: 'https://site.test', ipSalt: 'salt', ownerEmail: 'owner@test.fr', ownerChannel: 'file', clientChannel: 'file',
     trustProxy: false, paymentsEnabled: true, stripeSecretKey: SECRET_KEY, stripeWebhookSecret: WEBHOOK,
     privateDir: join(dir, 'private'), distDir: join(dir, 'dist'), dataDir: dir, catalog, fileSkus: [SKU, SKU2, 'hidden', 'unpriced'],
-    enabledCurrencies: ['EUR'], allowedOrigins: ['https://tilda.test'],
+    enabledCurrencies: ['EUR'], allowedOrigins: ['https://tilda.test'], paymentProvider: 'stripe',
     checkoutSuccessUrl: 'https://tilda.test/{locale}/merci', checkoutCancelUrl: 'https://tilda.test/{locale}/panier',
     blockedCountries: ['RU', 'BY'], downloadValidityDays: 7, downloadMaxCount: 5, telegram: {},
   };
@@ -175,7 +175,7 @@ test('outbox: after real owner delivery (telegram) the client acknowledgement is
 test('checkout: returns 503 while payments are disabled', async () => {
   const cfg = globalThis.__config;
   cfg.paymentsEnabled = false;
-  const res = await post('/api/checkout', { locale: 'en', email: 'b@example.com', items: [{ sku: SKU, qty: 1 }], acceptTerms: true, acceptDigital: true });
+  const res = await post('/api/checkout', { locale: 'en', email: 'b@example.com', items: [{ sku: SKU, qty: 1 }], acceptTerms: true, acceptDigital: true, country: 'FR' });
   assert.equal(res.status, 503);
   cfg.paymentsEnabled = true;
 });
@@ -186,13 +186,13 @@ test('checkout: requires both legal acceptances', async () => {
 });
 
 test('checkout: unknown or unpublished product cannot be bought', async () => {
-  const res = await post('/api/checkout', { locale: 'en', email: 'b@example.com', items: [{ sku: 'nope', qty: 1 }], acceptTerms: true, acceptDigital: true });
+  const res = await post('/api/checkout', { locale: 'en', email: 'b@example.com', items: [{ sku: 'nope', qty: 1 }], acceptTerms: true, acceptDigital: true, country: 'FR' });
   assert.equal(res.status, 409);
   assert.equal((await res.json()).error, 'product_unavailable');
 });
 
 test('checkout: price comes from the server catalog, client prices are ignored', async () => {
-  const res = await post('/api/checkout', { locale: 'en', email: 'b@example.com', items: [{ sku: SKU, qty: 1, priceCents: 1 }], acceptTerms: true, acceptDigital: true, amount: 1 });
+  const res = await post('/api/checkout', { locale: 'en', email: 'b@example.com', items: [{ sku: SKU, qty: 1, priceCents: 1 }], acceptTerms: true, acceptDigital: true, country: 'FR', amount: 1 });
   assert.equal(res.status, 200);
   assert.match((await res.json()).url, /^https:\/\/checkout\.stripe\.test\/c\/cs_test_\d+$/);
   const sent = new URLSearchParams(stripeCalls.at(-1).init.body);
@@ -207,9 +207,9 @@ test('checkout: price comes from the server catalog, client prices are ignored',
 });
 
 test('checkout: duplicate items and too many items are refused', () => {
-  assert.throws(() => validateCheckout({ email: 'a@b.fr', acceptTerms: true, acceptDigital: true, items: [{ sku: SKU, qty: 1 }, { sku: SKU, qty: 1 }] }), /duplicate/);
-  assert.throws(() => validateCheckout({ email: 'a@b.fr', acceptTerms: true, acceptDigital: true, items: [{ sku: SKU, qty: 2 }] }), /invalid item/);
-  assert.throws(() => validateCheckout({ email: 'a@b.fr', acceptTerms: true, acceptDigital: true, currency: 'USD', items: [{ sku: SKU }] }), /unsupported currency/);
+  assert.throws(() => validateCheckout({ email: 'a@b.fr', acceptTerms: true, acceptDigital: true, country: 'FR', items: [{ sku: SKU, qty: 1 }, { sku: SKU, qty: 1 }] }), /duplicate/);
+  assert.throws(() => validateCheckout({ email: 'a@b.fr', acceptTerms: true, acceptDigital: true, country: 'FR', items: [{ sku: SKU, qty: 2 }] }), /invalid item/);
+  assert.throws(() => validateCheckout({ email: 'a@b.fr', acceptTerms: true, acceptDigital: true, country: 'FR', currency: 'USD', items: [{ sku: SKU }] }), /unsupported currency/);
 });
 
 test('checkout: unconfirmed, unpriced or unpublished products are not sold', () => {
@@ -219,7 +219,7 @@ test('checkout: unconfirmed, unpriced or unpublished products are not sold', () 
 });
 
 test('checkout: RUB is refused while the currency is not enabled', async () => {
-  const res = await post('/api/checkout', { locale: 'ru', currency: 'RUB', email: 'r@example.com', items: [{ sku: BUNDLE }], acceptTerms: true, acceptDigital: true });
+  const res = await post('/api/checkout', { locale: 'ru', currency: 'RUB', email: 'r@example.com', items: [{ sku: BUNDLE }], acceptTerms: true, acceptDigital: true, country: 'FR' });
   assert.equal(res.status, 409);
   assert.equal((await res.json()).error, 'currency_not_enabled');
 });
@@ -231,7 +231,7 @@ test('checkout: RUB pricing uses the RUB catalog price when the currency is enab
 });
 
 test('checkout: a bundle cannot be bought together with a guide it contains', async () => {
-  const res = await post('/api/checkout', { locale: 'en', email: 'o@example.com', items: [{ sku: BUNDLE }, { sku: SKU }], acceptTerms: true, acceptDigital: true });
+  const res = await post('/api/checkout', { locale: 'en', email: 'o@example.com', items: [{ sku: BUNDLE }, { sku: SKU }], acceptTerms: true, acceptDigital: true, country: 'FR' });
   assert.equal(res.status, 409);
   assert.equal((await res.json()).error, 'bundle_overlap');
 });
@@ -377,7 +377,7 @@ test('health endpoint reports payment status without secrets', async () => {
 
 // ---------- bundle, ledger, refunds ----------
 async function paidBundleOrder(pi) {
-  const res = await post('/api/checkout', { locale: 'fr', email: `bundle-${pi}@example.com`, items: [{ sku: BUNDLE }], acceptTerms: true, acceptDigital: true });
+  const res = await post('/api/checkout', { locale: 'fr', email: `bundle-${pi}@example.com`, items: [{ sku: BUNDLE }], acceptTerms: true, acceptDigital: true, country: 'FR' });
   assert.equal(res.status, 200);
   const { orderId } = await res.json();
   const order = db.prepare('SELECT * FROM orders WHERE id = ?').get(orderId);
@@ -416,7 +416,7 @@ test('ledger: if the fee cannot be read, the payment is kept with fee = NULL (vi
 });
 
 test('failed payment: async failure marks the order failed and delivers nothing', async () => {
-  const res = await post('/api/checkout', { locale: 'en', email: 'fail@example.com', items: [{ sku: SKU }], acceptTerms: true, acceptDigital: true });
+  const res = await post('/api/checkout', { locale: 'en', email: 'fail@example.com', items: [{ sku: SKU }], acceptTerms: true, acceptDigital: true, country: 'FR' });
   const { orderId } = await res.json();
   const order = db.prepare('SELECT * FROM orders WHERE id = ?').get(orderId);
   const body = JSON.stringify({ id: 'evt_async_fail', type: 'checkout.session.async_payment_failed', data: { object: { id: order.provider_session_id } } });

@@ -35,6 +35,7 @@ function lookup(path, locale) {
     'owner.displayName': business.owner.displayName,
     'owner.qualification': business.owner.qualification[locale],
     'business.paymentMethods': business.paymentMethods,
+    'business.paymentProviderEntity': business.paymentProviderEntity,
   };
   if (path in map) return map[path];
   const [group, key] = path.split('.');
@@ -76,6 +77,7 @@ const REQUIRED = [
   ['policy.transfers', business.policy.transfers],
   ['policy.lateCancellation', business.policy.lateCancellation],
   ['business.paymentMethods', business.paymentMethods],
+  ['business.paymentProviderEntity', business.paymentProviderEntity],
 ];
 for (const [name, value] of REQUIRED) {
   if (value === null || value === undefined || value === '') gateIssues.push(`не заполнено: ${name}`);

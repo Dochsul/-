@@ -1,0 +1,33 @@
+# MANUAL check of the Revolut SANDBOX (no money moves). Needs the owner to add the repository secret
+# REVOLUT_SANDBOX_API_KEY (Settings -> Secrets and variables -> Actions). Never runs on push.
+# The script refuses any environment other than sandbox.
+name: Revolut sandbox check (manual)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sandbox:
+    name: Create and read back one sandbox order
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Require the sandbox key
+        env:
+          REVOLUT_SANDBOX_API_KEY: ${{ secrets.REVOLUT_SANDBOX_API_KEY }}
+        run: |
+          if [ -z "$REVOLUT_SANDBOX_API_KEY" ]; then
+            echo "REVOLUT_SANDBOX_API_KEY is not set. Add the sandbox key as a repository secret to run this check."
+            exit 1
+          fi
+      - name: Sandbox order round trip
+        env:
+          REVOLUT_ENV: sandbox
+          REVOLUT_SANDBOX_API_KEY: ${{ secrets.REVOLUT_SANDBOX_API_KEY }}
+        run: node scripts/revolut-test.mjs check

@@ -9,6 +9,14 @@ export function loadConfig(env = process.env) {
   return {
     downloadValidityDays: 7,                // proposal, confirm in docs/ANKETA.md
     downloadMaxCount: 5,
+    // Payment provider. Revolut is the primary provider; Stripe is kept as a disabled fallback module.
+    paymentProvider: env.PAYMENT_PROVIDER || 'revolut',
+    revolut: {
+      env: env.REVOLUT_ENV || 'sandbox',           // sandbox | production
+      apiKey: env.REVOLUT_API_KEY || null,           // Merchant API secret key: server environment only
+      webhookSecret: env.REVOLUT_WEBHOOK_SECRET || null, // wsk_… signing secret of the webhook
+      version: env.REVOLUT_API_VERSION || '2024-05-01',
+    },
     catalog: products,                      // overridden in tests only
     fileSkus: fileSkus(),
     // Currencies in which checkout is allowed. RUB prices are stored, but RUB payments stay OFF until a lawyer and the
@@ -70,13 +78,22 @@ export function assertProductionConfig(config, env = process.env) {
     if (config.smtp.user && !['tls', 'starttls'].includes(config.smtp.secure)) errors.push('SMTP_SECURE must be tls or starttls');
   }
   if (config.ownerChannel === 'telegram' && !(config.telegram.token && config.telegram.chatId)) errors.push('TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID are required for the telegram channel');
-  if (config.paymentsEnabled) {
+  if (config.paymentsEnabled && config.paymentProvider === 'revolut') {
+    const r = config.revolut || {};
+    if (!r.apiKey) errors.push('REVOLUT_API_KEY is required when payments are enabled');
+    if (!/^wsk_[A-Za-z0-9_-]{10,}$/.test(r.webhookSecret || '')) errors.push('REVOLUT_WEBHOOK_SECRET (wsk_…) is missing or malformed');
+    if (!['sandbox', 'production'].includes(r.env)) errors.push('REVOLUT_ENV must be sandbox or production');
+    if (r.env === 'production' && env.LIVE_PAYMENTS_APPROVED !== 'owner-approved') errors.push('REVOLUT_ENV=production requires LIVE_PAYMENTS_APPROVED=owner-approved (explicit owner decision)');
+    if (config.clientChannel !== 'smtp') errors.push("CLIENT_CHANNEL must be 'smtp' when payments are enabled: buyers receive their links by email");
+  }
+  if (config.paymentsEnabled && config.paymentProvider === 'stripe') {
     const key = config.stripeSecretKey || '';
     if (!/^(sk|rk)_(test|live)_[A-Za-z0-9]{10,}$/.test(key)) errors.push('STRIPE_SECRET_KEY is missing or malformed');
     if (!/^whsec_[A-Za-z0-9]{10,}$/.test(config.stripeWebhookSecret || '')) errors.push('STRIPE_WEBHOOK_SECRET is missing or malformed');
     if (/_live_/.test(key) && env.LIVE_PAYMENTS_APPROVED !== 'owner-approved') errors.push('a live Stripe key requires LIVE_PAYMENTS_APPROVED=owner-approved (explicit owner decision)');
     if (config.clientChannel !== 'smtp') errors.push("CLIENT_CHANNEL must be 'smtp' when payments are enabled: buyers receive their links by email");
   }
+  if (!['revolut', 'stripe'].includes(config.paymentProvider)) errors.push('PAYMENT_PROVIDER must be revolut or stripe');
   if (config.enabledCurrencies.includes('RUB') && env.RUB_PAYMENTS_APPROVED !== 'owner-approved') errors.push('RUB payments require RUB_PAYMENTS_APPROVED=owner-approved (lawful working payment channel confirmed)');
   return errors;
 }

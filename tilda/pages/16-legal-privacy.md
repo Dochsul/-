@@ -104,7 +104,7 @@ Le formulaire n’est pas destiné à recueillir des données de santé. Ne tran
 
 #### Destinataires
 
-Les données sont accessibles au responsable du traitement. Elles peuvent être transmises à l’hébergeur du site, au service de messagerie utilisé pour répondre aux demandes et, pour les paiements, au prestataire de paiement choisi. Aucune donnée n’est vendue.
+Les données sont accessibles au responsable du traitement. Elles peuvent être transmises à l’hébergeur du site, au service de messagerie utilisé pour répondre aux demandes et, pour les paiements, au prestataire de paiement Revolut (**[À COMPLÉTER: entité Revolut contractante]**), qui traite les données de paiement sous sa propre responsabilité. Aucune donnée n’est vendue.
 
 #### Transferts hors Union européenne
 
@@ -200,7 +200,7 @@ The form is not meant for health data. Do not send test results or diagnoses. If
 
 #### Recipients
 
-Data is accessible to the controller. It may be shared with the site host, the email service used to reply to requests and, for payments, the chosen payment provider. Data is not sold.
+Data is accessible to the controller. It may be shared with the site host, the email service used to reply to requests and, for payments, the payment provider Revolut (**[TO COMPLETE: Revolut contracting entity]**), which processes payment data under its own responsibility. Data is not sold.
 
 #### Transfers outside the EU
 

@@ -43,13 +43,15 @@ export const business = {
     lateCancellation: null,     // what applies to late cancellation or no-show
   },
   download: { validityDays: 7, maxDownloads: 5 }, // proposed defaults, to be confirmed by the owner
-  paymentMethods: null,         // payment methods actually enabled, e.g. 'Stripe (cartes, Apple Pay, Google Pay)'
+  paymentMethods: null,         // payment methods actually enabled in Revolut, e.g. 'cartes bancaires, Apple Pay, Google Pay' (confirm in the Revolut dashboard)
+  paymentProviderEntity: null,  // legal entity of Revolut that contracts with the merchant (shown in the legal texts; confirm in the merchant agreement)
   pricesConfirmed: false,     // owner confirms the service prices in src/config/services.mjs
   legalReviewed: false,       // lawyer has reviewed legal documents (set true only after review)
   payments: {
     // All providers are OFF until the owner explicitly approves going live (see docs/PAYMENTS.md).
     enabled: process.env.PAYMENTS_ENABLED === 'true',
-    stripe: { enabled: false },
+    revolut: { enabled: true, primary: true, mode: 'api-orders' }, // Merchant API orders; pay-by-link is NOT used for automatic sales (docs/REVOLUT.md)
+    stripe: { enabled: false, fallbackOnly: true },                 // kept as a disabled fallback module
     paypal: { enabled: false },
     bankTransfer: { enabled: false, iban: null, bic: null },
   },
