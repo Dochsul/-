@@ -1,0 +1,35 @@
+#cloud-config
+# First-boot setup for a fresh Ubuntu 24.04 VPS. Contains NO secrets. Replace the SSH key before use.
+# Result: Docker, firewall (22/80/443 only), fail2ban, automatic security updates, key-only SSH, /opt/aina prepared.
+package_update: true
+package_upgrade: true
+packages: [ca-certificates, curl, git, ufw, fail2ban, unattended-upgrades]
+users:
+  - name: deploy
+    groups: [docker, sudo]
+    shell: /bin/bash
+    sudo: "ALL=(ALL) NOPASSWD:ALL"
+    ssh_authorized_keys:
+      - "ssh-ed25519 REPLACE_WITH_YOUR_PUBLIC_KEY owner@laptop"
+write_files:
+  - path: /etc/ssh/sshd_config.d/99-hardening.conf
+    content: |
+      PermitRootLogin no
+      PasswordAuthentication no
+      KbdInteractiveAuthentication no
+runcmd:
+  - install -m 0755 -d /etc/apt/keyrings
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+  - 'echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $VERSION_CODENAME) stable" > /etc/apt/sources.list.d/docker.list'
+  - apt-get update
+  - apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+  - ufw default deny incoming
+  - ufw default allow outgoing
+  - ufw allow 22/tcp
+  - ufw allow 80/tcp
+  - ufw allow 443/tcp
+  - ufw --force enable
+  - systemctl enable --now fail2ban
+  - dpkg-reconfigure -f noninteractive unattended-upgrades
+  - systemctl restart ssh
+  - mkdir -p /opt/aina/private/products && chown -R deploy:deploy /opt/aina

@@ -1,5 +1,6 @@
-// Digital products. Prices are NOT invented: a price stays null until the owner states it.
+// Digital products. Prices are exactly as approved by the owner (never changed or rounded here).
 // prices: minor units per currency (EUR cents, RUB kopecks). priceConfirmed: the owner approved these prices.
+// RUB prices are stored and displayed, but RUB payments stay OFF (ENABLED_CURRENCIES) until a lawful working payment channel is confirmed.
 // published:false keeps a product off the shop and out of checkout.
 // contentConfirmed:false means the author has not yet confirmed the content outline.
 // files: SKUs of the PDF files delivered for this product. Files live in private/products/<file-sku>.pdf
@@ -7,9 +8,9 @@
 
 export const products = [
   {
-    sku: 'cow-milk-protein-allergy-guide',
-    prices: { EUR: null, RUB: null }, // individual price: not stated by the owner yet
-    priceConfirmed: false,
+    sku: 'cow-milk-protein-allergy-guide', // АБКМ: аллергия на белок коровьего молока
+    prices: { EUR: 990, RUB: 100000 }, // approved by the owner
+    priceConfirmed: true,
     published: false,
     contentConfirmed: false,
     files: ['cow-milk-protein-allergy-guide'],
@@ -22,8 +23,8 @@ export const products = [
   },
   {
     sku: 'complementary-feeding-guide',
-    prices: { EUR: null, RUB: null }, // individual price: not stated by the owner yet
-    priceConfirmed: false,
+    prices: { EUR: 790, RUB: 80000 }, // approved by the owner
+    priceConfirmed: true,
     published: false,
     contentConfirmed: false,
     files: ['complementary-feeding-guide'],
@@ -36,8 +37,8 @@ export const products = [
   },
   {
     sku: 'child-sleep-guide-0-18',
-    prices: { EUR: null, RUB: null }, // individual price: not stated by the owner yet
-    priceConfirmed: false,
+    prices: { EUR: 990, RUB: 100000 }, // approved by the owner
+    priceConfirmed: true,
     published: false,
     contentConfirmed: false,
     files: ['child-sleep-guide-0-18'],
@@ -50,10 +51,10 @@ export const products = [
   },
   {
     sku: 'parent-guides-bundle',
-    // Approved by the owner: 19,90 € and 2 000 ₽ for the bundle of the three guides.
+    // Approved by the owner: 19,90 € and 2 000 ₽ for the bundle of the three guides (cheaper than the three separately).
     prices: { EUR: 1990, RUB: 200000 },
     priceConfirmed: true,
-    published: false,          // stays hidden until the three PDF files exist and their content is confirmed
+    published: false,          // stays hidden until the three PDF files exist and their content is confirmed (owner)
     contentConfirmed: false,
     files: ['cow-milk-protein-allergy-guide', 'complementary-feeding-guide', 'child-sleep-guide-0-18'],
     preview: null,

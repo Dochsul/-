@@ -1,0 +1,24 @@
+# Automatic HTTPS (Let's Encrypt) for the API domain. Caddy overwrites X-Forwarded-For with the real client address,
+# so the API can trust the first entry (TRUST_PROXY=true) for rate limiting.
+{$API_DOMAIN} {
+	encode zstd gzip
+	request_body {
+		max_size 100KB
+	}
+	header {
+		-Server
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+	reverse_proxy api:8080 {
+		transport http {
+			dial_timeout 5s
+			response_header_timeout 30s
+		}
+	}
+	log {
+		output stdout
+		format json
+	}
+}

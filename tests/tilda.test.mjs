@@ -49,6 +49,8 @@ test('shop page lists the bundle with the approved prices', () => {
   const md = readFileSync(join(pagesDir, '08-shop.md'), 'utf8');
   assert.match(md, /Комплект из трёх гайдов/);
   assert.match(md, /19,90\s€\s·\s2\s000\s₽/);
+  assert.match(md, /9,90\s€\s·\s1\s000\s₽/);
+  assert.match(md, /7,90\s€\s·\s800\s₽/);
 });
 
 test('SEO: 57 rows, title ≤ 65, description 50–160, drafts are noindex', () => {
@@ -92,13 +94,12 @@ test('components: no secrets, no innerHTML/eval, API base empty by default', () 
   }
 });
 
-test('components: the shop embeds the approved bundle prices and only https redirects are followed', () => {
+test('components: the shop embeds the approved prices of all four products; only https redirects are followed', () => {
   const html = readFileSync(join(compDir, '01-shop.ru.html'), 'utf8');
-  assert.match(html, /"sku":"parent-guides-bundle"[^}]*"prices":\{"EUR":1990,"RUB":200000\}/);
   assert.match(html, /\/\^https:\\\/\\\/\/\.test\(res\.j\.url\)/);
-  for (const sku of ['cow-milk-protein-allergy-guide', 'complementary-feeding-guide', 'child-sleep-guide-0-18']) {
-    assert.match(html, new RegExp(`"sku":"${sku}","files":\\["${sku}"\\],"prices":null`), `${sku} has no confirmed price`);
-  }
+  const expected = { 'parent-guides-bundle': '"EUR":1990,"RUB":200000', 'cow-milk-protein-allergy-guide': '"EUR":990,"RUB":100000',
+    'child-sleep-guide-0-18': '"EUR":990,"RUB":100000', 'complementary-feeding-guide': '"EUR":790,"RUB":80000' };
+  for (const [sku, prices] of Object.entries(expected)) assert.ok(html.includes(`"prices":{${prices}}`) && html.includes(`"sku":"${sku}"`), `${sku} prices`);
 });
 
 test('components: legal consent checkboxes are required in the checkout form', () => {

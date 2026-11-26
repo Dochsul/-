@@ -8,6 +8,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { nowIso } from './db.mjs';
+import { sendSmtp } from './smtp.mjs';
 
 const MAX_ATTEMPTS = 8;
 
@@ -23,13 +24,23 @@ export function enqueue(db, { kind, recipient, subject, body, relatedId = null }
 }
 
 // Transports: each returns { status: 'sent' | 'stored' } or throws.
-export function createTransports({ dataDir, telegram, fetchImpl = fetch }) {
+export function createTransports({ dataDir, telegram, smtp, fetchImpl = fetch }) {
   return {
     file: async (msg) => {
       const dir = join(dataDir, 'outbox');
       mkdirSync(dir, { recursive: true });
       writeFileSync(join(dir, `${msg.id}.json`), JSON.stringify({ to: msg.recipient, subject: msg.subject, body: msg.body, kind: msg.kind }, null, 2), 'utf8');
       return { status: 'stored' };
+    },
+    // Real email delivery through any SMTP relay. 'sent' means the relay accepted the message.
+    smtp: async (msg) => {
+      if (!smtp?.host) throw new Error('smtp_not_configured');
+      await sendSmtp({
+        host: smtp.host, port: smtp.port, secure: smtp.secure, user: smtp.user, pass: smtp.pass,
+        from: { name: smtp.fromName, address: smtp.fromAddress }, replyTo: smtp.replyTo || undefined,
+        to: msg.recipient, subject: msg.subject, text: msg.body, tlsOptions: smtp.tlsOptions || {},
+      });
+      return { status: 'sent' };
     },
     telegram: async (msg) => {
       if (!telegram?.token || !telegram?.chatId) throw new Error('telegram_not_configured');

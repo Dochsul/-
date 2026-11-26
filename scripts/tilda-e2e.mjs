@@ -28,7 +28,7 @@ mkdirSync(join(dir, 'dist'), { recursive: true });
 const PDF = Buffer.from('%PDF-1.4 e2e\n%%EOF');
 for (const f of fileSkus()) writeFileSync(join(dir, 'private', `${f}.pdf`), PDF);
 
-// Catalog as it will be once the owner publishes: real products and approved prices; only the bundle has a price.
+// Catalog as it will be once the owner publishes: real products with the owner-approved prices.
 const catalog = products.map((p) => ({ ...p, published: true, contentConfirmed: true }));
 let stripeForms = [];
 const fakeFetch = async (url, init) => {
@@ -106,9 +106,16 @@ const sign = (body) => { const t = Math.floor(Date.now() / 1000); return `t=${t}
     const bundleText = await bundle.innerText();
     ok(/19,90\s€/.test(bundleText) && /2\s000\s₽/.test(bundleText), 'shop: bundle shows approved prices 19,90 € and 2 000 ₽');
     ok(await bundle.locator('button').isEnabled(), 'shop: bundle can be added (published in this test, priced)');
-    const guideBtn = page.locator('.ae-card').first().locator('button');
-    ok(await guideBtn.isDisabled(), 'shop: guide without an approved price cannot be bought');
+    const cards = await page.locator('.ae-card').evaluateAll((els) => els.map((e) => ({ t: e.querySelector('.ae-card__title').textContent, p: e.querySelector('.ae-card__price').textContent, on: !e.querySelector('button').disabled })));
+    ok(cards.every((c) => c.on), 'shop: all four products can be added (published and priced in this test)');
+    const price = (name) => cards.find((c) => c.t.includes(name))?.p || '';
+    ok(/9,90\s€/.test(price('Аллергия')) && /1\s000\s₽/.test(price('Аллергия')), 'shop: allergy guide 9,90 € / 1 000 ₽');
+    ok(/9,90\s€/.test(price('Сон ребёнка')) && /1\s000\s₽/.test(price('Сон ребёнка')), 'shop: sleep guide 9,90 € / 1 000 ₽');
+    ok(/7,90\s€/.test(price('Прикорм')) && /800\s₽/.test(price('Прикорм')), 'shop: complementary feeding guide 7,90 € / 800 ₽');
+    // Cart rule: adding the bundle after a guide it contains keeps only the bundle (never the same PDF twice)
+    await page.locator('.ae-card:not(.ae-card--bundle)', { hasText: 'Прикорм: каши' }).locator('button').click();
     await bundle.locator('button').click();
+    ok((await page.locator('[data-ae-lines] li').count()) === 1 && /Комплект/.test(await page.textContent('[data-ae-lines]')), 'cart: bundle replaces a guide it already contains');
     ok(await page.isVisible('[data-ae-form]'), 'cart: checkout form appears after adding the bundle');
     ok(/19,90/.test(await page.textContent('[data-ae-total]')), 'cart: total 19,90 € (EUR)');
     // Consents are mandatory: no request without them
@@ -127,9 +134,25 @@ const sign = (body) => { const t = Math.floor(Date.now() / 1000); return `t=${t}
     await ctx.close();
   }
 
+  // 2b. Single guide purchase: one PDF, server price 7,90 EUR
+  {
+    const res = await fetch(`${api.base}/api/checkout`, { method: 'POST', headers: { 'content-type': 'application/json', origin: pageOrigin }, body: JSON.stringify({ locale: 'ru', email: 'single@example.com', items: [{ sku: 'complementary-feeding-guide' }], acceptTerms: true, acceptDigital: true }) });
+    const { orderId } = await res.json();
+    const f = stripeForms.at(-1);
+    ok(f.get('line_items[0][price_data][unit_amount]') === '790' && f.get('line_items[0][price_data][currency]') === 'eur', 'single guide: Stripe receives 7,90 EUR');
+    const o = api.db.prepare('SELECT * FROM orders WHERE id = ?').get(orderId);
+    const body = JSON.stringify({ id: 'evt_e2e_single', type: 'checkout.session.completed', data: { object: { id: o.provider_session_id, payment_status: 'paid', amount_total: 790, currency: 'eur', payment_intent: 'pi_e2e_single', metadata: { order_id: orderId }, customer_details: { address: { country: 'DE' } } } } });
+    await fetch(`${api.base}/api/webhooks/stripe`, { method: 'POST', headers: { 'content-type': 'application/json', 'stripe-signature': sign(body) }, body });
+    ok(api.db.prepare('SELECT COUNT(*) n FROM downloads WHERE order_id = ?').get(orderId).n === 1, 'single guide: exactly one personal link');
+    const overlap = await fetch(`${api.base}/api/checkout`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ locale: 'ru', email: 'o@example.com', items: [{ sku: 'parent-guides-bundle' }, { sku: 'child-sleep-guide-0-18' }], acceptTerms: true, acceptDigital: true }) });
+    ok(overlap.status === 409, 'server: bundle together with its own guide is refused');
+    const rub = await fetch(`${api.base}/api/checkout`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ locale: 'ru', currency: 'RUB', email: 'rub@example.com', items: [{ sku: 'parent-guides-bundle' }], acceptTerms: true, acceptDigital: true }) });
+    ok(rub.status === 409 && (await rub.json()).error === 'currency_not_enabled', 'server: payment in RUB is refused (channel not confirmed)');
+  }
+
   // 3. Payment confirmation → delivery of three PDFs, no duplicates, refund revokes access
   {
-    const order = api.db.prepare("SELECT * FROM orders ORDER BY created_at DESC LIMIT 1").get();
+    const order = api.db.prepare("SELECT * FROM orders WHERE email = 'buyer@example.com'").get(); // the bundle order made through the browser
     ok(order.status === 'pending_payment' && order.amount_cents === 1990, 'order: stored as pending_payment, 19,90 EUR, before any confirmation');
     ok(api.db.prepare('SELECT COUNT(*) n FROM downloads WHERE order_id = ?').get(order.id).n === 0, 'delivery: no download link exists before payment confirmation');
     const evt = (id, type, obj) => JSON.stringify({ id, type, data: { object: obj } });

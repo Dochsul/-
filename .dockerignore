@@ -1,0 +1,16 @@
+.git
+.github
+.env
+.env.*
+data
+dist
+private
+exports
+node_modules
+tilda
+docs
+tests
+site
+src/content
+src/legal
+*.md

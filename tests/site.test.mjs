@@ -103,10 +103,11 @@ test('JSON-LD FAQ and Organization exist where expected', () => {
   assert.match(home, /"@type":"Organization"/);
 });
 
-test('no product is priced or listed as available while prices are unconfirmed', () => {
+test('approved guide prices are shown, but nothing is buyable while products are unpublished', () => {
   const shop = readFileSync(join(dist, 'ru', 'shop', 'index.html'), 'utf8');
-  assert.equal(/data-add-sku=/.test(shop), false);
-  assert.match(shop, /Цена уточняется/);
+  assert.equal(/data-add-sku=/.test(shop), false, 'unpublished products must not have a buy button');
+  for (const rx of [/9,90\s€\s·\s1\s000\s₽/, /7,90\s€\s·\s800\s₽/, /19,90\s€\s·\s2\s000\s₽/]) assert.match(shop, rx);
+  assert.equal(/Цена уточняется/.test(shop), false, 'no price is left unconfirmed');
 });
 
 test('client catalog contains only published products', () => {
@@ -152,7 +153,7 @@ test('draft service pages: noindex, banner, out of sitemap and navigation', () =
   }
 });
 
-test('bundle: approved prices are shown (EUR everywhere, RUB on the Russian site), not sold while unpublished', () => {
+test('bundle and guides: approved prices (EUR everywhere, RUB only on the Russian site)', () => {
   const ru = readFileSync(join(dist, 'ru', 'shop', 'parent-guides-bundle', 'index.html'), 'utf8');
   assert.match(ru, /19,90\s€/);
   assert.match(ru, /2\s000\s₽/);
@@ -160,6 +161,21 @@ test('bundle: approved prices are shown (EUR everywhere, RUB on the Russian site
   assert.match(fr, /19,90\s€/);
   assert.equal(/₽/.test(fr), false);
   assert.equal(/data-add-sku=/.test(ru), false, 'unpublished bundle must not have a buy button');
-  const guide = readFileSync(join(dist, 'en', 'shop', 'complementary-feeding-guide', 'index.html'), 'utf8');
-  assert.match(guide, /Price to be confirmed/);
+  const en = readFileSync(join(dist, 'en', 'shop', 'complementary-feeding-guide', 'index.html'), 'utf8');
+  assert.match(en, /€7\.90/); // en-GB number format
+  assert.equal(/Price to be confirmed/.test(en), false);
+});
+
+test('catalog prices equal the owner-approved values exactly, and the bundle is cheaper than the three guides', async () => {
+  const { products } = await import('../src/config/catalog.mjs');
+  const by = Object.fromEntries(products.map((p) => [p.sku, p]));
+  assert.deepEqual(by['cow-milk-protein-allergy-guide'].prices, { EUR: 990, RUB: 100000 });
+  assert.deepEqual(by['child-sleep-guide-0-18'].prices, { EUR: 990, RUB: 100000 });
+  assert.deepEqual(by['complementary-feeding-guide'].prices, { EUR: 790, RUB: 80000 });
+  assert.deepEqual(by['parent-guides-bundle'].prices, { EUR: 1990, RUB: 200000 });
+  assert.ok(products.every((p) => p.priceConfirmed));
+  for (const cur of ['EUR', 'RUB']) {
+    const sum = products.filter((p) => p.files.length === 1).reduce((a, p) => a + p.prices[cur], 0);
+    assert.ok(by['parent-guides-bundle'].prices[cur] < sum, `${cur}: bundle must be cheaper than ${sum}`);
+  }
 });

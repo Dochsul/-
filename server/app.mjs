@@ -9,6 +9,7 @@ import { validateLead, validateCheckout, priceOrder, ValidationError } from './v
 import { verifyStripeSignature, createCheckoutSession, fetchStripeFee } from './stripe.mjs';
 import { fileSkus } from '../src/config/catalog.mjs';
 import { enqueue } from './outbox.mjs';
+import { deliveryEmail } from './emails.mjs';
 import { nowIso } from './db.mjs';
 
 const MIME = {
@@ -45,10 +46,12 @@ export class RateLimiter {
   }
 }
 
+let HSTS = {};
 function send(res, status, body, headers = {}) {
   const isJson = typeof body !== 'string' && !Buffer.isBuffer(body);
   res.writeHead(status, {
     ...SECURITY_HEADERS,
+    ...HSTS,
     'Content-Security-Policy': CSP,
     'Content-Type': isJson ? 'application/json; charset=utf-8' : headers['Content-Type'] || 'text/plain; charset=utf-8',
     'Cache-Control': 'no-store',
@@ -102,6 +105,7 @@ export function createApp({ config, db, transports, fetchImpl = fetch, now = () 
   });
   const ipHash = (req) => sha256(`${config.ipSalt}|${clientIp(req, config.trustProxy)}`).slice(0, 32);
   const siteUrl = config.siteUrl.replace(/\/$/, '');
+  if (siteUrl.startsWith('https://')) HSTS = { 'Strict-Transport-Security': 'max-age=31536000; includeSubDomains' };
   const distDir = resolve(config.distDir);
   const products = config.catalog;
   const blocked = new Set(config.blockedCountries);
@@ -259,13 +263,10 @@ export function createApp({ config, db, transports, fetchImpl = fetch, now = () 
         .run(sha256(token), order.id, fileSku, t, expires, config.downloadMaxCount);
       const p = products.find((x) => x.sku === fileSku);
       const title = p ? (p.i18n[order.locale]?.title || p.i18n.en.title) : fileSku;
-      links.push(`${title}: ${siteUrl}/api/download/${token}`);
+      links.push({ title, url: `${siteUrl}/api/download/${token}` });
     }
-    enqueue(db, {
-      kind: 'order_delivery', recipient: order.email, subject: 'AINA Évidence: your files',
-      body: `Payment confirmed. Your personal download links (valid ${config.downloadValidityDays} days, up to ${config.downloadMaxCount} downloads each):\n\n${links.join('\n')}\n\nKeep this email private.`,
-      relatedId: order.id,
-    });
+    const mail = deliveryEmail({ locale: order.locale, links, validityDays: config.downloadValidityDays, maxDownloads: config.downloadMaxCount, supportEmail: config.ownerEmail, orderId: order.id });
+    enqueue(db, { kind: 'order_delivery', recipient: order.email, subject: mail.subject, body: mail.body, relatedId: order.id });
     enqueue(db, { kind: 'order_owner', recipient: config.ownerEmail, subject: 'Новый оплаченный заказ', body: `Заказ ${order.id}\nСумма: ${(order.amount_cents / 100).toFixed(2)} ${order.currency}\nПозиции: ${items.map((i) => i.sku).join(', ')}`, relatedId: order.id });
     return paymentId.startsWith('pi_') ? paymentId : null;
   }
@@ -346,7 +347,11 @@ export function createApp({ config, db, transports, fetchImpl = fetch, now = () 
         if (!cors['Access-Control-Allow-Origin']) return send(res, 403, { error: 'origin_not_allowed' });
         res.writeHead(204); return res.end();
       }
-      if (p === '/api/health' && m === 'GET') return send(res, 200, { ok: true, payments: config.paymentsEnabled && !!config.stripeSecretKey, currencies: config.enabledCurrencies });
+      if (p === '/api/health' && m === 'GET') {
+        let dbOk = false;
+        try { dbOk = db.prepare('SELECT 1 AS v').get().v === 1; } catch { /* reported below */ }
+        return send(res, dbOk ? 200 : 503, { ok: dbOk, payments: config.paymentsEnabled && !!config.stripeSecretKey, currencies: config.enabledCurrencies });
+      }
       if (p === '/api/catalog' && m === 'GET') return send(res, 200, publicCatalog(), { 'Cache-Control': 'public, max-age=300' });
       if (p === '/api/leads' && m === 'POST') return await leads(req, res);
       if (p === '/api/checkout' && m === 'POST') return await checkout(req, res);

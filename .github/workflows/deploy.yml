@@ -1,0 +1,62 @@
+# MANUAL deployment to the owner's server. It never runs on push. Two switches must be set by the owner first:
+#   1) repository variable DEPLOY_ENABLED = true
+#   2) the "production" environment with required reviewers (Settings -> Environments), plus the secrets below
+# Secrets: DEPLOY_HOST, DEPLOY_USER, DEPLOY_SSH_KEY (private key of a dedicated deploy user), DEPLOY_KNOWN_HOSTS (output of ssh-keyscan)
+# Application secrets (Stripe, SMTP, backup passphrase) live ONLY in /opt/aina/.env on the server, never in GitHub.
+name: Deploy (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Git ref to deploy (branch, tag or commit)
+        required: true
+        default: main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: Tests must pass first
+    if: ${{ vars.DEPLOY_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm test
+
+  deploy:
+    name: Deploy to production
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Validate the ref
+        env:
+          REF: ${{ inputs.ref }}
+        run: |
+          # values reach the shell only through environment variables, never by direct interpolation
+          [[ "$REF" =~ ^[A-Za-z0-9._/-]{1,100}$ ]] || { echo "invalid ref"; exit 1; }
+      - name: Prepare SSH
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+      - name: Run deploy script on the server
+        env:
+          REF: ${{ inputs.ref }}
+          TARGET: ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}
+        run: |
+          ssh -o StrictHostKeyChecking=yes "$TARGET" "cd /opt/aina && deploy/deploy.sh '$REF'"
