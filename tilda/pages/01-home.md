@@ -64,7 +64,7 @@
 
 - Title (64): AINA Évidence — nutrition fondée sur les données pour la famille
 
-- Description (132): Alimentation de l’adulte et de l’enfant, maternité, guides pour parents. Conseil en nutrition diplômé(e), en ligne depuis la France.
+- Description (134): Alimentation de l’adulte et de l’enfant, maternité, guides pour parents. Conseil en nutrition et bien-être, en ligne depuis la France.
 
 - OG title / description: как Title / Description. OG-изображение: фирменная обложка из библиотеки владельца (1200×630).
 
@@ -115,7 +115,7 @@ Décrivez-moi votre besoin en quelques mots. Je vous réponds par e-mail et je v
 
 - Title (61): AINA Évidence — evidence-based nutrition for the whole family
 
-- Description (143): Personalised nutrition for adults and children, maternity, guides for parents. Diploma-holding nutrition consultant working online from France.
+- Description (140): Personalised nutrition for adults and children, maternity, guides for parents. Nutrition and wellness consultant working online from France.
 
 - OG title / description: как Title / Description. OG-изображение: фирменная обложка из библиотеки владельца (1200×630).
 

@@ -73,7 +73,7 @@
 **Блок: магазин** — компонент `tilda/components/01-shop.html` (T123). Карточки и цены ниже — для проверки, источник цен: API `/api/catalog`.
 - **Allergie aux protéines du lait de vache** — Guide pratique pour les parents : organiser l'alimentation de l'enfant et lire les étiquettes. Ne remplace pas l'avis d'un médecin. Цена: 9,90 €. Статус: скоро (не опубликован).
 - **Première alimentation : bouillies et purées** — Guide pour les parents sur l'introduction de la première alimentation : premiers aliments, textures, rythme et observation de l'enfant. Цена: 7,90 €. Статус: скоро (не опубликован).
-- **Pourquoi mon enfant ne dort-il pas ? Guide complet pour les parents d’enfants de la naissance à 18 ans** — Guide sur le sommeil de l'enfant par âge : repères, rythme de la journée et organisation du sommeil en famille. Цена: 9,90 €. Статус: скоро (не опубликован).
+- **Pourquoi mon enfant ne dort-il pas ? Le guide complet pour les parents, de la naissance à 18 ans** — Guide sur le sommeil de l'enfant par âge : repères, rythme de la journée et organisation du sommeil en famille. Цена: 9,90 €. Статус: скоро (не опубликован).
 - **Pack des trois guides pour parents** — Les trois guides en une seule commande : allergie aux protéines du lait de vache, première alimentation (bouillies et purées), sommeil de l'enfant de la naissance à 18 ans. Цена: 19,90 €. Статус: скоро (не опубликован).
 
 
@@ -109,5 +109,5 @@
 **Блок: магазин** — компонент `tilda/components/01-shop.html` (T123). Карточки и цены ниже — для проверки, источник цен: API `/api/catalog`.
 - **Cow's milk protein allergy** — A practical guide for parents on organising a child's diet and reading food labels. It does not replace medical advice. Цена: €9.90. Статус: скоро (не опубликован).
 - **Complementary feeding: cereals and purées** — A parents' guide to introducing complementary foods: first foods, textures, routine and observing your child. Цена: €7.90. Статус: скоро (не опубликован).
-- **Why Won’t My Child Sleep? A Complete Guide for Parents of Children from Birth to 18** — A guide to children's sleep by age stage: reference points, daily rhythm and organising sleep at home. Цена: €9.90. Статус: скоро (не опубликован).
+- **Why Isn’t My Child Sleeping? A Complete Guide for Parents, from Birth to Age 18** — A guide to children's sleep by age stage: reference points, daily rhythm and organising sleep at home. Цена: €9.90. Статус: скоро (не опубликован).
 - **Bundle of the three parent guides** — All three guides in one order: cow's milk protein allergy, complementary feeding (cereals and purées), child sleep from birth to 18 years. Цена: €19.90. Статус: скоро (не опубликован).

@@ -13,7 +13,7 @@
 
 - Title (23): Обо мне — AINA Évidence
 
-- Description (113): Айна Мусхаджиева: дипломированный консультант по питанию и нутрициологии. Подход основан на доказательных данных.
+- Description (97): Айна Мусхаджиева: консультант по питанию и нутрициологии. Подход основан на доказательных данных.
 
 - OG title / description: как Title / Description. OG-изображение: фирменная обложка из библиотеки владельца (1200×630).
 
@@ -25,7 +25,7 @@
 <link rel="alternate" hreflang="fr" href="{DOMAIN}/fr/about/">
 <link rel="alternate" hreflang="en" href="{DOMAIN}/en/about/">
 <link rel="alternate" hreflang="x-default" href="{DOMAIN}/en/about/">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Айна Мусхаджиева","jobTitle":"Дипломированный консультант по питанию и нутрициологии","worksFor":{"@type":"Organization","name":"AINA Évidence"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Айна Мусхаджиева","jobTitle":"Консультант по питанию и нутрициологии","worksFor":{"@type":"Organization","name":"AINA Évidence"}}</script>
 ```
 
 ### Тексты
@@ -33,7 +33,7 @@
 **Блок: обложка (первый экран)**
 - Надзаголовок: Обо мне
 - H1: Айна Мусхаджиева
-- Подзаголовок: Дипломированный консультант по питанию и нутрициологии. Работаю международно онлайн из Франции.
+- Подзаголовок: Консультант по питанию и нутрициологии. Работаю международно онлайн из Франции.
 
 **Блок: текст**
 #### Подход
@@ -65,7 +65,7 @@
 
 - Title (24): À propos — AINA Évidence
 
-- Description (105): Aina Muskhadzhieva : conseil en nutrition, diplômé(e). Une approche fondée sur les données scientifiques.
+- Description (106): Aina Muskhadzhieva : conseil en nutrition et bien-être. Une approche fondée sur les données scientifiques.
 
 - OG title / description: как Title / Description. OG-изображение: фирменная обложка из библиотеки владельца (1200×630).
 
@@ -77,7 +77,7 @@
 <link rel="alternate" hreflang="fr" href="{DOMAIN}/fr/about/">
 <link rel="alternate" hreflang="en" href="{DOMAIN}/en/about/">
 <link rel="alternate" hreflang="x-default" href="{DOMAIN}/en/about/">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Айна Мусхаджиева","jobTitle":"Conseil en nutrition, diplômé(e)","worksFor":{"@type":"Organization","name":"AINA Évidence"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Айна Мусхаджиева","jobTitle":"Conseil en nutrition et bien-être","worksFor":{"@type":"Organization","name":"AINA Évidence"}}</script>
 ```
 
 ### Тексты
@@ -85,7 +85,7 @@
 **Блок: обложка (первый экран)**
 - Надзаголовок: À propos
 - H1: Aina Muskhadzhieva
-- Подзаголовок: Conseil en nutrition, diplômé(e). J’exerce en ligne à l’international depuis la France.
+- Подзаголовок: Conseil en nutrition et bien-être. J’exerce en ligne à l’international depuis la France.
 
 **Блок: текст**
 #### Mon approche
@@ -117,7 +117,7 @@ Chaque demande est individuelle : l’âge, le contexte familial, le rythme et l
 
 - Title (21): About — AINA Évidence
 
-- Description (102): Aina Muskhadzhieva: diploma-holding nutrition consultant. An approach grounded in scientific evidence.
+- Description (99): Aina Muskhadzhieva: nutrition and wellness consultant. An approach grounded in scientific evidence.
 
 - OG title / description: как Title / Description. OG-изображение: фирменная обложка из библиотеки владельца (1200×630).
 
@@ -129,7 +129,7 @@ Chaque demande est individuelle : l’âge, le contexte familial, le rythme et l
 <link rel="alternate" hreflang="fr" href="{DOMAIN}/fr/about/">
 <link rel="alternate" hreflang="en" href="{DOMAIN}/en/about/">
 <link rel="alternate" hreflang="x-default" href="{DOMAIN}/en/about/">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Айна Мусхаджиева","jobTitle":"Diploma-holding nutrition consultant","worksFor":{"@type":"Organization","name":"AINA Évidence"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Айна Мусхаджиева","jobTitle":"Nutrition and wellness consultant","worksFor":{"@type":"Organization","name":"AINA Évidence"}}</script>
 ```
 
 ### Тексты
@@ -137,7 +137,7 @@ Chaque demande est individuelle : l’âge, le contexte familial, le rythme et l
 **Блок: обложка (первый экран)**
 - Надзаголовок: About
 - H1: Aina Muskhadzhieva
-- Подзаголовок: Diploma-holding nutrition consultant. I work online with an international clientele from France.
+- Подзаголовок: Nutrition and wellness consultant. I work online with an international clientele from France.
 
 **Блок: текст**
 #### My approach

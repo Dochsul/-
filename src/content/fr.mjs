@@ -149,7 +149,7 @@ export default {
   pages: {
     home: {
       title: 'AINA Évidence — nutrition fondée sur les données pour la famille',
-      description: 'Alimentation de l’adulte et de l’enfant, maternité, guides pour parents. Conseil en nutrition diplômé(e), en ligne depuis la France.',
+      description: 'Alimentation de l’adulte et de l’enfant, maternité, guides pour parents. Conseil en nutrition et bien-être, en ligne depuis la France.',
       sections: [
         { type: 'hero', eyebrow: 'Nutrition fondée sur les données', h1: 'Une alimentation adaptée à vous et à votre famille', lead: 'Une approche personnalisée, sans régimes stricts. Accompagnement en ligne pour adultes, enfants et périodes de maternité.', actions: [{ label: 'Choisir un service', href: 'contact/', primary: true }, { label: 'Boutique des guides', href: 'shop/' }, { label: 'Rejoindre la communauté gratuitement', href: 'community/' }] },
         { type: 'cards', h: 'Domaines d’accompagnement', items: [
@@ -166,9 +166,9 @@ export default {
     },
     about: {
       title: 'À propos — AINA Évidence',
-      description: 'Aina Muskhadzhieva : conseil en nutrition, diplômé(e). Une approche fondée sur les données scientifiques.',
+      description: 'Aina Muskhadzhieva : conseil en nutrition et bien-être. Une approche fondée sur les données scientifiques.',
       sections: [
-        { type: 'hero', eyebrow: 'À propos', h1: 'Aina Muskhadzhieva', lead: 'Conseil en nutrition, diplômé(e). J’exerce en ligne à l’international depuis la France.' },
+        { type: 'hero', eyebrow: 'À propos', h1: 'Aina Muskhadzhieva', lead: 'Conseil en nutrition et bien-être. J’exerce en ligne à l’international depuis la France.' },
         { type: 'text', h: 'Mon approche', paras: ['Je m’appuie sur les données scientifiques et j’explique pourquoi une recommandation fonctionne. L’objectif n’est pas un régime, mais une alimentation durable, compatible avec la vie quotidienne.', 'Chaque demande est individuelle : l’âge, le contexte familial, le rythme et les préférences sont pris en compte.'] },
         { type: 'list', h: 'Ce que je fais', items: ['Nutrition fondée sur les données', 'Alimentation personnalisée des adultes et des enfants', 'Maternité et développement de l’enfant', 'Supports pédagogiques pour les parents', 'Menus personnalisés et accompagnement', 'Information pour les parents dans les limites de ma compétence professionnelle'] },
         { type: 'notice', p: 'Je ne suis pas médecin. Je ne pose pas de diagnostic et je ne promets pas la guérison d’une maladie. En cas de maladie, consultez votre médecin.' },
@@ -279,7 +279,7 @@ export default {
       sections: [
         { type: 'hero', eyebrow: 'FAQ', h1: 'Questions fréquentes' },
         { type: 'faq', items: [
-          { q: 'Êtes-vous médecin ?', a: 'Non. Je suis conseil en nutrition, diplômé(e). Je ne réalise ni diagnostic médical ni traitement.' },
+          { q: 'Êtes-vous médecin ?', a: 'Non. Je suis conseil en nutrition et bien-être. Je ne réalise ni diagnostic médical ni traitement.' },
           { q: 'Comment se déroule une consultation ?', a: 'En ligne, dans le format qui vous convient. Avant de commencer, nous précisons vos objectifs, votre rythme et votre contexte.' },
           { q: 'Accompagnez-vous les enfants ?', a: 'Oui, pour les questions d’alimentation de l’enfant. En cas de maladie ou d’allergie, un avis médical reste nécessaire.' },
           { q: 'Puis-je acheter un guide sans compte ?', a: 'Oui. Une adresse e-mail suffit : le lien de téléchargement vous est envoyé après confirmation du paiement.' },

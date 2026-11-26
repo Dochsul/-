@@ -19,9 +19,9 @@ export const business = {
     displayName: 'Айна Мусхаджиева',               // name as used on the site; confirm spelling for legal documents
     // Owner's own statement of qualification, per language. Diploma details (school, year) are to be confirmed (docs/ANKETA.md).
     qualification: {
-      ru: 'Дипломированный консультант по питанию и нутрициологии',
-      fr: 'Conseil en nutrition, diplômé(e)',
-      en: 'Diploma-holding nutrition consultant',
+      ru: 'Консультант по питанию и нутрициологии',
+      fr: 'Conseil en nutrition et bien-être',
+      en: 'Nutrition and wellness consultant',
     },
     country: 'FR',
   },
