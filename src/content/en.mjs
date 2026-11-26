@@ -121,8 +121,8 @@ export default {
   },
   pages: {
     home: {
-      title: 'AINA Évidence — evidence-based nutrition for individuals and families',
-      description: 'Personalised nutrition for adults and children, maternity and child development, guides for parents. Qualified dietitian-nutritionist working online from France.',
+      title: 'AINA Évidence — evidence-based nutrition for the whole family',
+      description: 'Personalised nutrition for adults and children, maternity, guides for parents. Qualified dietitian-nutritionist working online from France.',
       sections: [
         { type: 'hero', eyebrow: 'Evidence-based nutrition', h1: 'Nutrition that fits you and your family', lead: 'A personal approach without strict diets. Online work with clients in several countries: adults, children and maternity.', actions: [{ label: 'Shop the guides', href: 'shop/', primary: true }, { label: 'Parent guides', href: 'guides/' }] },
         { type: 'cards', h: 'Areas of work', items: [
@@ -218,7 +218,7 @@ export default {
     },
     reviews: {
       title: 'Reviews — AINA Évidence',
-      description: 'Reviews from AINA Évidence clients.',
+      description: 'Client reviews of AINA Évidence, published only with the written consent of their authors.',
       sections: [
         { type: 'hero', eyebrow: 'Reviews', h1: 'Client reviews' },
         { type: 'empty', h: 'No reviews yet', p: 'Reviews will be published with the written consent of their authors. We do not publish invented or anonymous reviews.' },

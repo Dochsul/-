@@ -4,13 +4,18 @@
   "private": true,
   "description": "AINA Évidence: static multilingual site and small order/lead API. No runtime dependencies.",
   "type": "module",
-  "engines": { "node": ">=22.13" },
+  "engines": {
+    "node": ">=22.13"
+  },
   "scripts": {
     "build": "node src/build.mjs",
     "build:prod": "node src/build.mjs --prod",
     "serve": "node server/index.mjs",
     "test": "node --test tests/*.test.mjs",
     "check": "node scripts/check.mjs",
-    "smoke": "node scripts/smoke.cjs"
+    "smoke": "node scripts/smoke.cjs",
+    "tilda": "node scripts/tilda-export.mjs && node scripts/tilda-components.mjs",
+    "e2e:tilda": "node scripts/tilda-e2e.mjs",
+    "accounting:export": "node scripts/export-accounting.mjs"
   }
 }

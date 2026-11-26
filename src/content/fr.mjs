@@ -121,8 +121,8 @@ export default {
   },
   pages: {
     home: {
-      title: 'AINA Évidence — nutrition fondée sur les données et alimentation familiale',
-      description: 'Alimentation personnalisée des adultes et des enfants, maternité et développement de l’enfant, guides pour parents. Conseil en diététique et nutrition diplômé(e), accompagnement en ligne depuis la France.',
+      title: 'AINA Évidence — nutrition fondée sur les données pour la famille',
+      description: 'Alimentation de l’adulte et de l’enfant, maternité, guides pour parents. Conseil en diététique et nutrition diplômé(e), en ligne depuis la France.',
       sections: [
         { type: 'hero', eyebrow: 'Nutrition fondée sur les données', h1: 'Une alimentation adaptée à vous et à votre famille', lead: 'Une approche personnalisée, sans régimes stricts. Accompagnement en ligne pour adultes, enfants et périodes de maternité.', actions: [{ label: 'Boutique des guides', href: 'shop/', primary: true }, { label: 'Guides parents', href: 'guides/' }] },
         { type: 'cards', h: 'Domaines d’accompagnement', items: [
@@ -218,7 +218,7 @@ export default {
     },
     reviews: {
       title: 'Avis — AINA Évidence',
-      description: 'Avis des clients AINA Évidence.',
+      description: 'Avis des clients AINA Évidence, publiés uniquement avec l’accord écrit de leurs auteurs.',
       sections: [
         { type: 'hero', eyebrow: 'Avis', h1: 'Avis clients' },
         { type: 'empty', h: 'Pas encore d’avis', p: 'Les avis seront publiés avec l’accord écrit de leurs auteurs. Aucun avis fictif ou anonyme n’est publié.' },

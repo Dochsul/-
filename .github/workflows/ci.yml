@@ -9,19 +9,38 @@ permissions:
 
 jobs:
   test:
-    name: Build, test and static checks
+    name: Tests, build, static checks, Tilda package sync
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Unit and integration tests (server, site)
+      - name: Unit and integration tests (server, ledger, site, Tilda package)
         run: npm test
       - name: Build the development site
         run: npm run build
       - name: Static checks on dist/ and source secrets
         run: npm run check
+      - name: Tilda package is in sync with the sources
+        run: |
+          npm run tilda
+          git diff --exit-code -- tilda/ || (echo "tilda/ is out of date: run npm run tilda and commit" && exit 1)
+
+  e2e:
+    name: Browser e2e of the Tilda shop block (Stripe stub, no real payments)
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Playwright (test-only, not a runtime dependency)
+        run: |
+          npm i --no-save playwright@1.49.1
+          npx playwright install --with-deps chromium
+      - name: Tilda shop e2e
+        run: npm run e2e:tilda
 
   # Deliberately NO deploy job. Publication is a manual decision by the owner.
-  # The production gate (npm run build:prod) is run locally once the data in docs/ANKETA.md is complete.

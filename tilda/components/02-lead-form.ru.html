@@ -1,0 +1,81 @@
+<!-- AINA Évidence — форма заявки на собственный API (Tilda T123), язык: ru. Необязательный компонент:
+     вместо него можно использовать нативную форму Tilda (см. TILDA_HANDOFF.md, раздел «Заявки»). data-api — адрес API. -->
+<div class="ae ae-lead" data-ae-lead data-lang="ru" data-api="">
+  <div class="ae-wrap">
+    <h2 class="ae-h">Оставить заявку</h2>
+    <form class="ae-lead__form" novalidate>
+      <div class="ae-lead__field"><label for="ae-ln-ru">Имя *</label><input id="ae-ln-ru" name="name" required minlength="2" maxlength="120" autocomplete="name"></div>
+      <div class="ae-lead__field"><label for="ae-le-ru">Email *</label><input id="ae-le-ru" name="email" type="email" required maxlength="200" autocomplete="email"></div>
+      <div class="ae-lead__field"><label for="ae-lt-ru">Тема *</label><select id="ae-lt-ru" name="topic" required><option value="general">Вопрос</option><option value="community">Сообщество «Мамы и дети»</option></select></div>
+      <div class="ae-lead__field"><label for="ae-lm-ru">Коротко о запросе (необязательно)</label><textarea id="ae-lm-ru" name="message" maxlength="500" rows="4"></textarea><small>Не указывайте медицинские анализы и диагнозы.</small></div>
+      <label class="ae-lead__check"><input name="consent" type="checkbox" required><span>Я согласен(на) на обработку данных для ответа на заявку. <a href="/ru/legal/privacy/" target="_blank" rel="noopener">Политика конфиденциальности</a> *</span></label>
+      <div class="ae-lead__hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+      <button class="ae-btn ae-btn--primary" type="submit">Отправить</button>
+      <p class="ae-lead__status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</div>
+<style>
+.ae{--ae-ivory:#FFF4E9;--ae-powder:#F3D6CF;--ae-lavender:#E4D3E4;--ae-gold:#B4883E;--ae-gold-light:#C9A35E;--ae-burgundy:#74283F;--ae-emerald:#174532;--ae-ink:#2E2427;--ae-ink-soft:#5C4A4E;--ae-line:#E9CFC7;--ae-danger:#A3261C;
+  font-family:'Montserrat',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:16px;line-height:1.65;color:var(--ae-ink);box-sizing:border-box;text-align:left}
+.ae *,.ae *::before,.ae *::after{box-sizing:border-box}
+.ae .ae-wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+.ae .ae-h{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;color:var(--ae-burgundy);line-height:1.2;margin:0 0 .5em}
+.ae p{margin:0 0 .8em}
+.ae a{color:var(--ae-emerald);text-underline-offset:3px}
+.ae :focus-visible{outline:2px solid var(--ae-emerald);outline-offset:3px}
+.ae .ae-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:12px 24px;border-radius:999px;border:1px solid transparent;font:500 15px/1.2 'Montserrat',system-ui,sans-serif;letter-spacing:.02em;cursor:pointer;text-decoration:none;transition:background-color .3s ease,color .3s ease,transform .3s ease}
+.ae .ae-btn--primary{background:linear-gradient(180deg,var(--ae-gold-light),var(--ae-gold));border-color:var(--ae-gold);color:var(--ae-ink)}
+.ae .ae-btn--primary:hover{background:var(--ae-gold-light);transform:translateY(-1px)}
+.ae .ae-btn--ghost{background:transparent;border-color:var(--ae-emerald);color:var(--ae-ink)}
+.ae .ae-btn--ghost:hover{background:var(--ae-emerald);color:var(--ae-ivory)}
+.ae .ae-btn[disabled]{opacity:.55;cursor:not-allowed;transform:none}
+.ae .ae-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.ae *{transition-duration:.01ms!important}.ae .ae-btn--primary:hover{transform:none}}
+.ae-lead{background:var(--ae-ivory);padding:48px 0}
+.ae-lead .ae-lead__form{max-width:640px;display:grid;gap:14px;background:#fff;border:1px solid var(--ae-line);border-radius:16px;padding:28px}
+.ae-lead .ae-lead__field{display:grid;gap:6px}
+.ae-lead label{font-weight:500;font-size:14px}
+.ae-lead input:not([type=checkbox]),.ae-lead select,.ae-lead textarea{width:100%;min-height:44px;font:400 16px 'Montserrat',system-ui,sans-serif;color:var(--ae-ink);background:var(--ae-ivory);border:1px solid #CDB3AA;border-radius:10px;padding:10px 14px}
+.ae-lead small{color:var(--ae-ink-soft);font-size:13px}
+.ae-lead .ae-lead__check{display:flex;gap:10px;align-items:flex-start;font-weight:400}
+.ae-lead .ae-lead__check input{width:18px;height:18px;margin-top:2px;accent-color:var(--ae-emerald)}
+.ae-lead .ae-lead__hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.ae-lead .ae-lead__status{min-height:1.4em;margin:0;font-size:14px}
+.ae-lead .ae-lead__status--error{color:var(--ae-danger)}
+@media (max-width:639px){.ae-lead .ae-lead__form{padding:20px}.ae-lead .ae-btn{width:100%}}
+</style>
+<script>
+(function () {
+  'use strict';
+  var T = {"ru":{"title":"Оставить заявку","name":"Имя","email":"Email","topic":"Тема","message":"Коротко о запросе (необязательно)","hint":"Не указывайте медицинские анализы и диагнозы.","consent":"Я согласен(на) на обработку данных для ответа на заявку.","privacy":"Политика конфиденциальности","submit":"Отправить","ok":"Спасибо! Заявка получена. Ответ придёт на ваш email.","err":"Не удалось отправить заявку. Напишите нам напрямую: ","health":"Пожалуйста, не указывайте анализы и диагнозы: обсудим их на консультации.","topics":[["general","Вопрос"],["community","Сообщество «Мамы и дети»"]]},"fr":{"title":"Envoyer une demande","name":"Prénom et nom","email":"E-mail","topic":"Sujet","message":"Quelques mots (facultatif)","hint":"N’indiquez pas d’analyses médicales ni de diagnostics.","consent":"J’accepte le traitement de mes données pour répondre à ma demande.","privacy":"Politique de confidentialité","submit":"Envoyer","ok":"Merci ! Votre demande est bien reçue. La réponse arrivera par e-mail.","err":"La demande n’a pas pu être envoyée. Écrivez-nous directement : ","health":"Merci de ne pas indiquer d’analyses ni de diagnostics.","topics":[["general","Question"],["community","Communauté « Mamans et enfants »"]]},"en":{"title":"Send a request","name":"Name","email":"Email","topic":"Topic","message":"A few words (optional)","hint":"Please do not include medical test results or diagnoses.","consent":"I agree to my data being processed to answer my request.","privacy":"Privacy policy","submit":"Send","ok":"Thank you! Your request has been received. The reply will come by email.","err":"Your request could not be sent. Write to us directly: ","health":"Please do not include test results or diagnoses.","topics":[["general","Question"],["community","Mums & Kids community"]]}};
+  var CONTACT = "globalainanutrition@gmail.com";
+  function init(root) {
+    if (root.getAttribute('data-ae-ready')) return; root.setAttribute('data-ae-ready', '1');
+    var t = T[root.getAttribute('data-lang')] || T.en; var lang = T[root.getAttribute('data-lang')] ? root.getAttribute('data-lang') : 'en';
+    var api = (root.getAttribute('data-api') || '').replace(/\/$/, '');
+    var form = root.querySelector('form'); var status = root.querySelector('.ae-lead__status');
+    function show(msg, err) { status.textContent = msg; status.className = 'ae-lead__status' + (err ? ' ae-lead__status--error' : ''); }
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      if (form.elements.website.value) return;
+      var btn = form.querySelector('button'); btn.disabled = true;
+      fetch(api + '/api/leads', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify({
+        name: form.elements.name.value, email: form.elements.email.value, topic: form.elements.topic.value,
+        message: form.elements.message.value, consent: form.elements.consent.checked, locale: lang }) })
+        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { status: r.status, j: j }; }); })
+        .then(function (res) {
+          // Success is shown only after the server confirmed the request is stored (HTTP 201).
+          if (res.status === 201) { form.reset(); show(t.ok, false); }
+          else if (res.j && res.j.message === 'health_data_not_allowed') show(t.health, true);
+          else show(t.err + CONTACT, true);
+        })
+        .catch(function () { show(t.err + CONTACT, true); })
+        .then(function () { btn.disabled = false; });
+    });
+  }
+  function boot() { var r = document.querySelectorAll('[data-ae-lead]'); for (var i = 0; i < r.length; i++) init(r[i]); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+})();
+</script>
