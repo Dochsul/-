@@ -215,7 +215,7 @@ function renderSection(s, ctx) {
       return renderCart(ctx);
     case 'checkoutResult': {
       const k = s.kind === 'success' ? 'success' : 'cancel';
-      return `<section class="block reveal checkout-result"><h1>${esc(c.ui[k + 'Title'])}</h1><p>${esc(c.ui[k + 'Text'])}</p><a class="btn btn-ghost" href="${localePath(locale, 'shop/')}">${esc(c.ui.backToShop)}</a></section>`;
+      return `<section class="block reveal checkout-result" data-result="${k}" data-paid-title="${esc(c.ui.paidTitle)}" data-paid-text="${esc(c.ui.paidText)}" data-pending-text="${esc(c.ui.pendingText)}" data-unpaid-title="${esc(c.ui.unpaidTitle)}" data-unpaid-text="${esc(c.ui.unpaidText)}" data-review-title="${esc(c.ui.reviewTitle)}" data-review-text="${esc(c.ui.reviewText)}"><h1>${esc(c.ui[k + 'Title'])}</h1><p data-result-text>${esc(c.ui[k + 'Text'])}</p><a class="btn btn-ghost" href="${localePath(locale, 'shop/')}">${esc(c.ui.backToShop)}</a></section>`;
     }
     default:
       throw new Error(`Unknown section type: ${s.type}`);

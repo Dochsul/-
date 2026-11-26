@@ -106,6 +106,7 @@ export function createApp({ config, db, transports, fetchImpl = fetch, now = () 
     leads: { max: 10, windowMs: 10 * 60 * 1000 },
     checkout: { max: 20, windowMs: 10 * 60 * 1000 },
     download: { max: 60, windowMs: 10 * 60 * 1000 },
+    orderStatus: { max: 60, windowMs: 10 * 60 * 1000 },
   });
   const ipHash = (req) => sha256(`${config.ipSalt}|${clientIp(req, config.trustProxy)}`).slice(0, 32);
   const siteUrl = config.siteUrl.replace(/\/$/, '');
@@ -179,6 +180,18 @@ export function createApp({ config, db, transports, fetchImpl = fetch, now = () 
     const mail = deliveryEmail({ locale: order.locale, links, validityDays: config.downloadValidityDays, maxDownloads: config.downloadMaxCount, supportEmail: config.ownerEmail, orderId: order.id });
     enqueue(db, { kind: 'order_delivery', recipient: order.email, subject: mail.subject, body: mail.body, relatedId: order.id });
     enqueue(db, { kind: 'order_owner', recipient: config.ownerEmail, subject: 'Новый оплаченный заказ', body: `Заказ ${order.id}\nСумма: ${(order.amount_cents / 100).toFixed(2)} ${order.currency}\nПозиции: ${items.map((i) => i.sku).join(', ')}\nОплата: ${providerName}`, relatedId: order.id });
+  }
+
+  // ----- GET /api/orders/:id/status -----
+  // What the buyer's browser may read after returning from the payment page. Only the status: no e-mail, items or tokens.
+  // Returning to the thank-you page is NOT proof of payment: the order counts as paid only when the server has settled it.
+  const STATUS_VIEW = { paid: 'paid', pending_payment: 'pending', settling: 'pending', expired: 'unpaid', failed: 'unpaid', refunded: 'refunded', partially_refunded: 'refunded' };
+  function orderStatus(res, req, id) {
+    if (!limiter.allow(ipHash(req), 'orderStatus')) return send(res, 429, { error: 'rate_limited' });
+    const row = db.prepare('SELECT status FROM orders WHERE id = ?').get(id);
+    if (!row) return send(res, 404, { error: 'not_found' });
+    const view = STATUS_VIEW[row.status] || (String(row.status).startsWith('review') ? 'review' : 'unknown');
+    return send(res, 200, { status: view, paid: view === 'paid' });
   }
 
   // ----- POST /api/checkout -----
@@ -437,6 +450,8 @@ export function createApp({ config, db, transports, fetchImpl = fetch, now = () 
       if (p === '/api/checkout' && m === 'POST') return await checkout(req, res);
       if (p === '/api/webhooks/revolut' && m === 'POST') return await revolutWebhook(req, res);
       if (p === '/api/webhooks/stripe' && m === 'POST') return await stripeWebhook(req, res);
+      const os = p.match(/^\/api\/orders\/([a-f0-9]{24})\/status$/);
+      if (os && m === 'GET') return orderStatus(res, req, os[1]);
       const dl = p.match(/^\/api\/download\/([^/]+)$/);
       if (dl && m === 'GET') return await download(req, res, dl[1]);
       if (await adminRoute(req, res, p, url)) return;

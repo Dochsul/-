@@ -212,4 +212,30 @@
     try { window.localStorage.removeItem(CART_KEY); } catch (e) { /* ignore */ }
     updateBadge();
   }
+  // After returning from the payment page the server decides whether the order is paid. Returning here is not proof.
+  var resultBox = document.querySelector('[data-result="success"]');
+  var orderMatch = /[?&]order=([a-f0-9]{24})(?:&|$)/.exec(window.location.search);
+  if (resultBox && orderMatch) {
+    var h1 = resultBox.querySelector('h1');
+    var txt = resultBox.querySelector('[data-result-text]');
+    var attempts = 0;
+    var show = function (title, text) { if (h1 && title) h1.textContent = title; if (txt && text) txt.textContent = text; };
+    var check = function () {
+      attempts += 1;
+      fetch('/api/orders/' + orderMatch[1] + '/status', { credentials: 'same-origin', cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (d) {
+          if (d && d.status === 'paid') { show(resultBox.getAttribute('data-paid-title'), resultBox.getAttribute('data-paid-text')); return; }
+          if (d && d.status === 'unpaid') { show(resultBox.getAttribute('data-unpaid-title'), resultBox.getAttribute('data-unpaid-text')); return; }
+          if (d && d.status === 'review') { show(resultBox.getAttribute('data-review-title'), resultBox.getAttribute('data-review-text')); return; }
+          if (attempts < 40) { window.setTimeout(check, 3000); return; }
+          show(null, resultBox.getAttribute('data-pending-text'));
+        })
+        .catch(function () {
+          if (attempts < 40) { window.setTimeout(check, 3000); return; }
+          show(null, resultBox.getAttribute('data-pending-text'));
+        });
+    };
+    check();
+  }
 })();
