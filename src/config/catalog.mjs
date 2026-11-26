@@ -46,7 +46,7 @@ export const products = [
     i18n: {
       ru: { title: 'Почему ребёнок не спит? Полный гайд для родителей детей от рождения до 18 лет', summary: 'Гайд о детском сне по возрастным этапам: ориентиры, режим дня и организация сна в семье.', topics: ['Возрастные этапы', 'Режим дня', 'Организация сна в семье'] },
       fr: { title: "Pourquoi mon enfant ne dort-il pas ? Guide complet pour les parents d’enfants de la naissance à 18 ans", summary: "Guide sur le sommeil de l'enfant par âge : repères, rythme de la journée et organisation du sommeil en famille.", topics: ['Étapes par âge', 'Rythme de la journée', "Organisation du sommeil en famille"] },
-      en: { title: 'Why won’t my child sleep? Complete guide for parents of children from birth to 18', summary: 'A guide to children\'s sleep by age stage: reference points, daily rhythm and organising sleep at home.', topics: ['Age stages', 'Daily rhythm', 'Organising sleep at home'] },
+      en: { title: 'Why Won’t My Child Sleep? A Complete Guide for Parents of Children from Birth to 18', summary: 'A guide to children\'s sleep by age stage: reference points, daily rhythm and organising sleep at home.', topics: ['Age stages', 'Daily rhythm', 'Organising sleep at home'] },
     },
   },
   {

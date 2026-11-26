@@ -117,7 +117,7 @@
 **Блок: магазин** — компонент `tilda/components/01-shop.html` (T123). Карточки и цены ниже — для проверки, источник цен: API `/api/catalog`.
 - **Cow's milk protein allergy** — A practical guide for parents on organising a child's diet and reading food labels. It does not replace medical advice. Цена: €9.90. Статус: скоро (не опубликован).
 - **Complementary feeding: cereals and purées** — A parents' guide to introducing complementary foods: first foods, textures, routine and observing your child. Цена: €7.90. Статус: скоро (не опубликован).
-- **Why won’t my child sleep? Complete guide for parents of children from birth to 18** — A guide to children's sleep by age stage: reference points, daily rhythm and organising sleep at home. Цена: €9.90. Статус: скоро (не опубликован).
+- **Why Won’t My Child Sleep? A Complete Guide for Parents of Children from Birth to 18** — A guide to children's sleep by age stage: reference points, daily rhythm and organising sleep at home. Цена: €9.90. Статус: скоро (не опубликован).
 - **Bundle of the three parent guides** — All three guides in one order: cow's milk protein allergy, complementary feeding (cereals and purées), child sleep from birth to 18 years. Цена: €19.90. Статус: скоро (не опубликован).
 
 **Блок: заметка (компонент `tilda/components/03-notice.html` или текстовый блок на лавандовом фоне)**
