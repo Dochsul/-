@@ -1,0 +1,16 @@
+{
+  "name": "aina-evidence-site",
+  "version": "2.0.0",
+  "private": true,
+  "description": "AINA Évidence: static multilingual site and small order/lead API. No runtime dependencies.",
+  "type": "module",
+  "engines": { "node": ">=22.13" },
+  "scripts": {
+    "build": "node src/build.mjs",
+    "build:prod": "node src/build.mjs --prod",
+    "serve": "node server/index.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node scripts/check.mjs",
+    "smoke": "node scripts/smoke.cjs"
+  }
+}

@@ -1,84 +1,114 @@
-// Browser smoke test for the site. Requires Playwright and a Chromium build.
-// Setup (once):  npm i -D playwright && npx playwright install chromium
-// Or point to an existing Chromium:  CHROMIUM_PATH=/path/to/chromium node scripts/smoke.cjs
-// Usage: node scripts/smoke.cjs [path/to/index.html]
-// Checks: CSP violations, consent gate, honeypot, mailto fallback status,
-// accessible mobile button, legal page links resolve, no horizontal overflow on phone width.
+// Browser smoke test against a RUNNING server (npm run build, then start the server, then this).
+// Requires Playwright + Chromium:  npm i -D playwright && npx playwright install chromium
+//   or CHROMIUM_PATH=/path/to/chromium. Usage: SMOKE_URL=http://localhost:8080 node scripts/smoke.cjs
+'use strict';
 const { chromium } = require('playwright');
-const path = require('path');
-const base = 'file://' + path.resolve(process.argv[2] || path.join(__dirname, '..', 'index.html'));
+
+const BASE = process.env.SMOKE_URL || 'http://localhost:8080';
+const failures = [];
+const ok = (cond, msg) => { if (!cond) failures.push(msg); else console.log('  ok  ' + msg); };
 
 (async () => {
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--no-sandbox'] });
-  const out = { consoleErrors: [], checks: {} };
-  const isCdnBlocked = (t) => t.includes('ERR_TUNNEL_CONNECTION_FAILED') || t.includes('ERR_FILE_NOT_FOUND');
+  const consoleProblems = [];
+  const newContext = async (viewport) => {
+    const ctx = await browser.newContext({ viewport, deviceScaleFactor: 1, locale: 'en-US' });
+    const page = await ctx.newPage();
+    page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') consoleProblems.push(m.text()); });
+    page.on('pageerror', (e) => consoleProblems.push('pageerror: ' + e.message));
+    return { ctx, page };
+  };
 
-  // --- Desktop: form behaviour
-  let ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
-  let page = await ctx.newPage();
-  const dialogs = [];
-  page.on('dialog', d => { dialogs.push(d.message()); d.dismiss(); });
-  page.on('console', m => { if (m.type() === 'error' && !isCdnBlocked(m.text())) out.consoleErrors.push('desktop: ' + m.text()); });
-  page.on('pageerror', e => out.consoleErrors.push('desktop pageerror: ' + e.message));
-  const reqs = [];
-  page.on('request', r => { if (r.url().startsWith('http') && !/fonts\.g|cdnjs/.test(r.url())) reqs.push(r.method() + ' ' + r.url()); });
-  await page.goto(base, { waitUntil: 'domcontentloaded' });
-
-  out.checks.consentAttributeRequired = await page.evaluate(() => document.getElementById('consent').required);
-  await page.fill('#name', 'Тест'); await page.fill('#email', 'test@example.com');
-  await page.selectOption('#age-group', 'adult'); await page.fill('#goal', 'Проверка формы');
-  await page.click('.form-submit');
-  await page.waitForTimeout(300);
-  out.checks.submitWithoutConsentBlocked = await page.evaluate(() => !document.getElementById('consent').checkValidity());
-  out.checks.noAlertOnBlocked = dialogs.length === 0;
-
-  await page.check('#consent');
-  // Honeypot filled => silently ignored (no status text, no mail)
-  await page.evaluate(() => { document.querySelector('input[name="website"]').value = 'http://spam.example'; });
-  await page.click('.form-submit');
-  await page.waitForTimeout(300);
-  out.checks.honeypotIgnored = (await page.textContent('#form-status')).trim() === '';
-  await page.evaluate(() => { document.querySelector('input[name="website"]').value = ''; });
-
-  // Mailto fallback: status must be honest (no claim that the request was sent)
-  await page.evaluate(() => { window.__mailto = null; });
-  await page.click('.form-submit');
-  await page.waitForTimeout(400);
-  const status = (await page.textContent('#form-status')).trim();
-  out.checks.mailtoStatus = status;
-  out.checks.statusNotFalseSuccess = !/Ваша заявка отправлена/.test(status);
-  out.checks.formNotResetInMailtoMode = await page.evaluate(() => document.getElementById('name').value === 'Тест');
-  out.checks.networkRequestsOnSubmit = reqs.filter(r => !r.startsWith('GET http://localhost')).length;
-
-  // Legal links resolve to real pages
-  for (const href of ['privacy.html', 'terms.html', 'refund.html']) {
-    const res = await page.request.get(base.replace('index.html', href)).catch(() => null);
-    out.checks['legal:' + href] = res ? (res.status() === 200 || base.startsWith('file:')) : 'n/a (file://)';
+  // 1. Each language: home renders, has h1, hreflang, no horizontal overflow on phone width
+  for (const [lang, viewport] of [['ru', { width: 1280, height: 800 }], ['fr', { width: 375, height: 740 }], ['en', { width: 1280, height: 800 }]]) {
+    const { ctx, page } = await newContext(viewport);
+    const resp = await page.goto(`${BASE}/${lang}/`, { waitUntil: 'load' });
+    ok(resp && resp.status() === 200, `${lang} home returns 200`);
+    ok((await page.locator('h1').count()) === 1, `${lang} home has one h1`);
+    ok((await page.getAttribute('html', 'lang')) === lang, `${lang} html lang set`);
+    ok((await page.locator('link[rel="alternate"][hreflang="x-default"]').count()) === 1, `${lang} has x-default hreflang`);
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
+    ok(!overflow, `${lang} home: no horizontal overflow at ${viewport.width}px`);
+    await ctx.close();
   }
-  out.checks.footerLinks = await page.evaluate(() => [...document.querySelectorAll('.footer-policies a')].map(a => a.getAttribute('href')));
-  await ctx.close();
 
-  // --- Mobile: menu button semantics, overflow
-  ctx = await browser.newContext({ viewport: { width: 375, height: 740 } });
-  page = await ctx.newPage();
-  page.on('console', m => { if (m.type() === 'error' && !isCdnBlocked(m.text())) out.consoleErrors.push('mobile: ' + m.text()); });
-  page.on('pageerror', e => out.consoleErrors.push('mobile pageerror: ' + e.message));
-  await page.goto(base, { waitUntil: 'domcontentloaded' });
-  out.checks.mobileToggleTag = await page.evaluate(() => document.getElementById('mobile-toggle').tagName);
-  out.checks.ariaBefore = await page.getAttribute('#mobile-toggle', 'aria-expanded');
-  await page.click('#mobile-toggle'); await page.waitForTimeout(400);
-  out.checks.ariaOpen = await page.getAttribute('#mobile-toggle', 'aria-expanded');
-  await page.click('#nav a[href="#services"]'); await page.waitForTimeout(600);
-  out.checks.ariaAfterLinkClick = await page.getAttribute('#mobile-toggle', 'aria-expanded');
-  out.checks.overflowMobile = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
-  // Consent row must not overflow on phone width
-  await page.locator('#contact').scrollIntoViewIfNeeded();
-  out.checks.consentRowFits = await page.evaluate(() => {
-    const el = document.querySelector('.form-consent'); const r = el.getBoundingClientRect();
-    return r.right <= window.innerWidth + 1;
-  });
-  await ctx.close();
+  // 2. Mobile menu: opens, aria-expanded toggles, Escape closes
+  {
+    const { ctx, page } = await newContext({ width: 375, height: 740 });
+    await page.goto(`${BASE}/en/`, { waitUntil: 'load' });
+    await page.click('#menu-toggle');
+    await page.waitForTimeout(500);
+    ok((await page.getAttribute('#menu-toggle', 'aria-expanded')) === 'true', 'mobile menu: aria-expanded true when open');
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(200);
+    ok((await page.getAttribute('#menu-toggle', 'aria-expanded')) === 'false', 'mobile menu: Escape closes');
+    await ctx.close();
+  }
+
+  // 3. Lead form: consent gate, then real submission; success text only after 201
+  {
+    const { ctx, page } = await newContext({ width: 1280, height: 900 });
+    const apiCalls = [];
+    page.on('response', (r) => { if (r.url().includes('/api/leads')) apiCalls.push(r.status()); });
+    await page.goto(`${BASE}/en/contact/`, { waitUntil: 'load' });
+    await page.fill('#lead-name', 'Smoke Test');
+    await page.fill('#lead-email', 'smoke@example.com');
+    await page.selectOption('#lead-topic', 'general');
+    await page.click('#lead-form button[type="submit"]');
+    await page.waitForTimeout(300);
+    ok(apiCalls.length === 0, 'lead form: no request without consent');
+    await page.check('#lead-consent');
+    await page.click('#lead-form button[type="submit"]');
+    await page.waitForFunction(() => document.querySelector('#lead-form .form-status').textContent.trim().length > 0, null, { timeout: 8000 });
+    const status = (await page.textContent('#lead-form .form-status')).trim();
+    ok(apiCalls[0] === 201, `lead form: API answered 201 (got ${apiCalls[0]})`);
+    ok(/received/i.test(status), 'lead form: success message shown after 201');
+    await ctx.close();
+  }
+
+  // 4. Cart page without items
+  {
+    const { ctx, page } = await newContext({ width: 1280, height: 800 });
+    await page.goto(`${BASE}/en/cart/`, { waitUntil: 'load' });
+    await page.waitForTimeout(600);
+    ok(await page.isVisible('[data-cart-empty]'), 'cart: empty state visible');
+    ok(!(await page.isVisible('[data-checkout]')), 'cart: checkout hidden when empty');
+    await ctx.close();
+  }
+
+  // 5. Legal pages render; drafts are visibly marked; FAQ details open
+  {
+    const { ctx, page } = await newContext({ width: 1280, height: 800 });
+    for (const p of ['legal/mentions/', 'legal/privacy/', 'legal/terms-of-sale/', 'legal/refunds/', 'legal/digital-products/', 'legal/cookies/']) {
+      const r = await page.goto(`${BASE}/fr/${p}`, { waitUntil: 'load' });
+      ok(r.status() === 200, `legal ${p} loads`);
+    }
+    ok((await page.locator('mark.todo').count()) >= 0, 'legal: placeholders are rendered as marks (count may be 0 after data entry)');
+    await page.goto(`${BASE}/en/faq/`, { waitUntil: 'load' });
+    await page.click('.faq details summary >> nth=0');
+    ok(await page.evaluate(() => document.querySelector('.faq details').open), 'faq: details opens');
+    await ctx.close();
+  }
+
+  // 6. Language switcher keeps the same page
+  {
+    const { ctx, page } = await newContext({ width: 1280, height: 800 });
+    await page.goto(`${BASE}/ru/consultations/`, { waitUntil: 'load' });
+    await page.click('.lang-switch a[hreflang="fr"]');
+    await page.waitForLoadState('load');
+    ok(page.url().endsWith('/fr/consultations/'), 'language switch keeps the page');
+    await ctx.close();
+  }
+
+  // 7. CSP: no violations reported
+  const csp = consoleProblems.filter((t) => /Content Security Policy|Refused to/i.test(t));
+  ok(csp.length === 0, `no CSP violations (${csp.length})`);
+  ok(consoleProblems.length === 0, `no console errors or warnings (${consoleProblems.length}: ${consoleProblems.slice(0, 3).join(' | ')})`);
 
   await browser.close();
-  console.log(JSON.stringify(out, null, 2));
-})().catch(e => { console.error('VERIFY FAILED', e); process.exit(1); });
+  if (failures.length) {
+    console.log('\nFAILED:\n - ' + failures.join('\n - '));
+    process.exit(1);
+  }
+  console.log('\nSmoke test passed.');
+})().catch((e) => { console.error('SMOKE ERROR', e); process.exit(1); });

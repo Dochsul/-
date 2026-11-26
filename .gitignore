@@ -35,3 +35,9 @@ yarn-error.log*
 
 # Node (only if dependencies are installed for local checks)
 node_modules/
+
+# Runtime data and sensitive files (never commit)
+data/
+dist/
+private/
+.env

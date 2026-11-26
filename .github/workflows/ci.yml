@@ -8,13 +8,20 @@ permissions:
   contents: read
 
 jobs:
-  static-checks:
-    name: Static checks (HTML, links, sitemap, CSP)
+  test:
+    name: Build, test and static checks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Run scripts/check.mjs
-        run: node scripts/check.mjs
+      - name: Unit and integration tests (server, site)
+        run: npm test
+      - name: Build the development site
+        run: npm run build
+      - name: Static checks on dist/ and source secrets
+        run: npm run check
+
+  # Deliberately NO deploy job. Publication is a manual decision by the owner.
+  # The production gate (npm run build:prod) is run locally once the data in docs/ANKETA.md is complete.
