@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Content Security Policy: the site is static, so the policy is delivered as a meta tag.
+         Inline <script>/<style> are used, hence 'unsafe-inline'. If a form backend is added (FORM_ENDPOINT),
+         add its origin to connect-src. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'">
     <meta name="description" content="Global Aina Nutrition - Онлайн-консультации по питанию. Индивидуальный подход без жёстких диет. Работаем дистанционно из Франции.">
     <meta name="keywords" content="консультации по питанию, онлайн питание, эксперт по питанию, здоровое питание">
     <meta name="author" content="Айна Мусхаджиева">
@@ -13,7 +17,6 @@
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="alternate icon" href="favicon.ico">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -103,7 +106,7 @@
 
         .cta-button {
             background-color: var(--accent-color);
-            color: var(--white);
+            color: var(--text-color);
             padding: 0.75rem 1.5rem;
             border-radius: 30px;
             text-decoration: none;
@@ -114,7 +117,7 @@
 
         .cta-button:hover {
             background-color: transparent;
-            color: var(--accent-color);
+            color: var(--text-color);
             transform: translateY(-2px);
         }
 
@@ -362,7 +365,7 @@
             top: 20px;
             right: 20px;
             background-color: var(--accent-color);
-            color: var(--white);
+            color: var(--text-color);
             padding: 0.3rem 1rem;
             border-radius: 20px;
             font-size: 0.85rem;
@@ -414,7 +417,7 @@
 
         .btn-primary {
             background-color: var(--accent-color);
-            color: var(--white);
+            color: var(--text-color);
             padding: 0.75rem 1.5rem;
             border-radius: 30px;
             text-decoration: none;
@@ -667,7 +670,7 @@
         .form-submit {
             width: 100%;
             background-color: var(--accent-color);
-            color: var(--white);
+            color: var(--text-color);
             padding: 1rem 2rem;
             border: 2px solid var(--accent-color);
             border-radius: 30px;
@@ -686,7 +689,7 @@
         /* Final CTA Section */
         .final-cta {
             background: linear-gradient(135deg, var(--accent-color) 0%, #B89760 100%);
-            color: var(--white);
+            color: var(--text-color);
             text-align: center;
             padding: 5rem 5%;
         }
@@ -694,7 +697,7 @@
         .final-cta h2 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
-            color: var(--white);
+            color: var(--text-color);
         }
 
         .final-cta p {
@@ -705,14 +708,14 @@
 
         .final-cta .cta-button {
             background-color: var(--white);
-            color: var(--accent-color);
+            color: var(--text-color);
             border-color: var(--white);
         }
 
         .final-cta .cta-button:hover {
             background-color: transparent;
-            color: var(--white);
-            border-color: var(--white);
+            color: var(--text-color);
+            border-color: var(--text-color);
         }
 
         /* Footer */
@@ -877,6 +880,45 @@
             }
         }
 
+        /* Mobile menu button (rendered as <button> for keyboard and screen-reader access) */
+        button.mobile-menu-toggle {
+            background: none;
+            border: 0;
+            padding: 0;
+        }
+
+        /* Contact form: consent checkbox and status message */
+        .form-consent label {
+            display: flex;
+            gap: 0.6rem;
+            align-items: flex-start;
+            font-weight: 400;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .form-consent input[type="checkbox"] {
+            margin-top: 0.3rem;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .form-consent a {
+            color: var(--text-color);
+            text-decoration: underline;
+        }
+
+        .form-status {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            min-height: 1.5rem;
+        }
+
+        .form-status.is-error {
+            color: #B3261E;
+        }
+
         /* Smooth animations */
         .fade-in {
             opacity: 0;
@@ -902,11 +944,11 @@
             <a href="#contact">Контакты</a>
             <a href="#contact" class="cta-button">Записаться</a>
         </nav>
-        <div class="mobile-menu-toggle" id="mobile-toggle">
+        <button type="button" class="mobile-menu-toggle" id="mobile-toggle" aria-label="Открыть меню" aria-expanded="false" aria-controls="nav">
             <span></span>
             <span></span>
             <span></span>
-        </div>
+        </button>
     </header>
 
     <!-- Hero Section -->
@@ -1239,7 +1281,7 @@
             </div>
 
             <div class="contact-form">
-                <form id="contact-form" action="#" method="POST" onsubmit="handleFormSubmit(event)">
+                <form id="contact-form" autocomplete="on">
                     <div class="form-group">
                         <label for="name">Имя <span style="color: red;">*</span></label>
                         <input type="text" id="name" name="name" required>
@@ -1280,7 +1322,18 @@
                         <label for="comment">Комментарий (необязательно)</label>
                         <textarea id="comment" name="comment"></textarea>
                     </div>
+                    <div class="form-group form-consent">
+                        <label for="consent">
+                            <input type="checkbox" id="consent" name="consent" required>
+                            <span>Я даю согласие на обработку указанных данных для ответа на мою заявку и ознакомлен(а) с <a href="privacy.html" target="_blank" rel="noopener noreferrer">Политикой конфиденциальности</a>. <span style="color: red;">*</span></span>
+                        </label>
+                    </div>
+                    <!-- Honeypot field against bots: hidden from people, must stay empty -->
+                    <div style="position: absolute; left: -9999px;" aria-hidden="true">
+                        <label>Не заполняйте это поле <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+                    </div>
                     <button type="submit" class="form-submit">Отправить заявку</button>
+                    <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
                 </form>
             </div>
         </div>
@@ -1333,13 +1386,13 @@
             </div>
 
             <div class="footer-policies">
-                <a href="#privacy">Политика конфиденциальности</a>
-                <a href="#terms">Условия использования</a>
-                <a href="#refund">Политика возврата</a>
+                <a href="privacy.html">Политика конфиденциальности</a>
+                <a href="terms.html">Условия использования</a>
+                <a href="refund.html">Политика возврата</a>
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; 2025 Global Aina Nutrition. Все права защищены.</p>
+                <p>&copy; 2026 Global Aina Nutrition. Все права защищены.</p>
             </div>
         </div>
     </footer>
@@ -1352,6 +1405,7 @@
         mobileToggle.addEventListener('click', () => {
             mobileToggle.classList.toggle('active');
             nav.classList.toggle('active');
+            mobileToggle.setAttribute('aria-expanded', String(nav.classList.contains('active')));
         });
 
         // Close mobile menu when clicking on a link
@@ -1360,6 +1414,7 @@
             link.addEventListener('click', () => {
                 mobileToggle.classList.remove('active');
                 nav.classList.remove('active');
+                mobileToggle.setAttribute('aria-expanded', 'false');
             });
         });
 
@@ -1396,30 +1451,83 @@
             });
         });
 
-        // Form submission handler
-        function handleFormSubmit(event) {
-            event.preventDefault();
+        // Contact form
+        // FORM_ENDPOINT: URL of a form-processing service that accepts JSON POST.
+        // It is empty on purpose: choosing and paying for a service is the owner's decision (see CLAUDE.md).
+        // While empty, the form opens a pre-filled email to the owner instead. Nothing is logged or sent to third parties.
+        const FORM_ENDPOINT = '';
+        const CONTACT_EMAIL = 'globalainanutrition@gmail.com';
+        const CONTACT_FALLBACK = 'WhatsApp +33 6 67 65 03 84, Telegram @global_aina_nutrition или email ' + CONTACT_EMAIL;
 
-            const formData = new FormData(event.target);
-            const data = {};
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
+        const contactForm = document.getElementById('contact-form');
+        const formStatus = document.getElementById('form-status');
 
-            // Here you would typically send the data to a server
-            // For now, we'll just show an alert and log to console
-            console.log('Form submitted:', data);
-
-            alert('Спасибо за вашу заявку! Я свяжусь с вами в ближайшее время.\n\nА пока можете написать мне напрямую:\n\nWhatsApp: +33 6 67 65 03 84\nTelegram: @global_aina_nutrition\nEmail: globalainanutrition@gmail.com');
-
-            event.target.reset();
+        function setFormStatus(text, isError) {
+            formStatus.textContent = text;
+            formStatus.classList.toggle('is-error', Boolean(isError));
         }
 
-        // Smooth scroll for all anchor links
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+
+            if (!contactForm.checkValidity()) {
+                contactForm.reportValidity();
+                return;
+            }
+
+            const formData = new FormData(contactForm);
+            // Honeypot: real users leave this field empty, bots fill it in
+            if (formData.get('website')) {
+                return;
+            }
+            formData.delete('website');
+            const data = Object.fromEntries(formData.entries());
+
+            const submitButton = contactForm.querySelector('.form-submit');
+            submitButton.disabled = true;
+
+            try {
+                if (FORM_ENDPOINT) {
+                    const response = await fetch(FORM_ENDPOINT, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    if (!response.ok) {
+                        throw new Error('HTTP ' + response.status);
+                    }
+                    contactForm.reset();
+                    setFormStatus('Спасибо! Ваша заявка отправлена. Я свяжусь с вами в ближайшее время.', false);
+                } else {
+                    const lines = [
+                        'Имя: ' + (data.name || ''),
+                        'Email: ' + (data.email || ''),
+                        'Телефон / мессенджер: ' + (data.phone || '—'),
+                        'Возраст: ' + (data['age-group'] || ''),
+                        'Услуга: ' + (data.service || '—'),
+                        'Цель обращения: ' + (data.goal || ''),
+                        'Комментарий: ' + (data.comment || '—')
+                    ];
+                    const subject = 'Заявка с сайта: ' + (data.service || 'консультация');
+                    window.location.href = 'mailto:' + CONTACT_EMAIL
+                        + '?subject=' + encodeURIComponent(subject)
+                        + '&body=' + encodeURIComponent(lines.join('\n'));
+                    setFormStatus('Откроется письмо с вашей заявкой. Если почтовая программа не открылась, отправьте заявку напрямую: ' + CONTACT_FALLBACK + '.', false);
+                }
+            } catch (error) {
+                setFormStatus('Не удалось отправить заявку. Пожалуйста, напишите мне напрямую: ' + CONTACT_FALLBACK + '.', true);
+            } finally {
+                submitButton.disabled = false;
+            }
+        }
+
+        contactForm.addEventListener('submit', handleFormSubmit);
+
+        // Smooth scroll for in-page anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 const href = this.getAttribute('href');
-                if (href !== '#' && href !== '#privacy' && href !== '#terms' && href !== '#refund') {
+                if (href !== '#') {
                     e.preventDefault();
                     const target = document.querySelector(href);
                     if (target) {

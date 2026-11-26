@@ -29,3 +29,9 @@ yarn-error.log*
 .env
 .env.local
 .env.*.local
+
+# Claude Code: personal settings (never commit)
+.claude/settings.local.json
+
+# Node (only if dependencies are installed for local checks)
+node_modules/
