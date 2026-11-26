@@ -10,6 +10,7 @@ import { verifyStripeSignature, createCheckoutSession, fetchStripeFee } from './
 import { fileSkus } from '../src/config/catalog.mjs';
 import { enqueue } from './outbox.mjs';
 import { deliveryEmail } from './emails.mjs';
+import { claimDownload, releaseDownload } from './downloads.mjs';
 import { nowIso } from './db.mjs';
 
 const MIME = {
@@ -281,13 +282,12 @@ export function createApp({ config, db, transports, fetchImpl = fetch, now = () 
     `).get(sha256(token));
     if (!row || row.revoked || row.order_status !== 'paid' || new Date(row.expires_at) < now()) return notFound();
     if (row.download_count >= row.max_downloads) return notFound();
-    // Atomic increment: concurrent requests cannot exceed the limit.
-    const upd = db.prepare('UPDATE downloads SET download_count = download_count + 1 WHERE token_hash = ? AND download_count < max_downloads AND revoked = 0').run(row.token_hash);
-    if (upd.changes !== 1) return notFound();
+    // Atomic claim: concurrent requests (even from another process) cannot exceed the limit.
+    if (!claimDownload(db, row.token_hash)) return notFound();
     const known = config.fileSkus.includes(row.sku);
     const file = known && join(resolve(config.privateDir), `${basename(row.sku)}.pdf`);
     if (!file || !file.startsWith(resolve(config.privateDir) + sep) || !existsSync(file)) {
-      db.prepare('UPDATE downloads SET download_count = download_count - 1 WHERE token_hash = ?').run(row.token_hash);
+      releaseDownload(db, row.token_hash);
       return send(res, 503, { error: 'file_unavailable' });
     }
     const size = statSync(file).size;

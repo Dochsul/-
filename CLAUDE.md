@@ -22,7 +22,7 @@
 | `site/static/` | CSS, `app.js`, self-hosted шрифты, favicon |
 | `server/` | API на Node.js без зависимостей: заявки, заказы, webhook Stripe, загрузки, очередь писем, SMTP (`smtp.mjs`, `emails.mjs`), копии (`backup.mjs`, `s3.mjs`), защита запуска (`config.mjs`) |
 | `deploy/` | Dockerfile, compose, Caddyfile, cloud-init, `deploy.sh` с откатом. **Не запускалось на сервере**; образ проверяется в CI |
-| `tests/` | `node --test`: сервер, учёт, SMTP, защита, копии, развёртывание, сайт, пакет Tilda — **125** |
+| `tests/` | `node --test`: сервер, учёт, SMTP, защита, копии, развёртывание, сайт, пакет Tilda — **127** |
 | `TILDA_HANDOFF.md`, `tilda/` | Пакет для Tilda: тексты 19 страниц, SEO, T123-компоненты. **Генерируется** `npm run tilda`, вручную не править |
 | `server/ledger.mjs`, `scripts/export-accounting.mjs` | Учёт платежей, комиссий, возвратов; CSV для бухгалтера |
 | `scripts/tilda-e2e.mjs` | Браузерный e2e блока магазина (два origin, Stripe — заглушка) |

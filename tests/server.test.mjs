@@ -494,3 +494,29 @@ test('catalog: lists only sellable products with server prices', async () => {
   assert.equal(body.products.find((p) => p.sku === BUNDLE).prices.EUR, 1990);
   assert.deepEqual(body.currencies, ['EUR']);
 });
+
+// ---------- protections that mutation testing showed were not covered ----------
+import { claimDownload, releaseDownload } from '../server/downloads.mjs';
+
+test('claimDownload: the stored limit is enforced by the database itself, even if the caller skips the pre-check', () => {
+  const t = new Date().toISOString();
+  db.prepare("INSERT INTO orders (id, created_at, updated_at, locale, email, items_json, amount_cents, currency, status, provider, terms_accepted_at, digital_waiver_at) VALUES ('o_claim', ?, ?, 'en', 'c@x.fr', '[]', 1, 'EUR', 'paid', 'stripe', ?, ?)").run(t, t, t, t);
+  db.prepare("INSERT INTO downloads (token_hash, order_id, sku, created_at, expires_at, max_downloads) VALUES ('h_claim', 'o_claim', ?, ?, ?, 3)").run(SKU, t, new Date(Date.now() + 86400000).toISOString());
+  const results = Array.from({ length: 10 }, () => claimDownload(db, 'h_claim'));
+  assert.equal(results.filter(Boolean).length, 3, 'exactly 3 slots can be claimed out of 10 attempts');
+  assert.equal(db.prepare("SELECT download_count FROM downloads WHERE token_hash = 'h_claim'").get().download_count, 3);
+  releaseDownload(db, 'h_claim');
+  assert.equal(claimDownload(db, 'h_claim'), true, 'a released slot can be claimed again');
+  db.prepare("UPDATE downloads SET revoked = 1 WHERE token_hash = 'h_claim'").run();
+  releaseDownload(db, 'h_claim');
+  assert.equal(claimDownload(db, 'h_claim'), false, 'a revoked token can never be claimed');
+});
+
+test('a product whose price exists but is NOT confirmed by the owner cannot be sold', async () => {
+  const unconfirmed = [{ sku: 'draft-price', prices: { EUR: 990, RUB: 100000 }, priceConfirmed: false, published: true, contentConfirmed: true, files: ['draft-price'], i18n: i18n('Draft price') }];
+  assert.equal(priceOrder([{ sku: 'draft-price' }], 'EUR', unconfirmed, ['EUR']).error, 'product_unavailable');
+  const noContent = [{ ...unconfirmed[0], priceConfirmed: true, contentConfirmed: false }];
+  assert.equal(priceOrder([{ sku: 'draft-price' }], 'EUR', noContent, ['EUR']).error, 'product_unavailable', 'unconfirmed content blocks the sale too');
+  const ok = [{ ...unconfirmed[0], priceConfirmed: true }];
+  assert.equal(priceOrder([{ sku: 'draft-price' }], 'EUR', ok, ['EUR']).amountCents, 990);
+});
