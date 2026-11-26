@@ -44,9 +44,9 @@ export const products = [
     files: ['child-sleep-guide-0-18'],
     preview: null,
     i18n: {
-      ru: { title: 'Сон ребёнка от рождения до 18 лет', summary: 'Гайд о детском сне по возрастным этапам: ориентиры, режим дня и организация сна в семье.', topics: ['Возрастные этапы', 'Режим дня', 'Организация сна в семье'] },
-      fr: { title: "Sommeil de l'enfant, de la naissance à 18 ans", summary: "Guide sur le sommeil de l'enfant par âge : repères, rythme de la journée et organisation du sommeil en famille.", topics: ['Étapes par âge', 'Rythme de la journée', "Organisation du sommeil en famille"] },
-      en: { title: 'Child sleep from birth to 18 years', summary: 'A guide to children\'s sleep by age stage: reference points, daily rhythm and organising sleep at home.', topics: ['Age stages', 'Daily rhythm', 'Organising sleep at home'] },
+      ru: { title: 'Почему ребёнок не спит? Полный гайд для родителей детей от рождения до 18 лет', summary: 'Гайд о детском сне по возрастным этапам: ориентиры, режим дня и организация сна в семье.', topics: ['Возрастные этапы', 'Режим дня', 'Организация сна в семье'] },
+      fr: { title: "Pourquoi mon enfant ne dort-il pas ? Guide complet pour les parents d’enfants de la naissance à 18 ans", summary: "Guide sur le sommeil de l'enfant par âge : repères, rythme de la journée et organisation du sommeil en famille.", topics: ['Étapes par âge', 'Rythme de la journée', "Organisation du sommeil en famille"] },
+      en: { title: 'Why won’t my child sleep? Complete guide for parents of children from birth to 18', summary: 'A guide to children\'s sleep by age stage: reference points, daily rhythm and organising sleep at home.', topics: ['Age stages', 'Daily rhythm', 'Organising sleep at home'] },
     },
   },
   {
@@ -59,7 +59,7 @@ export const products = [
     files: ['cow-milk-protein-allergy-guide', 'complementary-feeding-guide', 'child-sleep-guide-0-18'],
     preview: null,
     i18n: {
-      ru: { title: 'Комплект из трёх гайдов для родителей', summary: 'Три гайда в одном заказе: аллергия на белок коровьего молока, прикорм (каши и пюре), сон ребёнка от рождения до 18 лет.', topics: ['Аллергия на белок коровьего молока', 'Прикорм: каши и пюре', 'Сон ребёнка от рождения до 18 лет'] },
+      ru: { title: 'Комплект из трёх гайдов для родителей', summary: 'Три гайда в одном заказе: аллергия на белок коровьего молока, прикорм (каши и пюре), сон ребёнка от рождения до 18 лет.', topics: ['Аллергия на белок коровьего молока', 'Прикорм: каши и пюре', 'гайд «Почему ребёнок не спит?»'] },
       fr: { title: 'Pack des trois guides pour parents', summary: "Les trois guides en une seule commande : allergie aux protéines du lait de vache, première alimentation (bouillies et purées), sommeil de l'enfant de la naissance à 18 ans.", topics: ['Allergie aux protéines du lait de vache', 'Première alimentation : bouillies et purées', "Sommeil de l'enfant, de la naissance à 18 ans"] },
       en: { title: 'Bundle of the three parent guides', summary: "All three guides in one order: cow's milk protein allergy, complementary feeding (cereals and purées), child sleep from birth to 18 years.", topics: ["Cow's milk protein allergy", 'Complementary feeding: cereals and purées', 'Child sleep from birth to 18 years'] },
     },

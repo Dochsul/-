@@ -149,16 +149,16 @@ export default {
   pages: {
     home: {
       title: 'AINA Évidence — nutrition fondée sur les données pour la famille',
-      description: 'Alimentation de l’adulte et de l’enfant, maternité, guides pour parents. Conseil en diététique et nutrition diplômé(e), en ligne depuis la France.',
+      description: 'Alimentation de l’adulte et de l’enfant, maternité, guides pour parents. Conseil en nutrition diplômé(e), en ligne depuis la France.',
       sections: [
-        { type: 'hero', eyebrow: 'Nutrition fondée sur les données', h1: 'Une alimentation adaptée à vous et à votre famille', lead: 'Une approche personnalisée, sans régimes stricts. Accompagnement en ligne pour adultes, enfants et périodes de maternité.', actions: [{ label: 'Boutique des guides', href: 'shop/', primary: true }, { label: 'Guides parents', href: 'guides/' }] },
+        { type: 'hero', eyebrow: 'Nutrition fondée sur les données', h1: 'Une alimentation adaptée à vous et à votre famille', lead: 'Une approche personnalisée, sans régimes stricts. Accompagnement en ligne pour adultes, enfants et périodes de maternité.', actions: [{ label: 'Choisir un service', href: 'contact/', primary: true }, { label: 'Boutique des guides', href: 'shop/' }, { label: 'Rejoindre la communauté gratuitement', href: 'community/' }] },
         { type: 'cards', h: 'Domaines d’accompagnement', items: [
           { t: 'Alimentation de l’adulte', p: 'Recommandations personnalisées sur le rythme et l’alimentation, sans restrictions rigides.' },
           { t: 'Alimentation de l’enfant', p: 'Alimentation selon l’âge : diversification, rythme, questions fréquentes des parents.' },
           { t: 'Maternité et développement', p: 'Alimentation pendant la grossesse et l’allaitement, accompagnement aux étapes de développement.' },
           { t: 'Menus personnalisés', p: 'Des menus élaborés selon vos objectifs, vos préférences et votre rythme.' },
           { t: 'Accompagnement', p: 'Un soutien régulier et des ajustements au fil des changements.' },
-          { t: 'Soutien psychologique', p: 'Dans les limites de ma compétence professionnelle : relation à l’alimentation et habitudes.' },
+          { t: 'Information pour les parents', p: 'Repères sur l’alimentation et le développement de l’enfant. Je n’assure pas de soutien psychologique.' },
         ] },
         { type: 'cta', h: 'Première étape : une demande courte', p: 'Décrivez-moi votre besoin en quelques mots. Je vous réponds par e-mail et je vous propose un format.', label: 'Envoyer une demande', href: 'contact/' },
         { type: 'notice', p: 'Les services ont une vocation de conseil et d’information. Aucun diagnostic ni traitement médical n’est réalisé. Les recommandations ne remplacent pas une consultation médicale.' },
@@ -166,11 +166,11 @@ export default {
     },
     about: {
       title: 'À propos — AINA Évidence',
-      description: 'Aina Muskhadzhieva : conseil en diététique et nutrition, diplômé(e). Une approche fondée sur les données scientifiques.',
+      description: 'Aina Muskhadzhieva : conseil en nutrition, diplômé(e). Une approche fondée sur les données scientifiques.',
       sections: [
-        { type: 'hero', eyebrow: 'À propos', h1: 'Aina Muskhadzhieva', lead: 'Conseil en diététique et nutrition, diplômé(e). J’exerce en ligne à l’international depuis la France.' },
+        { type: 'hero', eyebrow: 'À propos', h1: 'Aina Muskhadzhieva', lead: 'Conseil en nutrition, diplômé(e). J’exerce en ligne à l’international depuis la France.' },
         { type: 'text', h: 'Mon approche', paras: ['Je m’appuie sur les données scientifiques et j’explique pourquoi une recommandation fonctionne. L’objectif n’est pas un régime, mais une alimentation durable, compatible avec la vie quotidienne.', 'Chaque demande est individuelle : l’âge, le contexte familial, le rythme et les préférences sont pris en compte.'] },
-        { type: 'list', h: 'Ce que je fais', items: ['Nutrition fondée sur les données', 'Alimentation personnalisée des adultes et des enfants', 'Maternité et développement de l’enfant', 'Supports pédagogiques pour les parents', 'Menus personnalisés et accompagnement', 'Soutien psychologique dans les limites de ma compétence professionnelle'] },
+        { type: 'list', h: 'Ce que je fais', items: ['Nutrition fondée sur les données', 'Alimentation personnalisée des adultes et des enfants', 'Maternité et développement de l’enfant', 'Supports pédagogiques pour les parents', 'Menus personnalisés et accompagnement', 'Information pour les parents dans les limites de ma compétence professionnelle'] },
         { type: 'notice', p: 'Je ne suis pas médecin. Je ne pose pas de diagnostic et je ne promets pas la guérison d’une maladie. En cas de maladie, consultez votre médecin.' },
         { type: 'cta', h: 'Commencez par les guides pour parents', label: 'Guides parents', href: 'guides/' },
       ],
@@ -279,7 +279,7 @@ export default {
       sections: [
         { type: 'hero', eyebrow: 'FAQ', h1: 'Questions fréquentes' },
         { type: 'faq', items: [
-          { q: 'Êtes-vous médecin ?', a: 'Non. Je suis conseil en diététique et nutrition, diplômé(e). Je ne réalise ni diagnostic médical ni traitement.' },
+          { q: 'Êtes-vous médecin ?', a: 'Non. Je suis conseil en nutrition, diplômé(e). Je ne réalise ni diagnostic médical ni traitement.' },
           { q: 'Comment se déroule une consultation ?', a: 'En ligne, dans le format qui vous convient. Avant de commencer, nous précisons vos objectifs, votre rythme et votre contexte.' },
           { q: 'Accompagnez-vous les enfants ?', a: 'Oui, pour les questions d’alimentation de l’enfant. En cas de maladie ou d’allergie, un avis médical reste nécessaire.' },
           { q: 'Puis-je acheter un guide sans compte ?', a: 'Oui. Une adresse e-mail suffit : le lien de téléchargement vous est envoyé après confirmation du paiement.' },

@@ -13,7 +13,7 @@
 
 - Title (63): AINA Évidence — доказательная нутрициология и питание для семьи
 
-- Description (156): Индивидуальное питание взрослых и детей, материнство и детское развитие, гайды для родителей. Консультант-диетолог и нутрициолог, работаю онлайн из Франции.
+- Description (160): Индивидуальное питание взрослых и детей, материнство и детское развитие, гайды для родителей. Консультант по питанию и нутрициологии, работаю онлайн из Франции.
 
 - OG title / description: как Title / Description. OG-изображение: фирменная обложка из библиотеки владельца (1200×630).
 
@@ -34,8 +34,9 @@
 - Надзаголовок: Доказательная нутрициология
 - H1: Питание, которое подходит именно вам и вашей семье
 - Подзаголовок: Индивидуальный подход без жёстких диет. Работаю онлайн с клиентами в разных странах: взрослые, дети, материнство.
-- Кнопка (основная, золотая, тёмный текст): [Магазин гайдов](/ru/shop/)
-- Кнопка (контурная): [Гайды для родителей](/ru/guides/)
+- Кнопка (основная, золотая, тёмный текст): [Выбрать услугу](/ru/contact/)
+- Кнопка (контурная): [Магазин гайдов](/ru/shop/)
+- Кнопка (контурная): [Вступить бесплатно в сообщество](/ru/community/)
 
 **Блок: карточки**
 #### Направления
@@ -44,7 +45,7 @@
 - **Материнство и развитие** — Питание в период беременности и кормления, поддержка на этапах развития ребёнка.
 - **Индивидуальные меню** — Меню, составленное под ваши цели, предпочтения и режим.
 - **Сопровождение** — Регулярная поддержка и корректировки в процессе изменений.
-- **Психологическая поддержка** — В пределах моей профессиональной компетенции: отношения с едой и привычки.
+- **Информационная поддержка родителей** — Ориентиры по питанию и развитию ребёнка. Психологическая помощь не оказывается.
 
 **Блок: призыв (фон: градиент пудра → лаванда)**
 #### Первый шаг — короткий запрос
@@ -63,7 +64,7 @@
 
 - Title (64): AINA Évidence — nutrition fondée sur les données pour la famille
 
-- Description (146): Alimentation de l’adulte et de l’enfant, maternité, guides pour parents. Conseil en diététique et nutrition diplômé(e), en ligne depuis la France.
+- Description (132): Alimentation de l’adulte et de l’enfant, maternité, guides pour parents. Conseil en nutrition diplômé(e), en ligne depuis la France.
 
 - OG title / description: как Title / Description. OG-изображение: фирменная обложка из библиотеки владельца (1200×630).
 
@@ -84,8 +85,9 @@
 - Надзаголовок: Nutrition fondée sur les données
 - H1: Une alimentation adaptée à vous et à votre famille
 - Подзаголовок: Une approche personnalisée, sans régimes stricts. Accompagnement en ligne pour adultes, enfants et périodes de maternité.
-- Кнопка (основная, золотая, тёмный текст): [Boutique des guides](/fr/shop/)
-- Кнопка (контурная): [Guides parents](/fr/guides/)
+- Кнопка (основная, золотая, тёмный текст): [Choisir un service](/fr/contact/)
+- Кнопка (контурная): [Boutique des guides](/fr/shop/)
+- Кнопка (контурная): [Rejoindre la communauté gratuitement](/fr/community/)
 
 **Блок: карточки**
 #### Domaines d’accompagnement
@@ -94,7 +96,7 @@
 - **Maternité et développement** — Alimentation pendant la grossesse et l’allaitement, accompagnement aux étapes de développement.
 - **Menus personnalisés** — Des menus élaborés selon vos objectifs, vos préférences et votre rythme.
 - **Accompagnement** — Un soutien régulier et des ajustements au fil des changements.
-- **Soutien psychologique** — Dans les limites de ma compétence professionnelle : relation à l’alimentation et habitudes.
+- **Information pour les parents** — Repères sur l’alimentation et le développement de l’enfant. Je n’assure pas de soutien psychologique.
 
 **Блок: призыв (фон: градиент пудра → лаванда)**
 #### Première étape : une demande courte
@@ -113,7 +115,7 @@ Décrivez-moi votre besoin en quelques mots. Je vous réponds par e-mail et je v
 
 - Title (61): AINA Évidence — evidence-based nutrition for the whole family
 
-- Description (139): Personalised nutrition for adults and children, maternity, guides for parents. Qualified dietitian-nutritionist working online from France.
+- Description (143): Personalised nutrition for adults and children, maternity, guides for parents. Diploma-holding nutrition consultant working online from France.
 
 - OG title / description: как Title / Description. OG-изображение: фирменная обложка из библиотеки владельца (1200×630).
 
@@ -134,8 +136,9 @@ Décrivez-moi votre besoin en quelques mots. Je vous réponds par e-mail et je v
 - Надзаголовок: Evidence-based nutrition
 - H1: Nutrition that fits you and your family
 - Подзаголовок: A personal approach without strict diets. Online work with clients in several countries: adults, children and maternity.
-- Кнопка (основная, золотая, тёмный текст): [Shop the guides](/en/shop/)
-- Кнопка (контурная): [Parent guides](/en/guides/)
+- Кнопка (основная, золотая, тёмный текст): [Choose a service](/en/contact/)
+- Кнопка (контурная): [Shop the guides](/en/shop/)
+- Кнопка (контурная): [Join the community for free](/en/community/)
 
 **Блок: карточки**
 #### Areas of work
@@ -144,7 +147,7 @@ Décrivez-moi votre besoin en quelques mots. Je vous réponds par e-mail et je v
 - **Maternity and development** — Nutrition during pregnancy and breastfeeding, support at each stage of a child’s development.
 - **Personalised menus** — Menus built around your goals, preferences and routine.
 - **Ongoing support** — Regular support and adjustments as things change.
-- **Psychological support** — Within my professional competence: your relationship with food and habits.
+- **Information for parents** — Guidance on nutrition and child development. I do not provide psychological support.
 
 **Блок: призыв (фон: градиент пудра → лаванда)**
 #### A first step: a short request

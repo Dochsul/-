@@ -149,16 +149,16 @@ export default {
   pages: {
     home: {
       title: 'AINA Évidence — evidence-based nutrition for the whole family',
-      description: 'Personalised nutrition for adults and children, maternity, guides for parents. Qualified dietitian-nutritionist working online from France.',
+      description: 'Personalised nutrition for adults and children, maternity, guides for parents. Diploma-holding nutrition consultant working online from France.',
       sections: [
-        { type: 'hero', eyebrow: 'Evidence-based nutrition', h1: 'Nutrition that fits you and your family', lead: 'A personal approach without strict diets. Online work with clients in several countries: adults, children and maternity.', actions: [{ label: 'Shop the guides', href: 'shop/', primary: true }, { label: 'Parent guides', href: 'guides/' }] },
+        { type: 'hero', eyebrow: 'Evidence-based nutrition', h1: 'Nutrition that fits you and your family', lead: 'A personal approach without strict diets. Online work with clients in several countries: adults, children and maternity.', actions: [{ label: 'Choose a service', href: 'contact/', primary: true }, { label: 'Shop the guides', href: 'shop/' }, { label: 'Join the community for free', href: 'community/' }] },
         { type: 'cards', h: 'Areas of work', items: [
           { t: 'Adult nutrition', p: 'Personal recommendations on diet and routine, without rigid restrictions.' },
           { t: 'Child nutrition', p: 'Nutrition by age: complementary feeding, routine and the questions parents ask most.' },
           { t: 'Maternity and development', p: 'Nutrition during pregnancy and breastfeeding, support at each stage of a child’s development.' },
           { t: 'Personalised menus', p: 'Menus built around your goals, preferences and routine.' },
           { t: 'Ongoing support', p: 'Regular support and adjustments as things change.' },
-          { t: 'Psychological support', p: 'Within my professional competence: your relationship with food and habits.' },
+          { t: 'Information for parents', p: 'Guidance on nutrition and child development. I do not provide psychological support.' },
         ] },
         { type: 'cta', h: 'A first step: a short request', p: 'Tell me in a few words what you need. I reply by email and suggest a format.', label: 'Send a request', href: 'contact/' },
         { type: 'notice', p: 'Services are advisory and educational. No medical diagnosis or treatment is provided. Recommendations do not replace a consultation with a doctor.' },
@@ -166,11 +166,11 @@ export default {
     },
     about: {
       title: 'About — AINA Évidence',
-      description: 'Aina Muskhadzhieva: qualified dietitian-nutritionist. An approach grounded in scientific evidence.',
+      description: 'Aina Muskhadzhieva: diploma-holding nutrition consultant. An approach grounded in scientific evidence.',
       sections: [
-        { type: 'hero', eyebrow: 'About', h1: 'Aina Muskhadzhieva', lead: 'Qualified dietitian-nutritionist. I work online with an international clientele from France.' },
+        { type: 'hero', eyebrow: 'About', h1: 'Aina Muskhadzhieva', lead: 'Diploma-holding nutrition consultant. I work online with an international clientele from France.' },
         { type: 'text', h: 'My approach', paras: ['I rely on scientific evidence and explain why a recommendation works. The goal is not a diet, but sustainable eating that fits everyday life.', 'Every request is individual: age, family context, routine and preferences all shape the work.'] },
-        { type: 'list', h: 'What I do', items: ['Evidence-based nutrition', 'Personalised nutrition for adults and children', 'Maternity and child development', 'Educational materials for parents', 'Personalised menus and ongoing support', 'Psychological support within my professional competence'] },
+        { type: 'list', h: 'What I do', items: ['Evidence-based nutrition', 'Personalised nutrition for adults and children', 'Maternity and child development', 'Educational materials for parents', 'Personalised menus and ongoing support', 'Information for parents within my professional competence'] },
         { type: 'notice', p: 'I am not a doctor. I do not make diagnoses or promise to cure any disease. If you have a medical condition, please see your doctor.' },
         { type: 'cta', h: 'Start with the parent guides', label: 'Parent guides', href: 'guides/' },
       ],
@@ -279,7 +279,7 @@ export default {
       sections: [
         { type: 'hero', eyebrow: 'FAQ', h1: 'Frequently asked questions' },
         { type: 'faq', items: [
-          { q: 'Are you a doctor?', a: 'No. I am a qualified dietitian-nutritionist. I do not make medical diagnoses or provide treatment.' },
+          { q: 'Are you a doctor?', a: 'No. I am a diploma-holding nutrition consultant. I do not make medical diagnoses or provide treatment.' },
           { q: 'How does a consultation work?', a: 'Online, in the format that suits you. Before we start, we clarify your goals, routine and context.' },
           { q: 'Do you work with children?', a: 'Yes, on child nutrition questions. For illness or allergies, a medical opinion is still needed.' },
           { q: 'Can I buy a guide without an account?', a: 'Yes. An email address is enough: the download link is sent after the payment is confirmed.' },

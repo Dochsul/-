@@ -13,7 +13,7 @@
 
 - Title (23): Обо мне — AINA Évidence
 
-- Description (109): Айна Мусхаджиева: дипломированный консультант-диетолог и нутрициолог. Подход основан на доказательных данных.
+- Description (113): Айна Мусхаджиева: дипломированный консультант по питанию и нутрициологии. Подход основан на доказательных данных.
 
 - OG title / description: как Title / Description. OG-изображение: фирменная обложка из библиотеки владельца (1200×630).
 
@@ -25,7 +25,7 @@
 <link rel="alternate" hreflang="fr" href="{DOMAIN}/fr/about/">
 <link rel="alternate" hreflang="en" href="{DOMAIN}/en/about/">
 <link rel="alternate" hreflang="x-default" href="{DOMAIN}/en/about/">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Айна Мусхаджиева","jobTitle":"Дипломированный консультант-диетолог и нутрициолог","worksFor":{"@type":"Organization","name":"AINA Évidence"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Айна Мусхаджиева","jobTitle":"Дипломированный консультант по питанию и нутрициологии","worksFor":{"@type":"Organization","name":"AINA Évidence"}}</script>
 ```
 
 ### Тексты
@@ -33,7 +33,7 @@
 **Блок: обложка (первый экран)**
 - Надзаголовок: Обо мне
 - H1: Айна Мусхаджиева
-- Подзаголовок: Дипломированный консультант-диетолог и нутрициолог. Работаю международно онлайн из Франции.
+- Подзаголовок: Дипломированный консультант по питанию и нутрициологии. Работаю международно онлайн из Франции.
 
 **Блок: текст**
 #### Подход
@@ -65,7 +65,7 @@
 
 - Title (24): À propos — AINA Évidence
 
-- Description (119): Aina Muskhadzhieva : conseil en diététique et nutrition, diplômé(e). Une approche fondée sur les données scientifiques.
+- Description (105): Aina Muskhadzhieva : conseil en nutrition, diplômé(e). Une approche fondée sur les données scientifiques.
 
 - OG title / description: как Title / Description. OG-изображение: фирменная обложка из библиотеки владельца (1200×630).
 
@@ -77,7 +77,7 @@
 <link rel="alternate" hreflang="fr" href="{DOMAIN}/fr/about/">
 <link rel="alternate" hreflang="en" href="{DOMAIN}/en/about/">
 <link rel="alternate" hreflang="x-default" href="{DOMAIN}/en/about/">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Айна Мусхаджиева","jobTitle":"Conseil en diététique et nutrition, diplômé(e)","worksFor":{"@type":"Organization","name":"AINA Évidence"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Айна Мусхаджиева","jobTitle":"Conseil en nutrition, diplômé(e)","worksFor":{"@type":"Organization","name":"AINA Évidence"}}</script>
 ```
 
 ### Тексты
@@ -85,7 +85,7 @@
 **Блок: обложка (первый экран)**
 - Надзаголовок: À propos
 - H1: Aina Muskhadzhieva
-- Подзаголовок: Conseil en diététique et nutrition, diplômé(e). J’exerce en ligne à l’international depuis la France.
+- Подзаголовок: Conseil en nutrition, diplômé(e). J’exerce en ligne à l’international depuis la France.
 
 **Блок: текст**
 #### Mon approche
@@ -99,7 +99,7 @@ Chaque demande est individuelle : l’âge, le contexte familial, le rythme et l
 - Maternité et développement de l’enfant
 - Supports pédagogiques pour les parents
 - Menus personnalisés et accompagnement
-- Soutien psychologique dans les limites de ma compétence professionnelle
+- Information pour les parents dans les limites de ma compétence professionnelle
 
 **Блок: заметка (компонент `tilda/components/03-notice.html` или текстовый блок на лавандовом фоне)**
 > Je ne suis pas médecin. Je ne pose pas de diagnostic et je ne promets pas la guérison d’une maladie. En cas de maladie, consultez votre médecin.
@@ -117,7 +117,7 @@ Chaque demande est individuelle : l’âge, le contexte familial, le rythme et l
 
 - Title (21): About — AINA Évidence
 
-- Description (98): Aina Muskhadzhieva: qualified dietitian-nutritionist. An approach grounded in scientific evidence.
+- Description (102): Aina Muskhadzhieva: diploma-holding nutrition consultant. An approach grounded in scientific evidence.
 
 - OG title / description: как Title / Description. OG-изображение: фирменная обложка из библиотеки владельца (1200×630).
 
@@ -129,7 +129,7 @@ Chaque demande est individuelle : l’âge, le contexte familial, le rythme et l
 <link rel="alternate" hreflang="fr" href="{DOMAIN}/fr/about/">
 <link rel="alternate" hreflang="en" href="{DOMAIN}/en/about/">
 <link rel="alternate" hreflang="x-default" href="{DOMAIN}/en/about/">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Айна Мусхаджиева","jobTitle":"Qualified dietitian-nutritionist","worksFor":{"@type":"Organization","name":"AINA Évidence"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Айна Мусхаджиева","jobTitle":"Diploma-holding nutrition consultant","worksFor":{"@type":"Organization","name":"AINA Évidence"}}</script>
 ```
 
 ### Тексты
@@ -137,7 +137,7 @@ Chaque demande est individuelle : l’âge, le contexte familial, le rythme et l
 **Блок: обложка (первый экран)**
 - Надзаголовок: About
 - H1: Aina Muskhadzhieva
-- Подзаголовок: Qualified dietitian-nutritionist. I work online with an international clientele from France.
+- Подзаголовок: Diploma-holding nutrition consultant. I work online with an international clientele from France.
 
 **Блок: текст**
 #### My approach
@@ -151,7 +151,7 @@ Every request is individual: age, family context, routine and preferences all sh
 - Maternity and child development
 - Educational materials for parents
 - Personalised menus and ongoing support
-- Psychological support within my professional competence
+- Information for parents within my professional competence
 
 **Блок: заметка (компонент `tilda/components/03-notice.html` или текстовый блок на лавандовом фоне)**
 > I am not a doctor. I do not make diagnoses or promise to cure any disease. If you have a medical condition, please see your doctor.

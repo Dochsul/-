@@ -96,7 +96,7 @@
 
 - Contact : globalainanutrition@gmail.com — +33 6 67 65 03 84
 
-- Professionnel : Айна Мусхаджиева, Conseil en diététique et nutrition, diplômé(e)
+- Professionnel : Айна Мусхаджиева, Conseil en nutrition, diplômé(e)
 
 #### Directeur de la publication
 
@@ -162,7 +162,7 @@ Les services proposés sur ce site sont de nature éducative et de conseil. Ils 
 
 - Contact: globalainanutrition@gmail.com — +33 6 67 65 03 84
 
-- Practitioner: Айна Мусхаджиева, Qualified dietitian-nutritionist
+- Practitioner: Айна Мусхаджиева, Diploma-holding nutrition consultant
 
 #### Publication director
 
