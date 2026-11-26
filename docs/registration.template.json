@@ -1,0 +1,21 @@
+{
+  "_note": "ШАБЛОН БЕЗ ЗНАЧЕНИЙ. Скопируйте в private/registration.json на СВОЁМ компьютере и заполните из ваших документов (выписка из реестра SIRENE/INSEE, данные регистрации). Не загружайте заполненный файл в GitHub, чат или облако без шифрования. Пустые поля null.",
+  "legal": {
+    "legalName": null,
+    "legalForm": null,
+    "siren": null,
+    "rcsOrRm": null,
+    "vatNumber": null,
+    "address": null,
+    "publicationDirector": null,
+    "hostProvider": null,
+    "mediator": null
+  },
+  "meta": {
+    "entityType": null,
+    "regime": null,
+    "apeCode": null,
+    "activity": null,
+    "registeredOn": null
+  }
+}

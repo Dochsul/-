@@ -81,7 +81,17 @@ docker compose -f deploy/docker-compose.yml logs --tail=100 api
 
 ## Личный файл и админ-панель (этап 7)
 
-- `private/registration.json` (SIREN и другие личные данные) **не копируется в образ Docker** (`.dockerignore`) и не попадает в git. Если сборка `npm run build:prod` выполняется на сервере, положите файл в `private/` рядом с проектом с правами `600`. Иначе сборка покажет недостающие поля.
+- `private/registration.json` **на сервер не нужен**: API не строит юридические страницы, а Docker-образ его не включает (`.dockerignore`). Личный файл остаётся только на вашем компьютере (зашифрованная копия — `docs/LAUNCH.md`, раздел 2).
 - Пароль панели задаётся через `ADMIN_PASSWORD_HASH` в `.env` на сервере (см. `docs/ADMIN.md`). Без него панель отключена.
 - `REGISTRATION_FILE=off` отключает личный файл (нужно для тестов и CI).
+
+## Выбранные сервисы и порядок запуска (ноябрь 2026)
+
+Пошаговая инструкция для владельца — `docs/LAUNCH.md`. Здесь только то, что относится к серверу:
+
+- Сервер: Hetzner Cloud, Ubuntu 24.04, один общий сервер в ЕС; `deploy/cloud-init.yaml` (замените строку с публичным ключом).
+- Адрес API: `API_DOMAIN` в `.env` (Caddy получает сертификат сам, после A-записи на IP сервера).
+- Почта: Brevo, SMTP (`SMTP_*`, `OWNER_CHANNEL=smtp`, `CLIENT_CHANNEL=smtp`).
+- Копии: Backblaze B2 (`S3_*`, `BACKUP_PASSPHRASE`); PDF в копии не участвуют.
+- PDF: `/opt/aina/private/products/` (монтируется только для чтения).
 
