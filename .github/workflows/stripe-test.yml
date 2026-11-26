@@ -1,0 +1,32 @@
+# MANUAL check of the Stripe TEST-mode credentials, run on GitHub's runner (which has internet access).
+# Does nothing until the owner adds the secret STRIPE_TEST_SECRET_KEY (a sk_test_ key) in Settings -> Secrets.
+# It never runs on push. The script itself refuses live keys (sk_live_/rk_live_) before sending any request.
+name: Stripe test-mode check (manual)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Verify test-mode credentials
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check the key is present and is a test key
+        env:
+          STRIPE_TEST_SECRET_KEY: ${{ secrets.STRIPE_TEST_SECRET_KEY }}
+        run: |
+          if [ -z "$STRIPE_TEST_SECRET_KEY" ]; then
+            echo "STRIPE_TEST_SECRET_KEY is not set. Add a sk_test_ key as a repository secret to run this check."
+            exit 1
+          fi
+      - name: Verify test-mode credentials with Stripe
+        env:
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_TEST_SECRET_KEY }}
+        run: node scripts/stripe-test.mjs check
