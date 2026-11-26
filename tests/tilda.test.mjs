@@ -35,7 +35,7 @@ test('page statuses: services are drafts, legal pages are legal drafts with high
     const md = readFileSync(join(pagesDir, f), 'utf8');
     assert.match(md, /ЮРИДИЧЕСКИЙ ЧЕРНОВИК/);
   }
-  assert.match(readFileSync(join(pagesDir, '15-legal-mentions.md'), 'utf8'), /\*\*\[À COMPLÉTER: SIREN\]\*\*/);
+  assert.match(readFileSync(join(pagesDir, '15-legal-mentions.md'), 'utf8'), /\[из личного реестра: legal\.siren\]/);
   assert.match(readFileSync(join(pagesDir, '16-legal-privacy.md'), 'utf8'), /### Cookies/);
 });
 

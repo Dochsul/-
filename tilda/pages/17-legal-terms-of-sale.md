@@ -76,7 +76,7 @@
 
 #### 1. Objet
 
-Les présentes conditions régissent la vente, en ligne, des consultations et des produits numériques proposés par **[À COMPLÉTER: dénomination]** (ci-après « le Vendeur »). Toute commande implique l’acceptation de ces conditions.
+Les présentes conditions régissent la vente, en ligne, des consultations et des produits numériques proposés par [из личного реестра: legal.legalName] (ci-après « le Vendeur »). Toute commande implique l’acceptation de ces conditions.
 
 #### 2. Informations précontractuelles
 
@@ -112,7 +112,7 @@ Les conseils donnés ont une vocation éducative. Le Vendeur ne peut être tenu 
 
 #### 9. Médiation
 
-En cas de litige, vous pouvez recourir gratuitement au médiateur suivant : **[À COMPLÉTER: médiateur, adresse et site]**.
+En cas de litige, vous pouvez recourir gratuitement au médiateur suivant : [из личного реестра: legal.mediator].
 
 #### 10. Droit applicable et juridiction
 
@@ -154,7 +154,7 @@ globalainanutrition@gmail.com — +33 6 67 65 03 84
 
 #### 1. Scope
 
-These terms govern online sales of consultations and digital products offered by **[TO COMPLETE: name]** (the "Seller"). Placing an order means accepting these terms.
+These terms govern online sales of consultations and digital products offered by [из личного реестра: legal.legalName] (the "Seller"). Placing an order means accepting these terms.
 
 #### 2. Pre-contract information
 
@@ -190,7 +190,7 @@ The advice given is educational. The Seller is not liable for consequences of ap
 
 #### 9. Mediation
 
-In case of dispute you may use this mediator free of charge: **[TO COMPLETE: mediator, address and website]**.
+In case of dispute you may use this mediator free of charge: [из личного реестра: legal.mediator].
 
 #### 10. Governing law and jurisdiction
 

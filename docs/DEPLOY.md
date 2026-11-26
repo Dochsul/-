@@ -78,3 +78,10 @@ docker compose -f deploy/docker-compose.yml ps
 docker compose -f deploy/docker-compose.yml logs --tail=100 api
 ```
 В логах нет тел запросов и персональных данных (только тип ошибки).
+
+## Личный файл и админ-панель (этап 7)
+
+- `private/registration.json` (SIREN и другие личные данные) **не копируется в образ Docker** (`.dockerignore`) и не попадает в git. Если сборка `npm run build:prod` выполняется на сервере, положите файл в `private/` рядом с проектом с правами `600`. Иначе сборка покажет недостающие поля.
+- Пароль панели задаётся через `ADMIN_PASSWORD_HASH` в `.env` на сервере (см. `docs/ADMIN.md`). Без него панель отключена.
+- `REGISTRATION_FILE=off` отключает личный файл (нужно для тестов и CI).
+

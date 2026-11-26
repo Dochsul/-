@@ -86,7 +86,7 @@
 
 #### Responsable du traitement
 
-**[À COMPLÉTER: dénomination]**, **[À COMPLÉTER: adresse]**. Contact : globalainanutrition@gmail.com.
+[из личного реестра: legal.legalName], [из личного реестра: legal.address]. Contact : globalainanutrition@gmail.com.
 
 #### Données collectées
 
@@ -182,7 +182,7 @@ Vous pouvez effacer le panier et les données du site à tout moment dans les pa
 
 #### Controller
 
-**[TO COMPLETE: name]**, **[TO COMPLETE: address]**. Contact: globalainanutrition@gmail.com.
+[из личного реестра: legal.legalName], [из личного реестра: legal.address]. Contact: globalainanutrition@gmail.com.
 
 #### Data we collect
 

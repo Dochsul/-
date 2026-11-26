@@ -36,19 +36,19 @@
 
 #### Оператор сайта
 
-- Наименование: **[УКАЗАТЬ: наименование]**
+- Наименование: [из личного реестра: legal.legalName]
 
-- Форма: **[УКАЗАТЬ: форма]**, SIREN: **[УКАЗАТЬ: SIREN]**
+- Форма: [из личного реестра: legal.legalForm], SIREN: [из личного реестра: legal.siren]
 
-- Адрес: **[УКАЗАТЬ: адрес]**
+- Адрес: [из личного реестра: legal.address]
 
 - Контакт: globalainanutrition@gmail.com, +33 6 67 65 03 84
 
 #### Хостинг и директор публикации
 
-- Директор публикации: **[УКАЗАТЬ: директор публикации]**
+- Директор публикации: [из личного реестра: legal.publicationDirector]
 
-- Хостинг: **[УКАЗАТЬ: хостинг-провайдер]**
+- Хостинг: [из личного реестра: legal.hostProvider]
 
 #### Характер услуг
 
@@ -84,15 +84,15 @@
 
 #### Éditeur du site
 
-- Dénomination : **[À COMPLÉTER: dénomination]**
+- Dénomination : [из личного реестра: legal.legalName]
 
-- Forme juridique : **[À COMPLÉTER: forme juridique]**
+- Forme juridique : [из личного реестра: legal.legalForm]
 
-- Numéro SIREN : **[À COMPLÉTER: SIREN]** — **[À COMPLÉTER: RCS / RM]**
+- Numéro SIREN : [из личного реестра: legal.siren] — [из личного реестра: legal.rcsOrRm]
 
-- TVA : **[À COMPLÉTER: numéro de TVA ou mention de franchise en base]**
+- TVA : [из личного реестра: legal.vatNumber]
 
-- Adresse : **[À COMPLÉTER: adresse]**
+- Adresse : [из личного реестра: legal.address]
 
 - Contact : globalainanutrition@gmail.com — +33 6 67 65 03 84
 
@@ -100,11 +100,11 @@
 
 #### Directeur de la publication
 
-**[À COMPLÉTER: directeur de la publication]**
+[из личного реестра: legal.publicationDirector]
 
 #### Hébergement
 
-**[À COMPLÉTER: nom, adresse et contact de l’hébergeur]**
+[из личного реестра: legal.hostProvider]
 
 #### Propriété intellectuelle
 
@@ -112,7 +112,7 @@ Les textes, guides, visuels et la structure du site sont protégés par le droit
 
 #### Médiation de la consommation
 
-Conformément au Code de la consommation, le consommateur peut recourir gratuitement à un médiateur : **[À COMPLÉTER: médiateur, adresse et site]**.
+Conformément au Code de la consommation, le consommateur peut recourir gratuitement à un médiateur : [из личного реестра: legal.mediator].
 
 #### Nature des services
 
@@ -150,15 +150,15 @@ Les services proposés sur ce site sont de nature éducative et de conseil. Ils 
 
 #### Publisher
 
-- Name: **[TO COMPLETE: name]**
+- Name: [из личного реестра: legal.legalName]
 
-- Legal form: **[TO COMPLETE: legal form]**
+- Legal form: [из личного реестра: legal.legalForm]
 
-- SIREN number: **[TO COMPLETE: SIREN]** — **[TO COMPLETE: RCS / RM]**
+- SIREN number: [из личного реестра: legal.siren] — [из личного реестра: legal.rcsOrRm]
 
-- VAT: **[TO COMPLETE: VAT number or VAT-exemption statement]**
+- VAT: [из личного реестра: legal.vatNumber]
 
-- Address: **[TO COMPLETE: address]**
+- Address: [из личного реестра: legal.address]
 
 - Contact: globalainanutrition@gmail.com — +33 6 67 65 03 84
 
@@ -166,11 +166,11 @@ Les services proposés sur ce site sont de nature éducative et de conseil. Ils 
 
 #### Publication director
 
-**[TO COMPLETE: publication director]**
+[из личного реестра: legal.publicationDirector]
 
 #### Hosting
 
-**[TO COMPLETE: name, address and contact of the host]**
+[из личного реестра: legal.hostProvider]
 
 #### Intellectual property
 
@@ -178,7 +178,7 @@ The texts, guides, visuals and structure of this site are protected by copyright
 
 #### Consumer mediation
 
-Under French consumer law, consumers may use a mediator free of charge: **[TO COMPLETE: mediator, address and website]**.
+Under French consumer law, consumers may use a mediator free of charge: [из личного реестра: legal.mediator].
 
 #### Nature of the services
 

@@ -1,3 +1,5 @@
+import { loadRegistration } from './registration.mjs';
+
 // Business facts used across the site, legal pages and checkout.
 // RULE: a value is `null` until the owner confirms it in docs/ANKETA.md.
 // `npm run build:prod` refuses to build while any required field is null (see src/build.mjs).
@@ -59,3 +61,9 @@ export const business = {
   // that MUST be confirmed by a lawyer against current EU / French sanctions rules (see docs/PAYMENTS.md).
   blockedCountries: ['RU', 'BY'],
 };
+
+// Registration data (SIREN, legal name, etc.) comes from the PRIVATE file, never from this repository.
+// See src/config/registration.mjs and docs/ANKETA.md, section L. Without the file these stay null.
+const registration = loadRegistration();
+business.legal = { ...business.legal, ...registration.legal };
+business.registration = { loaded: registration.loaded, ...registration.meta };

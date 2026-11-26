@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#FFF4E9">
+<title>Управление — AINA Évidence</title>
+<link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+<header class="top">
+  <strong>AINA Évidence</strong>
+  <button id="logout" class="ghost hidden" type="button">Выйти</button>
+</header>
+
+<main>
+  <section id="login" class="card hidden" aria-labelledby="login-title">
+    <h1 id="login-title">Вход</h1>
+    <form id="login-form">
+      <label for="password">Пароль</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required minlength="1" maxlength="200">
+      <button type="submit" class="primary">Войти</button>
+      <p id="login-error" class="error" role="alert"></p>
+    </form>
+  </section>
+
+  <div id="app" class="hidden">
+    <nav class="tabs" aria-label="Разделы">
+      <button type="button" data-tab="summary" class="tab active">Сводка</button>
+      <button type="button" data-tab="orders" class="tab">Заказы</button>
+      <button type="button" data-tab="leads" class="tab">Заявки</button>
+      <button type="button" data-tab="ledger" class="tab">Учёт</button>
+    </nav>
+
+    <section id="tab-summary" class="panel">
+      <div id="cards" class="cards"></div>
+      <h2>Деньги по валютам</h2>
+      <div id="money" class="list"></div>
+      <p class="note" id="updated"></p>
+    </section>
+
+    <section id="tab-orders" class="panel hidden">
+      <h2>Последние заказы</h2>
+      <div id="orders" class="list"></div>
+    </section>
+
+    <section id="tab-leads" class="panel hidden">
+      <h2>Последние заявки</h2>
+      <div id="leads" class="list"></div>
+    </section>
+
+    <section id="tab-ledger" class="panel hidden">
+      <h2>Выгрузка для бухгалтера</h2>
+      <p class="note">CSV без e-mail покупателей. Комиссии, которых ещё нет в выписке, помечены TO_RECONCILE.</p>
+      <form id="ledger-form" class="stack">
+        <label>С даты <input type="date" name="from"></label>
+        <label>По дату <input type="date" name="to"></label>
+        <button type="submit" class="primary">Скачать CSV</button>
+        <p id="ledger-error" class="error" role="alert"></p>
+      </form>
+    </section>
+  </div>
+</main>
+<script src="/admin/admin.js"></script>
+</body>
+</html>

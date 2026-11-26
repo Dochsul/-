@@ -6,6 +6,7 @@ import { mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { business } from '../src/config/business.mjs';
+import { REGISTRATION_KEYS } from '../src/config/registration.mjs';
 import { products } from '../src/config/catalog.mjs';
 import { services } from '../src/config/services.mjs';
 import { productPriceText } from '../src/render.mjs';
@@ -65,6 +66,8 @@ function lookup(path, lang) {
     'business.paymentMethods': business.paymentMethods,
     'business.paymentProviderEntity': business.paymentProviderEntity,
   };
+  // Registration values are never written into the repository (it is public): the owner copies them from the private file.
+  if (path.startsWith('legal.') && REGISTRATION_KEYS.includes(path.slice(6))) return `[из личного реестра: ${path}]`;
   if (path in map) return map[path];
   const [g, k] = path.split('.');
   return ({ legal: business.legal, policy: business.policy, download: business.download }[g] || {})[k];

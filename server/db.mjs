@@ -94,6 +94,12 @@ export function openDb(file) {
       created_at TEXT NOT NULL
     );
     CREATE INDEX IF NOT EXISTS payments_created ON payments(created_at);
+    -- Owner admin sessions: only a SHA-256 of the token is stored.
+    CREATE TABLE IF NOT EXISTS admin_sessions (
+      token_hash TEXT PRIMARY KEY,
+      created_at TEXT NOT NULL,
+      expires_at TEXT NOT NULL
+    );
     CREATE INDEX IF NOT EXISTS refunds_created ON refunds(created_at);
   `);
   return db;

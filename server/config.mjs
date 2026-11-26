@@ -56,6 +56,8 @@ export function loadConfig(env = process.env) {
     paymentsEnabled: bool(env.PAYMENTS_ENABLED),
     stripeSecretKey: env.STRIPE_SECRET_KEY || null,
     stripeWebhookSecret: env.STRIPE_WEBHOOK_SECRET || null,
+    // Owner admin panel (/admin). Off unless a scrypt hash of the password is set (scripts/admin-password.mjs).
+    adminPasswordHash: env.ADMIN_PASSWORD_HASH || null,
     workerIntervalMs: Number(env.WORKER_INTERVAL_MS) || 20000,
     runWorker: env.WORKER !== 'off',
   };
@@ -93,6 +95,7 @@ export function assertProductionConfig(config, env = process.env) {
     if (/_live_/.test(key) && env.LIVE_PAYMENTS_APPROVED !== 'owner-approved') errors.push('a live Stripe key requires LIVE_PAYMENTS_APPROVED=owner-approved (explicit owner decision)');
     if (config.clientChannel !== 'smtp') errors.push("CLIENT_CHANNEL must be 'smtp' when payments are enabled: buyers receive their links by email");
   }
+  if (config.adminPasswordHash && !/^scrypt\$\d+\$\d+\$\d+\$[A-Za-z0-9+/=]{16,}\$[A-Za-z0-9+/=]{32,}$/.test(config.adminPasswordHash)) errors.push('ADMIN_PASSWORD_HASH must be a scrypt hash made by scripts/admin-password.mjs (never a plain password)');
   if (!['revolut', 'stripe'].includes(config.paymentProvider)) errors.push('PAYMENT_PROVIDER must be revolut or stripe');
   if (config.enabledCurrencies.includes('RUB') && env.RUB_PAYMENTS_APPROVED !== 'owner-approved') errors.push('RUB payments require RUB_PAYMENTS_APPROVED=owner-approved (lawful working payment channel confirmed)');
   return errors;

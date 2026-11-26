@@ -14,6 +14,7 @@ import { claimDownload, releaseDownload } from './downloads.mjs';
 import { createRevolutOrder, getRevolutOrder, verifyRevolutSignature, parseRevolutEvent, checkRevolutOrder, revolutCountry, RevolutError } from './revolut.mjs';
 import { applyRefund } from './refunds.mjs';
 import { nowIso } from './db.mjs';
+import { createAdminRoutes } from './admin.mjs';
 
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'application/javascript; charset=utf-8',
@@ -112,6 +113,7 @@ export function createApp({ config, db, transports, fetchImpl = fetch, now = () 
   const distDir = resolve(config.distDir);
   const products = config.catalog;
   const blocked = new Set(config.blockedCountries);
+  const adminRoute = createAdminRoutes({ config, db, send, readJson, now });
 
   // ----- POST /api/leads -----
   async function leads(req, res) {
@@ -437,6 +439,7 @@ export function createApp({ config, db, transports, fetchImpl = fetch, now = () 
       if (p === '/api/webhooks/stripe' && m === 'POST') return await stripeWebhook(req, res);
       const dl = p.match(/^\/api\/download\/([^/]+)$/);
       if (dl && m === 'GET') return await download(req, res, dl[1]);
+      if (await adminRoute(req, res, p, url)) return;
       if (p.startsWith('/api/')) return send(res, 404, { error: 'not_found' });
       if (m !== 'GET' && m !== 'HEAD') return send(res, 405, { error: 'method_not_allowed' });
       return staticFile(req, res, p);
