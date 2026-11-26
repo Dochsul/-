@@ -99,6 +99,14 @@ function sectionMd(s, c, lang) {
       L.push(`**Блок: ${s.type === 'steps' ? 'шаги (нумерация 01, 02…)' : 'карточки'}**`); h(s.h);
       L.push(...s.items.map((i, k) => `${s.type === 'steps' ? `${k + 1}.` : '-'} **${i.t}** — ${i.p}`)); break;
     case 'cta': L.push('**Блок: призыв (фон: градиент пудра → лаванда)**'); h(s.h); if (s.p) L.push(s.p); L.push(`- Кнопка: ${btn(s.label, s.href)}`); break;
+    case 'communityLinks':
+      L.push('**Блок: два бесплатных вступления (две отдельные кнопки)**. Цена не указывается; платных условий участия нет.');
+      for (const it of s.items) {
+        const href = it.platform === 'whatsapp' ? (business.community?.whatsappGroup || `[${s.pendingWhatsapp}]`) : business.community?.telegramGroup;
+        L.push(`- **${it.h}** — кнопка «${it.button}» → ${href}`);
+        for (const x of it.items) L.push(`  - ${x}`);
+      }
+      break;
     case 'notice': L.push('**Блок: заметка (компонент `tilda/components/03-notice.html` или текстовый блок на лавандовом фоне)**'); L.push(...[].concat(s.p).map((p) => `> ${p}`)); break;
     case 'empty': L.push('**Блок: пустое состояние**'); h(s.h); L.push(s.p); if (s.cta) L.push(`- Кнопка: ${btn(s.cta.label, s.cta.href)}`); break;
     case 'services':

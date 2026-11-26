@@ -167,6 +167,21 @@ function renderSection(s, ctx) {
       return `<section class="block reveal">${h(s.h)}<div class="cards ${s.type === 'steps' ? 'steps' : ''}">${s.items.map((i, n) => `<article class="card">${s.type === 'steps' ? `<span class="step-n">${String(n + 1).padStart(2, '0')}</span>` : ''}<h3>${esc(i.t)}</h3><p>${esc(i.p)}</p></article>`).join('')}</div></section>`;
     case 'cta':
       return `<section class="cta-band reveal"><div class="container"><h2>${esc(s.h)}</h2>${s.p ? `<p>${esc(s.p)}</p>` : ''}<a class="btn btn-primary" href="${localePath(locale, s.href)}">${esc(s.label)}</a></div></section>`;
+    case 'communityLinks': {
+      // Free groups. A group link missing in business.mjs shows the pending note instead of a broken button.
+      const cards = s.items.map((it) => {
+        const href = it.platform === 'whatsapp' ? business.community?.whatsappGroup : business.community?.telegramGroup;
+        const action = href
+          ? `<a class="btn btn-primary" href="${esc(href)}" rel="noopener noreferrer" target="_blank">${esc(it.button)}</a>`
+          : `<p class="note">${esc(s.pendingWhatsapp)}</p>`;
+        return `<article class="card community-card">
+  <h3>${esc(it.h)}</h3>
+  <ul class="community-list">${it.items.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
+  ${action}
+</article>`;
+      }).join('');
+      return `<section class="block reveal"><div class="cards community-cards">${cards}</div></section>`;
+    }
     case 'notice':
       return `<section class="block reveal"><div class="notice" role="note">${(Array.isArray(s.p) ? s.p : [s.p]).map((p) => `<p>${esc(p)}</p>`).join('')}</div></section>`;
     case 'empty':
@@ -175,9 +190,12 @@ function renderSection(s, ctx) {
       const items = services.filter((x) => x.group === s.group);
       const cards = items.map((svc) => {
         const t = c.services[svc.id];
-        const priceLabel = business.pricesConfirmed
-          ? `${svc.priceFrom ? c.ui.from + ' ' : ''}${price(svc.price * 100, svc.currency, locale)}`
-          : `${c.ui.priceToConfirm}`;
+        // RUB for Russian, EUR for French and English. EUR is null until the owner approves a European tariff.
+        const amount = locale === 'ru' ? svc.rub : svc.eur;
+        const currency = locale === 'ru' ? 'RUB' : 'EUR';
+        const priceLabel = business.pricesConfirmed && amount != null
+          ? price(amount * 100, currency, locale)
+          : c.ui.priceToConfirm;
         return `<article class="card service">
   <h3>${esc(t.t)}</h3>
   <p class="price">${esc(priceLabel)}</p>

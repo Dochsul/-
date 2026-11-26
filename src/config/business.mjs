@@ -12,6 +12,8 @@ export const business = {
   contactPhone: '+33 6 67 65 03 84',               // known from the previous site; confirm
   // Channels as given by the owner (ноябрь 2026). TikTok is a handle only: the profile URL is not confirmed.
   messenger: { whatsapp: 'https://wa.me/33667650384', telegram: 'https://t.me/+kTsVIJ15dAM5YzY0' },
+  // Free community groups. WhatsApp: the group INVITE link (not the personal phone). null until the owner provides it.
+  community: { whatsappGroup: null, telegramGroup: 'https://t.me/+kTsVIJ15dAM5YzY0' },
   social: { instagram: 'https://www.instagram.com/aina_evidence/', tiktok: 'AinaEvidence' },
   owner: {
     displayName: 'Айна Мусхаджиева',               // name as used on the site; confirm spelling for legal documents

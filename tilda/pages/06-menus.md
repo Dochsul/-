@@ -41,6 +41,15 @@
 
 **Блок: карточки услуг** — цены НЕ переносить из этого пакета: в Tilda действует утверждённый прайс.
 #### Стоимость
+- **Меню на 7 дней** — Меню на 7 дней с расчётом КБЖУ, рецептами и списком покупок.
+- **Меню на 14 дней** — Меню на 14 дней с расчётом КБЖУ, рецептами и списком покупок.
+- **Меню-конструктор на месяц** — Месячный набор блюд, из которого вы собираете меню. Состав согласуется до оплаты.
+- **Детское индивидуальное меню** — Меню для ребёнка с учётом возраста и согласованных пищевых ограничений. Не заменяет консультацию врача.
+- **Меню кормящей мамы** — Меню для кормящей мамы с учётом режима и согласованных ограничений.
+- **Меню беременной** — Меню для беременной с учётом срока и согласованных ограничений. Решения о лечении принимает только врач.
+- **Меню с учётом подтверждённых врачом ограничений** — Меню с учётом ограничений, подтверждённых вашим врачом. Документ врача нужен до начала работы.
+- **Меню для пары** — Меню на двоих с учётом индивидуальных целей каждого.
+- **Семейное меню** — Меню для семьи с учётом возраста и предпочтений каждого участника.
 - **Индивидуальное меню** — Меню, составленное под ваши цели, предпочтения и режим. Итоговый состав и объём согласуются с вами.
 
 **Блок: форма заявки** (нативная форма Tilda или `tilda/components/02-lead-form.html`)
@@ -89,6 +98,15 @@ Nous commençons par vos objectifs et votre contexte. Je prépare ensuite le men
 
 **Блок: карточки услуг** — цены НЕ переносить из этого пакета: в Tilda действует утверждённый прайс.
 #### Tarifs
+- **Menu de 7 jours** — Menu de 7 jours avec calcul des apports, recettes et liste de courses.
+- **Menu de 14 jours** — Menu de 14 jours avec calcul des apports, recettes et liste de courses.
+- **Menu-constructeur sur un mois** — Un ensemble de plats pour un mois, à partir duquel vous composez vos menus. Le contenu est convenu avant le paiement.
+- **Menu individuel pour enfant** — Menu pour un enfant selon son âge et les restrictions alimentaires convenues. Ne remplace pas l’avis d’un médecin.
+- **Menu pour maman qui allaite** — Menu pour une maman qui allaite, selon son rythme et les restrictions convenues.
+- **Menu pour femme enceinte** — Menu pour une femme enceinte selon le stade de la grossesse et les restrictions convenues. Les décisions médicales relèvent du médecin.
+- **Menu avec restrictions confirmées par un médecin** — Menu tenant compte de restrictions confirmées par votre médecin. Le document du médecin est nécessaire avant le début du travail.
+- **Menu pour un couple** — Menu pour deux personnes, selon les objectifs individuels de chacun.
+- **Menu familial** — Menu pour la famille selon l’âge et les préférences de chaque membre.
 - **Menu personnalisé** — Un menu établi selon vos objectifs, vos préférences et votre rythme. Le contenu et le volume sont convenus avec vous.
 
 **Блок: форма заявки** (нативная форма Tilda или `tilda/components/02-lead-form.html`)
@@ -137,6 +155,15 @@ We start with your goals and context. I then prepare the menu. Content, portions
 
 **Блок: карточки услуг** — цены НЕ переносить из этого пакета: в Tilda действует утверждённый прайс.
 #### Pricing
+- **7-day menu** — A 7-day menu with nutrient calculations, recipes and a shopping list.
+- **14-day menu** — A 14-day menu with nutrient calculations, recipes and a shopping list.
+- **Monthly menu builder** — A monthly set of dishes from which you build your menus. The content is agreed before payment.
+- **Individual menu for a child** — A menu for a child, taking into account age and agreed dietary restrictions. It does not replace a doctor’s advice.
+- **Menu for breastfeeding mothers** — A menu for a breastfeeding mother, taking into account her routine and agreed restrictions.
+- **Menu for pregnancy** — A menu for a pregnant woman, taking into account the stage of pregnancy and agreed restrictions. Medical decisions belong to a doctor.
+- **Menu with restrictions confirmed by a doctor** — A menu taking into account restrictions confirmed by your doctor. The doctor’s document is needed before work starts.
+- **Menu for two** — A menu for two people, taking into account each person’s goals.
+- **Family menu** — A menu for the family, taking into account the age and preferences of each member.
 - **Personalised menu** — A menu built around your goals, preferences and routine. Content and portions are agreed with you.
 
 **Блок: форма заявки** (нативная форма Tilda или `tilda/components/02-lead-form.html`)

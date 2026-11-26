@@ -44,6 +44,12 @@
 
 **Блок: карточки услуг** — цены НЕ переносить из этого пакета: в Tilda действует утверждённый прайс.
 #### Варианты
+- **Письменный ответ на один вопрос** — Письменный ответ на один конкретный вопрос о питании. Вопрос и объём ответа согласуются до оплаты.
+- **Краткая консультация, 30 минут** — Онлайн-разговор на 30 минут по одному вопросу о питании. Время согласуется до оплаты.
+- **Полная консультация, 60–90 минут** — Подробный онлайн-разбор питания и режима дня. Время согласуется до оплаты.
+- **Повторная консультация, до 30 минут** — Короткая повторная онлайн-встреча после предыдущей консультации.
+- **Обзор анализов в контексте питания** — Обзор результатов анализов только в контексте питания. Это не медицинская диагностика и не назначение лечения. Услуга в черновике до юридической проверки.
+- **Расширенная консультация** — Расширенный онлайн-разбор с несколькими встречами по согласованному плану. Объём согласуется до оплаты.
 - **Онлайн-консультация по питанию (взрослые)** — Разбираем цели, рацион, режим дня и привычки. Помогаю понять, с чего начать, без жёстких ограничений.
 - **Онлайн-консультация по детскому питанию** — Разбираем питание ребёнка по возрасту, режим и вопросы, с которыми обращаются родители.
 - **Коррекция текущего питания** — Вносим изменения в уже существующий рацион и режим, учитывая ваши цели и возможности.
@@ -97,6 +103,12 @@
 
 **Блок: карточки услуг** — цены НЕ переносить из этого пакета: в Tilda действует утверждённый прайс.
 #### Formules
+- **Réponse écrite à une question** — Réponse écrite à une question précise sur l’alimentation. La question et l’étendue de la réponse sont convenues avant le paiement.
+- **Consultation courte, 30 minutes** — Échange en ligne de 30 minutes sur une question d’alimentation. L’horaire est convenu avant le paiement.
+- **Consultation complète, 60 à 90 minutes** — Analyse détaillée en ligne de l’alimentation et du rythme de la journée. L’horaire est convenu avant le paiement.
+- **Consultation de suivi, jusqu’à 30 minutes** — Court rendez-vous en ligne de suivi après une consultation précédente.
+- **Lecture d’analyses dans le contexte alimentaire** — Lecture des résultats d’analyses uniquement dans le contexte alimentaire. Ce n’est ni un diagnostic médical ni une prescription. Service en brouillon jusqu’à la vérification juridique.
+- **Consultation approfondie** — Analyse en ligne approfondie avec plusieurs rendez-vous selon un plan convenu. L’étendue est convenue avant le paiement.
 - **Consultation nutrition en ligne (adulte)** — Nous examinons vos objectifs, votre alimentation, votre rythme de vie et vos habitudes. Je vous aide à savoir par où commencer, sans restrictions rigides.
 - **Consultation en ligne alimentation de l’enfant** — Nous examinons l’alimentation de l’enfant selon son âge, son rythme et les questions les plus fréquentes des parents.
 - **Ajustement de l’alimentation actuelle** — J’adapte votre alimentation et votre rythme existants, en tenant compte de vos objectifs et de vos possibilités.
@@ -150,6 +162,12 @@
 
 **Блок: карточки услуг** — цены НЕ переносить из этого пакета: в Tilda действует утверждённый прайс.
 #### Options
+- **Written answer to one question** — A written answer to one specific nutrition question. The question and the scope of the answer are agreed before payment.
+- **Short consultation, 30 minutes** — A 30-minute online call about one nutrition question. The time is agreed before payment.
+- **Full consultation, 60–90 minutes** — A detailed online review of nutrition and daily routine. The time is agreed before payment.
+- **Follow-up consultation, up to 30 minutes** — A short online follow-up after an earlier consultation.
+- **Lab results review in a nutrition context** — A review of lab results only in a nutrition context. It is not a medical diagnosis or treatment. This service is a draft until legal review.
+- **Extended consultation** — An extended online review with several sessions under an agreed plan. The scope is agreed before payment.
 - **Online nutrition consultation (adults)** — We look at your goals, diet, daily routine and habits. I help you understand where to start, without rigid restrictions.
 - **Online child nutrition consultation** — We look at your child’s nutrition by age, routine and the questions parents most often ask.
 - **Adjustment of current diet** — I adapt your existing diet and routine, taking into account your goals and what is realistic for you.

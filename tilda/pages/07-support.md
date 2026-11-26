@@ -37,6 +37,11 @@
 
 **Блок: карточки услуг** — цены НЕ переносить из этого пакета: в Tilda действует утверждённый прайс.
 #### Форматы
+- **Сопровождение на 7 дней** — Индивидуальный план, обратная связь и согласованные корректировки в течение 7 дней.
+- **Сопровождение на 14 дней** — Индивидуальный план, обратная связь и согласованные корректировки в течение 14 дней.
+- **Сопровождение на 1 месяц** — Индивидуальный план, обратная связь, контроль выполнения и согласованные корректировки на месяц.
+- **Расширенное сопровождение на месяц** — Расширенный месячный формат с большим числом обратных связей. Объём согласуется до оплаты.
+- **Сопровождение на 3 месяца** — Сопровождение на три месяца с контрольными точками и корректировками по согласованному плану.
 - **WhatsApp-сопровождение** — Поддержка и обратная связь в чате, ответы на вопросы и помощь с корректировками в процессе.
 - **Премиальное VIP-сопровождение** — Персональный формат с постоянным контактом и контролем прогресса в комфортном для вас темпе.
 
@@ -85,6 +90,11 @@
 
 **Блок: карточки услуг** — цены НЕ переносить из этого пакета: в Tilda действует утверждённый прайс.
 #### Formules
+- **Accompagnement de 7 jours** — Plan individuel, retours et ajustements convenus pendant 7 jours.
+- **Accompagnement de 14 jours** — Plan individuel, retours et ajustements convenus pendant 14 jours.
+- **Accompagnement d’un mois** — Plan individuel, retours, suivi de la mise en œuvre et ajustements convenus pour un mois.
+- **Accompagnement étendu sur un mois** — Format mensuel étendu avec davantage de retours. L’étendue est convenue avant le paiement.
+- **Accompagnement de 3 mois** — Accompagnement de trois mois avec points de contrôle et ajustements selon un plan convenu.
 - **Accompagnement par WhatsApp** — Échanges et soutien dans la messagerie, réponses à vos questions et aide aux ajustements au fil du temps.
 - **Accompagnement VIP** — Un format personnalisé, avec un contact régulier et un suivi de vos progrès, à un rythme confortable pour vous.
 
@@ -133,6 +143,11 @@
 
 **Блок: карточки услуг** — цены НЕ переносить из этого пакета: в Tilda действует утверждённый прайс.
 #### Formats
+- **7-day support** — An individual plan, feedback and agreed adjustments for 7 days.
+- **14-day support** — An individual plan, feedback and agreed adjustments for 14 days.
+- **1-month support** — An individual plan, feedback, follow-up and agreed adjustments for one month.
+- **Extended monthly support** — An extended monthly format with more feedback. The scope is agreed before payment.
+- **3-month support** — Three months of support with checkpoints and adjustments under an agreed plan.
 - **WhatsApp support** — Chat-based follow-up, answers to your questions and help with adjustments along the way.
 - **VIP support** — A personal format with regular contact and progress follow-up, at a pace that suits you.
 

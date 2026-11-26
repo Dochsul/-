@@ -13,7 +13,7 @@
 
 - Title (40): Сообщество «Мамы и дети» — AINA Évidence
 
-- Description (101): Сообщество для родителей: вопросы о питании и развитии детей, поддержка. Запуск и правила уточняются.
+- Description (87): Два бесплатных сообщества для мам: WhatsApp и Telegram. Вступление и участие бесплатны.
 
 - OG title / description: как Title / Description. OG-изображение: фирменная обложка из библиотеки владельца (1200×630).
 
@@ -30,25 +30,30 @@
 ### Тексты
 
 **Блок: обложка (первый экран)**
-- Надзаголовок: Сообщество
+- Надзаголовок: Бесплатно
 - H1: Мамы и дети
-- Подзаголовок: Пространство для родителей: вопросы о питании и развитии, поддержка и полезные материалы.
+- Подзаголовок: Два бесплатных сообщества: общение, обмен опытом и информационная поддержка родителей.
 
-**Блок: текст**
-#### Как это будет работать
-Формат, площадка и правила сообщества уточняются. Оставьте email, и я сообщу о запуске.
-
-**Блок: форма заявки** (нативная форма Tilda или `tilda/components/02-lead-form.html`)
-#### Хочу узнать о запуске
-- Поля: Имя *, Email *, Телефон или мессенджер (необязательно), Что вас интересует * (по умолчанию: community), Коротко о вашем запросе (необязательно) (до 500 знаков)
-- Подсказка к сообщению: Не указывайте медицинские анализы, диагнозы и другие сведения о здоровье. Их обсудим на консультации.
-- Обязательный чекбокс: Я согласен(на) на обработку указанных данных, чтобы ответить на мою заявку. Политика конфиденциальности: → Политика конфиденциальности
-- Кнопка: Отправить заявку
-- Успех (показывать только после фактической отправки): Спасибо! Заявка получена. Я отвечу вам по указанному email в ближайшее время.
-- Ошибка: Не удалось отправить заявку. Попробуйте ещё раз или напишите мне напрямую.
+**Блок: два бесплатных вступления (две отдельные кнопки)**. Цена не указывается; платных условий участия нет.
+- **WhatsApp — «Мамы и дети»** — кнопка «Вступить бесплатно в WhatsApp» → [Ссылка-приглашение в группу WhatsApp будет добавлена.]
+  - Бесплатное вступление и участие
+  - Общение и обмен опытом между мамами
+  - Информационная поддержка родителей
+- **Telegram — «Мамы и дети | AINA»** — кнопка «Вступить бесплатно в Telegram» → https://t.me/+kTsVIJ15dAM5YzY0
+  - Бесплатное вступление и участие
+  - Образовательные материалы
+  - Детское питание и прикорм
+  - АБКМ и лактазная недостаточность
+  - Грудное вскармливание и молочные смеси
+  - Сон и развитие детей
+  - Психология и материнство
+  - Здоровье и благополучие мам
 
 **Блок: заметка (компонент `tilda/components/03-notice.html` или текстовый блок на лавандовом фоне)**
-> Сообщество не является медицинской службой. Экстренные вопросы — к врачу или в службу экстренной помощи.
+> Оба сообщества бесплатны: без подписки, обязательных покупок и платного вступления. Индивидуальные консультации, персональные меню, сопровождение и PDF-гайды оплачиваются отдельно и не являются условием участия.
+
+**Блок: заметка (компонент `tilda/components/03-notice.html` или текстовый блок на лавандовом фоне)**
+> Сообщества не являются медицинской службой. Экстренные вопросы — к врачу или в службу экстренной помощи.
 
 
 ---
@@ -59,7 +64,7 @@
 
 - Title (48): Communauté « Mamans et enfants » — AINA Évidence
 
-- Description (120): Communauté pour parents : questions sur l’alimentation et le développement de l’enfant. Lancement et règles à confirmer.
+- Description (116): Deux communautés gratuites pour les mamans : WhatsApp et Telegram. L’inscription et la participation sont gratuites.
 
 - OG title / description: как Title / Description. OG-изображение: фирменная обложка из библиотеки владельца (1200×630).
 
@@ -76,22 +81,27 @@
 ### Тексты
 
 **Блок: обложка (первый экран)**
-- Надзаголовок: Communauté
+- Надзаголовок: Gratuit
 - H1: Mamans et enfants
-- Подзаголовок: Un espace pour les parents : questions sur l’alimentation et le développement, soutien et ressources utiles.
+- Подзаголовок: Deux communautés gratuites : échanges, partage d’expériences et information pour les parents.
 
-**Блок: текст**
-#### Fonctionnement
-La plateforme, le format et les règles de la communauté sont en cours de définition. Laissez votre e-mail et je vous préviendrai du lancement.
+**Блок: два бесплатных вступления (две отдельные кнопки)**. Цена не указывается; платных условий участия нет.
+- **WhatsApp — « Mamans et enfants »** — кнопка «Rejoindre gratuitement WhatsApp» → [Le lien d’invitation au groupe WhatsApp sera ajouté.]
+  - Inscription et participation gratuites
+  - Échanges et partage d’expériences entre mamans
+  - Information pour les parents
+- **Telegram — « Mamans et enfants | AINA »** — кнопка «Rejoindre gratuitement Telegram» → https://t.me/+kTsVIJ15dAM5YzY0
+  - Inscription et participation gratuites
+  - Ressources pédagogiques
+  - Alimentation de l’enfant et diversification
+  - Allergie aux protéines du lait de vache et déficit en lactase
+  - Allaitement et laits infantiles
+  - Sommeil et développement de l’enfant
+  - Psychologie et maternité
+  - Santé et bien-être des mamans
 
-**Блок: форма заявки** (нативная форма Tilda или `tilda/components/02-lead-form.html`)
-#### Être informée du lancement
-- Поля: Prénom et nom *, E-mail *, Téléphone ou messagerie (facultatif), Votre demande * (по умолчанию: community), Quelques mots sur votre demande (facultatif) (до 500 знаков)
-- Подсказка к сообщению: Ne joignez pas d’analyses médicales, de diagnostics ni d’informations de santé détaillées. Nous en parlerons pendant la consultation.
-- Обязательный чекбокс: J’accepte le traitement des données indiquées pour répondre à ma demande. Politique de confidentialité : → Politique de confidentialité
-- Кнопка: Envoyer la demande
-- Успех (показывать только после фактической отправки): Merci ! Votre demande est bien reçue. Je vous répondrai à l’adresse indiquée.
-- Ошибка: La demande n’a pas pu être envoyée. Réessayez ou écrivez-moi directement.
+**Блок: заметка (компонент `tilda/components/03-notice.html` или текстовый блок на лавандовом фоне)**
+> Les deux communautés sont gratuites : sans abonnement, sans achat obligatoire et sans inscription payante. Les consultations individuelles, les menus personnalisés, l’accompagnement et les guides PDF sont payants séparément et ne conditionnent pas la participation.
 
 **Блок: заметка (компонент `tilda/components/03-notice.html` или текстовый блок на лавандовом фоне)**
 > La communauté n’est pas un service médical. Pour les questions urgentes, adressez-vous à un médecin ou aux services d’urgence.
@@ -105,7 +115,7 @@ La plateforme, le format et les règles de la communauté sont en cours de défi
 
 - Title (37): Mums & Kids community — AINA Évidence
 
-- Description (104): A community for parents: questions on nutrition and child development. Launch and rules to be confirmed.
+- Description (87): Two free communities for mums: WhatsApp and Telegram. Joining and taking part are free.
 
 - OG title / description: как Title / Description. OG-изображение: фирменная обложка из библиотеки владельца (1200×630).
 
@@ -122,22 +132,27 @@ La plateforme, le format et les règles de la communauté sont en cours de défi
 ### Тексты
 
 **Блок: обложка (первый экран)**
-- Надзаголовок: Community
+- Надзаголовок: Free
 - H1: Mums & Kids
-- Подзаголовок: A space for parents: questions on nutrition and development, support and useful resources.
+- Подзаголовок: Two free communities: conversation, shared experience and information for parents.
 
-**Блок: текст**
-#### How it will work
-The platform, format and community rules are still being defined. Leave your email and I will let you know when it launches.
+**Блок: два бесплатных вступления (две отдельные кнопки)**. Цена не указывается; платных условий участия нет.
+- **WhatsApp — “Mums & Kids”** — кнопка «Join the WhatsApp group for free» → [The WhatsApp group invite link will be added.]
+  - Free to join and take part
+  - Conversation and shared experience between mums
+  - Information support for parents
+- **Telegram — “Mums & Kids | AINA”** — кнопка «Join the Telegram group for free» → https://t.me/+kTsVIJ15dAM5YzY0
+  - Free to join and take part
+  - Educational materials
+  - Baby food and weaning
+  - Cow’s milk protein allergy and lactase deficiency
+  - Breastfeeding and infant formula
+  - Sleep and child development
+  - Psychology and motherhood
+  - Health and wellbeing of mums
 
-**Блок: форма заявки** (нативная форма Tilda или `tilda/components/02-lead-form.html`)
-#### Tell me when it launches
-- Поля: Name *, Email *, Phone or messenger (optional), What are you interested in? * (по умолчанию: community), A few words about your request (optional) (до 500 знаков)
-- Подсказка к сообщению: Please do not include medical test results, diagnoses or detailed health information here. We will discuss them during a consultation.
-- Обязательный чекбокс: I agree to the processing of the data above so that my request can be answered. Privacy policy: → Privacy policy
-- Кнопка: Send request
-- Успех (показывать только после фактической отправки): Thank you! Your request has been received. I will reply to the email address you gave.
-- Ошибка: Your request could not be sent. Please try again or write to me directly.
+**Блок: заметка (компонент `tilda/components/03-notice.html` или текстовый блок на лавандовом фоне)**
+> Both communities are free: no subscription, no compulsory purchase and no paid entry. Individual consultations, personal menus, support and PDF guides are paid separately and are not a condition of taking part.
 
 **Блок: заметка (компонент `tilda/components/03-notice.html` или текстовый блок на лавандовом фоне)**
 > The community is not a medical service. For urgent matters, contact a doctor or emergency services.
