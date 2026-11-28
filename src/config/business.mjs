@@ -11,9 +11,9 @@ export const business = {
   contactEmail: 'globalainanutrition@gmail.com',    // known from the previous site; confirm it is the business mailbox
   contactPhone: '+33 6 67 65 03 84',               // known from the previous site; confirm
   // Channels as given by the owner (ноябрь 2026). TikTok is a handle only: the profile URL is not confirmed.
-  messenger: { whatsapp: 'https://wa.me/33667650384', telegram: 'https://t.me/+kTsVIJ15dAM5YzY0' },
+  messenger: { whatsapp: 'https://wa.me/33667650384', telegram: null }, // Telegram invite link is kept out of the public repository (set in private config)
   // Free community groups. WhatsApp: the group INVITE link (not the personal phone). null until the owner provides it.
-  community: { whatsappGroup: null, telegramGroup: 'https://t.me/+kTsVIJ15dAM5YzY0' },
+  community: { whatsappGroup: null, telegramGroup: null }, // invite links are private: never commit them
   social: { instagram: 'https://www.instagram.com/aina_evidence/', tiktok: 'AinaEvidence' },
   owner: {
     displayName: 'Айна Мусхаджиева',               // name as used on the site; confirm spelling for legal documents

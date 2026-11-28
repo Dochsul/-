@@ -60,3 +60,25 @@
 - Ссылки формы заказа открывают якоря.
 - Для каждой страницы заданы title и description по `seo.csv`.
 - Страницы со статусом `draft` и `legal-draft` имеют `noindex`.
+
+## 7. Окончательный пакет передачи (статус)
+
+**Проект:** существующий Tilda №13114079 (Free). Не создавать новый сайт, не менять платформу.
+
+**Страницы:** 48 = 16 на язык × 3 языка (ru, fr, en). Список и адреса — `tilda/seo.csv`. Юридические разделы — `legal/privacy` (с якорями privacy, cookies, mentions) и `legal/terms-of-sale` (якоря terms, refunds, digital).
+
+**Цены (утверждены, не менять):** АБКМ 9,90 € / 1 000 ₽; сон 0–18 лет 9,90 € / 1 000 ₽; прикорм 7,90 € / 800 ₽; комплект 19,90 € / 2 000 ₽. Рубли для оплаты выключены (`ENABLED_CURRENCIES=EUR`).
+
+**Дизайн:** палитра `#FFF4E9 #F3D6CF #E4D3E4 #B4883E #74283F #174532`, текст на золоте только тёмный (`#2E2427`), CSS блоков только под `.ae`, без инлайн-скриптов и `style=`.
+
+**Сообщество (Telegram):** публичная ссылка удалена из репозитория. В Tilda кнопку вставлять вручную из приватного источника; до этого блок показывает нейтральный текст.
+
+**Юридические поля:** заполнены из RNE на приватной копии (`private/tilda-filled/pages/`): юридическое имя по RNE (nom d'usage MUSKHADZHIEVA, nom de naissance ZAGALAEVA), SIREN, адрес. Медиатор — CM2C (без публикации до договора). Не заполнено: hostProvider, vatNumber, paymentProviderEntity, paymentMethods, transfers, lateCancellation, retentionMonths (см. `docs/LEGAL_CONDITIONS_PROPOSAL.md`).
+
+**Инфраструктура:** `docs/ORACLE_DEPLOY.md` (Oracle Always Free, Caddy HTTPS, SQLite в томе, копии Backblaze B2, Brevo SMTP, Revolut Sandbox). Ключи и пароли — только в `.env` на сервере.
+
+**Задачи для ChatGPT Work:**
+1. Открыть проект №13114079; создать или обновить 48 страниц по `tilda/pages/*.md` и `tilda/seo.csv`.
+2. Вставить T123-блоки из `tilda/components/` по языкам.
+3. Реквизиты брать из приватной копии, не из репозитория.
+4. Не публиковать черновики (`draft`, `legal-draft`) и не включать продажи.

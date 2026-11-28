@@ -129,7 +129,7 @@ function footer(c, locale) {
       <div>
         <p class="footer-h">${esc(f.contacts)}</p>
         <p><a href="mailto:${esc(business.contactEmail)}">${esc(business.contactEmail)}</a></p>
-        <p><a href="${business.messenger.whatsapp}" rel="noopener noreferrer" target="_blank">WhatsApp</a> · <a href="${business.messenger.telegram}" rel="noopener noreferrer" target="_blank">Telegram</a></p>
+        <p><a href="${business.messenger.whatsapp}" rel="noopener noreferrer" target="_blank">WhatsApp</a>${business.messenger.telegram ? ` · <a href="${business.messenger.telegram}" rel="noopener noreferrer" target="_blank">Telegram</a>` : ''}</p>
       </div>
       <div>
         <p class="footer-h">${esc(f.legal)}</p>

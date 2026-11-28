@@ -57,4 +57,4 @@ data/           база и очередь (не в git)
 
 ## Контакты
 
-globalainanutrition@gmail.com · WhatsApp +33 6 67 65 03 84 · Telegram https://t.me/+kTsVIJ15dAM5YzY0 (указан владельцем, подтвердить).
+globalainanutrition@gmail.com · WhatsApp +33 6 67 65 03 84 · Telegram (ссылка-приглашение хранится в приватном конфиге, не в репозитории).

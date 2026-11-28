@@ -39,7 +39,7 @@
   - Бесплатное вступление и участие
   - Общение и обмен опытом между мамами
   - Информационная поддержка родителей
-- **Telegram — «Мамы и дети | AINA»** — кнопка «Вступить бесплатно в Telegram» → https://t.me/+kTsVIJ15dAM5YzY0
+- **Telegram — «Мамы и дети | AINA»** — кнопка «Вступить бесплатно в Telegram» → null
   - Бесплатное вступление и участие
   - Образовательные материалы
   - Детское питание и прикорм
@@ -90,7 +90,7 @@
   - Inscription et participation gratuites
   - Échanges et partage d’expériences entre mamans
   - Information pour les parents
-- **Telegram — « Mamans et enfants | AINA »** — кнопка «Rejoindre gratuitement Telegram» → https://t.me/+kTsVIJ15dAM5YzY0
+- **Telegram — « Mamans et enfants | AINA »** — кнопка «Rejoindre gratuitement Telegram» → null
   - Inscription et participation gratuites
   - Ressources pédagogiques
   - Alimentation de l’enfant et diversification
@@ -141,7 +141,7 @@
   - Free to join and take part
   - Conversation and shared experience between mums
   - Information support for parents
-- **Telegram — “Mums & Kids | AINA”** — кнопка «Join the Telegram group for free» → https://t.me/+kTsVIJ15dAM5YzY0
+- **Telegram — “Mums & Kids | AINA”** — кнопка «Join the Telegram group for free» → null
   - Free to join and take part
   - Educational materials
   - Baby food and weaning

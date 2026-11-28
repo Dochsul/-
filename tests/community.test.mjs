@@ -8,9 +8,8 @@ import fr from '../src/content/fr.mjs';
 import en from '../src/content/en.mjs';
 
 const LANGS = { ru, fr, en };
-const TELEGRAM = 'https://t.me/+kTsVIJ15dAM5YzY0';
 
-test('community: two free buttons per language, Telegram link is the owner’s, no form, no purchase', () => {
+test('community: two free buttons per language, Telegram link comes from the private config, no form, no purchase', () => {
   for (const [lang, c] of Object.entries(LANGS)) {
     const sec = c.pages.community.sections;
     const links = sec.find((s) => s.type === 'communityLinks');
@@ -27,7 +26,7 @@ test('community: two free buttons per language, Telegram link is the owner’s, 
     assert.ok(/без подписки.*платного вступления|sans abonnement.*inscription payante|no subscription.*paid entry/.test(sec.find((x) => x.type === 'notice')?.p ?? sec.filter((x) => x.type === 'notice').map((x) => x.p).join(' ')), `${lang}: states that there is no subscription and no paid entry`);
     assert.ok(/бесплатн|gratuit|free/i.test(text), `${lang}: free status stated`);
   }
-  assert.equal(business.community.telegramGroup, TELEGRAM);
+  assert.equal(business.community.telegramGroup, null, 'the Telegram invite link is private and never stored in the repository');
 });
 
 test('community: the WhatsApp group is an invite link, never the owner’s personal phone', () => {
