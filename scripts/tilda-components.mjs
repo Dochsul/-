@@ -258,8 +258,8 @@ function shopHtml(lang) {
       <form data-ae-form novalidate hidden>
         <div class="ae-field"><label for="ae-email-${lang}">${t.email} *</label><input id="ae-email-${lang}" name="email" type="email" autocomplete="email" required maxlength="200"></div>
         <div class="ae-field"><label for="ae-country-${lang}">${t.country} *</label><select id="ae-country-${lang}" name="country" required><option value="">${t.countryPick}</option>${countryOptions(lang)}</select></div>
-        <label class="ae-check"><input name="terms" type="checkbox" required><span>${t.terms} (<a href="${legal('terms-of-sale')}" target="_blank" rel="noopener">${t.rules}</a>, <a href="${legal('refunds')}" target="_blank" rel="noopener">${{ ru: 'возврат', fr: 'remboursement', en: 'refunds' }[lang]}</a>) *</span></label>
-        <label class="ae-check"><input name="digital" type="checkbox" required><span>${t.digital} (<a href="${legal('digital-products')}" target="_blank" rel="noopener">${t.rules}</a>) *</span></label>
+        <label class="ae-check"><input name="terms" type="checkbox" required><span>${t.terms} (<a href="${legal('terms-of-sale')}" target="_blank" rel="noopener">${t.rules}</a>, <a href="${legal('terms-of-sale')}#refunds" target="_blank" rel="noopener">${{ ru: 'возврат', fr: 'remboursement', en: 'refunds' }[lang]}</a>) *</span></label>
+        <label class="ae-check"><input name="digital" type="checkbox" required><span>${t.digital} (<a href="${legal('terms-of-sale')}#digital" target="_blank" rel="noopener">${t.rules}</a>) *</span></label>
         <p class="ae-note">${t.payNote}</p>
         <button class="ae-btn ae-btn--primary" type="submit">${t.submit}</button>
       </form>

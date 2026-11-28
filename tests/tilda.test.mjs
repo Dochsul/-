@@ -14,10 +14,10 @@ let comps;
 
 before(() => { exportAll(); comps = buildComponents(); });
 
-test('19 pages, each with Russian, French and English sections', () => {
+test('16 pages, each with Russian, French and English sections', () => {
   const files = readdirSync(pagesDir).filter((f) => f.endsWith('.md'));
-  assert.equal(files.length, 19);
-  assert.equal(PAGES.length, 19);
+  assert.equal(files.length, 16);
+  assert.equal(PAGES.length, 16);
   for (const f of files) {
     const md = readFileSync(join(pagesDir, f), 'utf8');
     for (const l of ['(ru)', '(fr)', '(en)']) assert.ok(md.includes(l), `${f} ${l}`);
@@ -30,13 +30,13 @@ test('page statuses: services are drafts, legal pages are legal drafts with high
     const f = readdirSync(pagesDir).find((x) => x.startsWith(n));
     assert.match(readFileSync(join(pagesDir, f), 'utf8'), /ЧЕРНОВИК: не публиковать/);
   }
-  for (const n of ['15', '16', '17', '18', '19']) {
+  for (const n of ['15', '16']) {
     const f = readdirSync(pagesDir).find((x) => x.startsWith(n));
     const md = readFileSync(join(pagesDir, f), 'utf8');
     assert.match(md, /ЮРИДИЧЕСКИЙ ЧЕРНОВИК/);
   }
-  assert.match(readFileSync(join(pagesDir, '15-legal-mentions.md'), 'utf8'), /\[из личного реестра: legal\.siren\]/);
-  assert.match(readFileSync(join(pagesDir, '16-legal-privacy.md'), 'utf8'), /### Cookies/);
+  assert.match(readFileSync(join(pagesDir, '15-legal-privacy.md'), 'utf8'), /\[из личного реестра: legal\.siren\]/);
+  assert.match(readFileSync(join(pagesDir, '15-legal-privacy.md'), 'utf8'), /### Cookies/);
 });
 
 test('service prices are not copied from this package (the approved price list in Tilda prevails)', () => {
@@ -53,9 +53,9 @@ test('shop page lists the bundle with the approved prices', () => {
   assert.match(md, /7,90\s€\s·\s800\s₽/);
 });
 
-test('SEO: 57 rows, title ≤ 65, description 50–160, drafts are noindex', () => {
+test('SEO: 48 rows, title ≤ 65, description 50–160, drafts are noindex', () => {
   const rows = readFileSync(join(root, 'tilda', 'seo.csv'), 'utf8').trim().split('\r\n');
-  assert.equal(rows.length, 58);
+  assert.equal(rows.length, 49);
   const parse = (line) => { const out = []; let cur = ''; let q = false;
     for (let i = 0; i < line.length; i++) { const ch = line[i];
       if (q) { if (ch === '"' && line[i + 1] === '"') { cur += '"'; i++; } else if (ch === '"') q = false; else cur += ch; }

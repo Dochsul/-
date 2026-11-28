@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Generates the Tilda handoff texts from the single source of truth (src/content, src/legal, src/config).
-// Output: tilda/pages/NN-<slug>.md (19 pages, RU/FR/EN each) and tilda/seo.csv.
+// Output: tilda/pages/NN-<slug>.md (16 pages, RU/FR/EN each; Tilda Free limit is 50) and tilda/seo.csv.
 // Usage: node scripts/tilda-export.mjs
 import { mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
@@ -25,7 +25,7 @@ const LANGS = ['ru', 'fr', 'en'];
 const LANG_NAME = { ru: 'Русский', fr: 'Français', en: 'English' };
 const TODO = { ru: 'УКАЗАТЬ', fr: 'À COMPLÉTER', en: 'TO COMPLETE' };
 
-// The 19 Tilda pages. Status: publish = ready to publish once the shop/legal gates allow it;
+// The 16 Tilda pages. Status: publish = ready to publish once the shop/legal gates allow it;
 // draft = keep unpublished (owner: consultations, menus and support stay drafts until the legal right to provide them
 // in France is confirmed); legal-draft = publish only after lawyer review and the questionnaire data is filled in.
 export const PAGES = [
@@ -43,11 +43,10 @@ export const PAGES = [
   { n: 12, id: 'blog', slug: 'blog', status: 'publish' },
   { n: 13, id: 'faq', slug: 'faq', status: 'publish' },
   { n: 14, id: 'contact', slug: 'contact', status: 'publish' },
-  { n: 15, legal: 'mentions', slug: 'legal/mentions', status: 'legal-draft' },
-  { n: 16, legal: 'privacy', slug: 'legal/privacy', status: 'legal-draft', append: 'cookies' },
-  { n: 17, legal: 'terms', slug: 'legal/terms-of-sale', status: 'legal-draft' },
-  { n: 18, legal: 'refunds', slug: 'legal/refunds', status: 'legal-draft' },
-  { n: 19, legal: 'digital', slug: 'legal/digital-products', status: 'legal-draft' },
+  // Tilda Free allows 50 pages per project. Legal documents share two pages (anchors inside a page):
+  // privacy page = privacy + cookies + legal notice; terms page = terms of sale + refunds + digital products.
+  { n: 15, legal: ['privacy', 'cookies', 'mentions'], seoDoc: 'privacy', slug: 'legal/privacy', status: 'legal-draft' },
+  { n: 16, legal: ['terms', 'refunds', 'digital'], seoDoc: 'terms', slug: 'legal/terms-of-sale', status: 'legal-draft' },
 ];
 
 const STATUS_TEXT = {
@@ -141,7 +140,7 @@ function sectionMd(s, c, lang) {
 
 function seoFor(page, lang) {
   if (page.legal) {
-    const d = LEGAL[lang][page.legal];
+    const d = LEGAL[lang][page.seoDoc];
     return { title: `${d.title} — ${business.brand}`, description: d.description };
   }
   const p = C[lang].pages[page.id];
@@ -167,12 +166,13 @@ function headSnippet(page, lang) {
 }
 
 function legalMd(page, lang) {
-  const docs = [LEGAL[lang][page.legal], page.append ? LEGAL[lang][page.append] : null].filter(Boolean);
+  const docs = page.legal.map((key) => ({ key, ...LEGAL[lang][key] }));
   const L = [];
   if (lang !== 'fr') L.push(`> ${lang === 'ru' ? 'Краткое изложение на русском. Юридически обязательна французская версия.' : 'Courtesy translation. The French version prevails.'}`);
   L.push(`> ${{ ru: 'Черновик. Не публиковать до проверки юристом.', fr: 'Brouillon. Ne pas publier avant relecture par un juriste.', en: 'Draft. Do not publish before review by a lawyer.' }[lang]}`);
-  docs.forEach((d, i) => {
-    if (i > 0) L.push(`### ${d.title}`);
+  docs.forEach((d) => {
+    L.push(`### ${d.title}`);
+    L.push(`Якорь блока (Tilda, «Настройки блока → Якорь»): \`${d.key}\``);
     for (const s of d.sections) {
       L.push(`#### ${s.h}`);
       for (const p of s.paras || []) L.push(tokens(p, lang));
@@ -205,7 +205,7 @@ export function exportAll() {
       L.push(`### Тексты`);
       if (page.legal) L.push(legalMd(page, lang));
       else L.push(C[lang].pages[page.id].sections.map((s) => sectionMd(s, C[lang], lang)).join('\n\n'));
-      seoRows.push([page.n, page.legal || page.id, lang, pagePath(lang, page.slug), page.status, seo.title, seo.title.length, seo.description, seo.description.length, page.status === 'publish' ? 'index, follow' : 'noindex, nofollow']);
+      seoRows.push([page.n, page.legal ? page.legal.join("+") : page.id, lang, pagePath(lang, page.slug), page.status, seo.title, seo.title.length, seo.description, seo.description.length, page.status === 'publish' ? 'index, follow' : 'noindex, nofollow']);
     }
     writeFileSync(join(out, `${name}.md`), L.join('\n\n') + '\n', 'utf8');
     files.push(name);

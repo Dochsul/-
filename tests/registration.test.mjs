@@ -62,7 +62,7 @@ test('Tilda export writes a marker instead of registration values', () => {
     // regenerate the committed package without private values
     spawnSync(process.execPath, [join(ROOT, 'scripts/tilda-export.mjs')], { cwd: ROOT, env: { ...process.env, REGISTRATION_FILE: 'off' }, stdio: 'pipe' });
   }
-  const mentions = readFileSync(join(ROOT, 'tilda/pages/15-legal-mentions.md'), 'utf8');
+  const mentions = readFileSync(join(ROOT, 'tilda/pages/15-legal-privacy.md'), 'utf8');
   assert.match(mentions, /из личного реестра: legal\.siren/);
 });
 

@@ -1,4 +1,4 @@
-# 16. Политика конфиденциальности
+# 15. Политика конфиденциальности
 
 **Статус:** ЮРИДИЧЕСКИЙ ЧЕРНОВИК: не публиковать до заполнения анкеты (docs/ANKETA.md) и проверки юристом.
 
@@ -34,6 +34,10 @@
 
 > Черновик. Не публиковать до проверки юристом.
 
+### Политика конфиденциальности
+
+Якорь блока (Tilda, «Настройки блока → Якорь»): `privacy`
+
 #### Что собираем
 
 Из формы заявки: имя, email, телефон или мессенджер (по желанию), тема, сообщение (по желанию). Из магазина: email и данные заказа. Медицинские анализы и диагнозы через форму не нужны и не принимаются.
@@ -48,6 +52,8 @@
 
 ### Cookies
 
+Якорь блока (Tilda, «Настройки блока → Якорь»): `cookies`
+
 #### Что сохраняем
 
 Рекламных cookies и cookies аналитики на сайте нет. В локальном хранилище браузера сохраняется только содержимое корзины, без которого сервис не работает.
@@ -55,6 +61,30 @@
 #### Согласие
 
 Строго необходимое для запрошенной услуги не требует предварительного согласия. Если появятся аналитика или реклама, будет показан баннер согласия.
+
+### Правовая информация
+
+Якорь блока (Tilda, «Настройки блока → Якорь»): `mentions`
+
+#### Оператор сайта
+
+- Наименование: [из личного реестра: legal.legalName]
+
+- Форма: [из личного реестра: legal.legalForm], SIREN: [из личного реестра: legal.siren]
+
+- Адрес: [из личного реестра: legal.address]
+
+- Контакт: globalainanutrition@gmail.com, +33 6 67 65 03 84
+
+#### Хостинг и директор публикации
+
+- Директор публикации: [из личного реестра: legal.publicationDirector]
+
+- Хостинг: [из личного реестра: legal.hostProvider]
+
+#### Характер услуг
+
+Услуги носят образовательный и консультационный характер. Это не медицинский диагноз, лечение или назначение. При заболеваниях обращайтесь к врачу.
 
 
 ---
@@ -83,6 +113,10 @@
 ### Тексты
 
 > Brouillon. Ne pas publier avant relecture par un juriste.
+
+### Politique de confidentialité
+
+Якорь блока (Tilda, «Настройки блока → Якорь»): `privacy`
 
 #### Responsable du traitement
 
@@ -138,6 +172,8 @@ La présente politique peut être mise à jour. La version en vigueur est celle 
 
 ### Cookies
 
+Якорь блока (Tilda, «Настройки блока → Якорь»): `cookies`
+
 #### Ce que nous utilisons
 
 Le site n’utilise aucun cookie publicitaire ni cookie de mesure d’audience. Le site enregistre uniquement ce qui est strictement nécessaire à son fonctionnement : le contenu de votre panier dans le stockage local de votre navigateur.
@@ -149,6 +185,46 @@ Les éléments strictement nécessaires au service demandé ne nécessitent pas 
 #### Gérer vos choix
 
 Vous pouvez effacer le panier et les données du site à tout moment dans les paramètres de votre navigateur.
+
+### Mentions légales
+
+Якорь блока (Tilda, «Настройки блока → Якорь»): `mentions`
+
+#### Éditeur du site
+
+- Dénomination : [из личного реестра: legal.legalName]
+
+- Forme juridique : [из личного реестра: legal.legalForm]
+
+- Numéro SIREN : [из личного реестра: legal.siren] — [из личного реестра: legal.rcsOrRm]
+
+- TVA : [из личного реестра: legal.vatNumber]
+
+- Adresse : [из личного реестра: legal.address]
+
+- Contact : globalainanutrition@gmail.com — +33 6 67 65 03 84
+
+- Professionnel : Айна Мусхаджиева, Conseil en nutrition et bien-être
+
+#### Directeur de la publication
+
+[из личного реестра: legal.publicationDirector]
+
+#### Hébergement
+
+[из личного реестра: legal.hostProvider]
+
+#### Propriété intellectuelle
+
+Les textes, guides, visuels et la structure du site sont protégés par le droit d’auteur. Toute reproduction sans autorisation écrite est interdite. Les guides téléchargés sont destinés à un usage personnel et ne peuvent être revendus ni diffusés.
+
+#### Médiation de la consommation
+
+Conformément au Code de la consommation, le consommateur peut recourir gratuitement à un médiateur : [из личного реестра: legal.mediator].
+
+#### Nature des services
+
+Les services proposés sur ce site sont de nature éducative et de conseil. Ils ne constituent ni un diagnostic médical, ni un traitement, ni une prescription. En cas de maladie, consultez un professionnel de santé.
 
 
 ---
@@ -179,6 +255,10 @@ Vous pouvez effacer le panier et les données du site à tout moment dans les pa
 > Courtesy translation. The French version prevails.
 
 > Draft. Do not publish before review by a lawyer.
+
+### Privacy policy
+
+Якорь блока (Tilda, «Настройки блока → Якорь»): `privacy`
 
 #### Controller
 
@@ -234,6 +314,8 @@ This policy may be updated. The version published on this page applies.
 
 ### Cookies
 
+Якорь блока (Tilda, «Настройки блока → Якорь»): `cookies`
+
 #### What we use
 
 The site uses no advertising cookies and no audience-measurement cookies. It only stores what is strictly necessary to operate: the contents of your basket in your browser’s local storage.
@@ -245,3 +327,43 @@ Items strictly necessary for the service you request do not require prior consen
 #### Managing your choices
 
 You can clear the basket and the site data at any time in your browser settings.
+
+### Legal notice
+
+Якорь блока (Tilda, «Настройки блока → Якорь»): `mentions`
+
+#### Publisher
+
+- Name: [из личного реестра: legal.legalName]
+
+- Legal form: [из личного реестра: legal.legalForm]
+
+- SIREN number: [из личного реестра: legal.siren] — [из личного реестра: legal.rcsOrRm]
+
+- VAT: [из личного реестра: legal.vatNumber]
+
+- Address: [из личного реестра: legal.address]
+
+- Contact: globalainanutrition@gmail.com — +33 6 67 65 03 84
+
+- Practitioner: Айна Мусхаджиева, Nutrition and wellness consultant
+
+#### Publication director
+
+[из личного реестра: legal.publicationDirector]
+
+#### Hosting
+
+[из личного реестра: legal.hostProvider]
+
+#### Intellectual property
+
+The texts, guides, visuals and structure of this site are protected by copyright. Reproduction without written permission is prohibited. Downloaded guides are for personal use only and may not be resold or distributed.
+
+#### Consumer mediation
+
+Under French consumer law, consumers may use a mediator free of charge: [из личного реестра: legal.mediator].
+
+#### Nature of the services
+
+The services are educational and advisory. They are not a medical diagnosis, treatment or prescription. If you have a medical condition, consult a healthcare professional.

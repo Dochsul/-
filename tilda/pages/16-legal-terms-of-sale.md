@@ -1,4 +1,4 @@
-# 17. Условия продажи
+# 16. Условия продажи
 
 **Статус:** ЮРИДИЧЕСКИЙ ЧЕРНОВИК: не публиковать до заполнения анкеты (docs/ANKETA.md) и проверки юристом.
 
@@ -34,6 +34,10 @@
 
 > Черновик. Не публиковать до проверки юристом.
 
+### Условия продажи
+
+Якорь блока (Tilda, «Настройки блока → Якорь»): `terms`
+
 #### Основное
 
 Консультации проводятся онлайн после подтверждения по email. Цены в евро с учётом налогов. Оплата через защищённого провайдера.
@@ -45,6 +49,30 @@
 #### Право на отказ
 
 Для покупок на расстоянии право на отказ в течение 14 дней действует в общем случае. Для цифровых продуктов после предоставления файла по вашему прямому согласию и с подтверждением отказа от права на отказ оно не применяется (ст. L221-28 Кодекса потребления Франции). Подтверждение фиксируется галочкой при заказе.
+
+### Политика возврата
+
+Якорь блока (Tilda, «Настройки блока → Якорь»): `refunds`
+
+#### Консультации
+
+Отмена или перенос — письмом на globalainanutrition@gmail.com не позднее **[УКАЗАТЬ: срок в часах]** часов до встречи. Возврат — в течение **[УКАЗАТЬ: срок в днях]** дней тем же способом оплаты.
+
+#### Цифровые продукты
+
+Непрочитанный и не скачанный гайд может быть возвращён. После выдачи файла возврат не предусмотрен, кроме случаев неисправного или недоступного файла по вине продавца. Двойная оплата и технические ошибки возвращаются полностью.
+
+### Правила продажи цифровых продуктов
+
+Якорь блока (Tilda, «Настройки блока → Якорь»): `digital`
+
+#### Использование
+
+Гайд предназначен для личного использования. Его нельзя перепродавать, публиковать и распространять без письменного разрешения. Гайды носят образовательный характер и не заменяют консультацию врача.
+
+#### Дефекты
+
+Если файл неисправен или не открывается, сообщите в течение 14 дней: файл заменят или вернут деньги.
 
 
 ---
@@ -73,6 +101,10 @@
 ### Тексты
 
 > Brouillon. Ne pas publier avant relecture par un juriste.
+
+### Conditions générales de vente
+
+Якорь блока (Tilda, «Настройки блока → Якорь»): `terms`
 
 #### 1. Objet
 
@@ -122,6 +154,54 @@ Les présentes conditions sont soumises au **[À COMPLÉTER: droit applicable]**
 
 globalainanutrition@gmail.com — +33 6 67 65 03 84
 
+### Politique de remboursement
+
+Якорь блока (Tilda, «Настройки блока → Якорь»): `refunds`
+
+#### Consultations
+
+- Annulation ou report : possible en écrivant à globalainanutrition@gmail.com au moins **[À COMPLÉTER: nombre]** heures avant le rendez-vous.
+
+- En cas d’annulation dans ce délai : remboursement intégral, sous **[À COMPLÉTER: nombre]** jours, par le même moyen de paiement.
+
+- En cas d’annulation tardive ou d’absence : **[À COMPLÉTER: condition appliquée]**.
+
+#### Produits numériques
+
+Un guide non encore téléchargé peut être remboursé dans les conditions de la section « Droit de rétractation » des conditions générales de vente. Une fois le fichier fourni et la renonciation acceptée, aucun remboursement n’est dû, sauf fichier non conforme ou inaccessible par la faute du Vendeur. Dans ce cas, nous proposons un nouveau lien ou un remboursement.
+
+#### Remboursement technique
+
+En cas de double paiement ou d’erreur technique, un remboursement intégral est effectué sans condition.
+
+### Règles de vente des produits numériques
+
+Якорь блока (Tilda, «Настройки блока → Якорь»): `digital`
+
+#### Nature du produit
+
+Les guides sont des fichiers PDF à vocation éducative. Ils ne remplacent pas une consultation médicale et ne contiennent pas de prescription.
+
+#### Accès et téléchargement
+
+- Le lien de téléchargement est envoyé par e-mail après confirmation du paiement.
+
+- Validité du lien : 7 jours. Nombre de téléchargements : 5 maximum.
+
+- Si vous n’avez pas reçu le lien, vérifiez vos spams puis écrivez-nous. Un nouveau lien peut être émis.
+
+#### Usage
+
+Usage strictement personnel. Le fichier ne peut être ni revendu, ni partagé, ni publié, ni traduit pour une diffusion publique sans accord écrit.
+
+#### Droit de rétractation
+
+Voir les conditions générales de vente, article 6 : une fois le contenu fourni après votre accord exprès et votre renonciation, le droit de rétractation ne s’applique pas.
+
+#### Conformité
+
+Si le fichier est défectueux ou illisible, signalez-le sous 14 jours : il sera remplacé ou remboursé.
+
 
 ---
 
@@ -151,6 +231,10 @@ globalainanutrition@gmail.com — +33 6 67 65 03 84
 > Courtesy translation. The French version prevails.
 
 > Draft. Do not publish before review by a lawyer.
+
+### Terms of sale
+
+Якорь блока (Tilda, «Настройки блока → Якорь»): `terms`
 
 #### 1. Scope
 
@@ -199,3 +283,51 @@ These terms are governed by **[TO COMPLETE: governing law]**. Mandatory consumer
 #### 11. Contact
 
 globalainanutrition@gmail.com — +33 6 67 65 03 84
+
+### Refund policy
+
+Якорь блока (Tilda, «Настройки блока → Якорь»): `refunds`
+
+#### Consultations
+
+- Cancellation or rescheduling: write to globalainanutrition@gmail.com at least **[TO COMPLETE: number]** hours before the appointment.
+
+- Cancellation within that period: full refund within **[TO COMPLETE: number]** days, by the original payment method.
+
+- Late cancellation or no-show: **[TO COMPLETE: rule applied]**.
+
+#### Digital products
+
+A guide not yet downloaded may be refunded under the right-of-withdrawal section of the terms of sale. Once the file has been supplied and the acknowledgement accepted, no refund is due, unless the file is non-conforming or inaccessible through the Seller’s fault; in that case we offer a new link or a refund.
+
+#### Technical refunds
+
+In case of double payment or a technical error, a full refund is made without conditions.
+
+### Digital products rules
+
+Якорь блока (Tilda, «Настройки блока → Якорь»): `digital`
+
+#### Nature of the product
+
+Guides are educational PDF files. They do not replace a medical consultation and do not contain prescriptions.
+
+#### Access and download
+
+- The download link is sent by email after payment is confirmed.
+
+- Link validity: 7 days. Maximum downloads: 5.
+
+- If you did not receive the link, check your spam folder and then write to us. A new link can be issued.
+
+#### Use
+
+For personal use only. The file may not be resold, shared, published or translated for public distribution without written permission.
+
+#### Right of withdrawal
+
+See the terms of sale, section 6: once the content is supplied after your express consent and acknowledgement, the right of withdrawal does not apply.
+
+#### Conformity
+
+If the file is defective or unreadable, report it within 14 days: it will be replaced or refunded.
