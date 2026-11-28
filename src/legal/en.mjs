@@ -10,7 +10,8 @@ export default {
       { h: 'Publisher', items: [
         'Name: {{legal.legalName|name}}',
         'Legal form: {{legal.legalForm|legal form}}',
-        'SIREN number: {{legal.siren|SIREN}} — {{legal.rcsOrRm|RCS / RM}}',
+        'SIREN number: {{legal.siren|SIREN}}',
+        'Registration: National business register (Répertoire national des entreprises, RNE)',
         'VAT: {{legal.vatNumber|VAT number or VAT-exemption statement}}',
         'Address: {{legal.address|address}}',
         'Contact: {{contact.email|email}} — {{contact.phone|phone}}',
@@ -37,7 +38,7 @@ export default {
       ] },
       { h: 'Recipients', paras: ['Data is accessible to the controller. It may be shared with the site host, the email service used to reply to requests and, for payments, the payment provider Revolut ({{business.paymentProviderEntity|Revolut contracting entity}}), which processes payment data under its own responsibility. Data is not sold.'] },
       { h: 'Transfers outside the EU', paras: ['Where a provider is located outside the EU, safeguards in line with the GDPR apply. {{policy.transfers|list non-EU providers or state none}}.'] },
-      { h: 'Retention', paras: ['Contact requests are kept for {{policy.retentionMonths|number}} months after the last exchange. Order data is kept for as long as accounting rules require.'] },
+      { h: 'Retention', paras: ['Contact requests are kept for {{policy.retentionMonths|number}} months after the last exchange.', 'Accounting documents and invoices are kept for 10 years (Article L123-22 of the French Commercial Code).', 'Data used for marketing is kept for 3 years after the last contact (CNIL recommendations).'] },
       { h: 'Your rights', paras: ['You have the right of access, rectification, erasure, restriction, objection and portability, and you may withdraw consent at any time without affecting earlier processing. To exercise your rights: {{contact.email|email}}.', 'You may lodge a complaint with the CNIL (www.cnil.fr), the French data protection authority.'] },
       { h: 'Security', paras: ['The site uses HTTPS. Data is stored on a server with restricted access. Digital files are reachable only through a personal, time-limited link.'] },
       { h: 'Minors', paras: ['Consultations on child nutrition are requested by a parent or legal guardian, who provides the information about the child.'] },
@@ -69,7 +70,7 @@ export default {
     notice: 'Courtesy translation. The French version prevails.',
     sections: [
       { h: 'Consultations', items: [
-        'Cancellation or rescheduling: write to {{contact.email|email}} at least {{policy.refundWindowHours|number}} hours before the appointment.',
+        'Cancellation or rescheduling: write to {{contact.email|email}} at least {{policy.refundWindowHours|number}} hours before the appointment. Within that period we offer a free rescheduling or a full refund, at your choice; this does not limit your legal rights.',
         'Cancellation within that period: full refund within {{policy.refundDays|number}} days, by the original payment method.',
         'Late cancellation or no-show: {{policy.lateCancellation|rule applied}}.',
       ] },

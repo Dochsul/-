@@ -48,7 +48,7 @@
 
 #### Срок хранения и ваши права
 
-Заявки хранятся **[УКАЗАТЬ: срок]** месяцев после последнего контакта. Вы можете получить доступ к данным, исправить, удалить их и отозвать согласие, написав на globalainanutrition@gmail.com. Жалобы — в CNIL (Франция).
+Заявки хранятся **[УКАЗАТЬ: срок]** месяцев после последнего контакта. Бухгалтерские документы и чеки хранятся 10 лет (ст. L123-22 Торгового кодекса Франции). Данные для маркетинговых рассылок хранятся 3 года после последнего контакта (рекомендации CNIL). Вы можете получить доступ к данным, исправить, удалить их и отозвать согласие, написав на globalainanutrition@gmail.com. Жалобы — в CNIL (Франция).
 
 ### Cookies
 
@@ -146,7 +146,11 @@ Si un prestataire est situé hors de l’Union européenne, un encadrement confo
 
 #### Durée de conservation
 
-Les demandes de contact sont conservées **[À COMPLÉTER: nombre de mois]** mois après le dernier échange. Les données de commande sont conservées le temps imposé par les obligations comptables.
+Les demandes de contact sont conservées **[À COMPLÉTER: nombre de mois]** mois après le dernier échange.
+
+Les documents comptables et justificatifs de facturation sont conservés 10 ans (article L123-22 du Code de commerce).
+
+Les données utilisées pour la prospection commerciale sont conservées 3 ans après le dernier contact (recommandations de la CNIL).
 
 #### Vos droits
 
@@ -196,7 +200,9 @@ Vous pouvez effacer le panier et les données du site à tout moment dans les pa
 
 - Forme juridique : [из личного реестра: legal.legalForm]
 
-- Numéro SIREN : [из личного реестра: legal.siren] — [из личного реестра: legal.rcsOrRm]
+- Numéro SIREN : [из личного реестра: legal.siren]
+
+- Immatriculation : Répertoire national des entreprises (RNE)
 
 - TVA : [из личного реестра: legal.vatNumber]
 
@@ -288,7 +294,11 @@ Where a provider is located outside the EU, safeguards in line with the GDPR app
 
 #### Retention
 
-Contact requests are kept for **[TO COMPLETE: number]** months after the last exchange. Order data is kept for as long as accounting rules require.
+Contact requests are kept for **[TO COMPLETE: number]** months after the last exchange.
+
+Accounting documents and invoices are kept for 10 years (Article L123-22 of the French Commercial Code).
+
+Data used for marketing is kept for 3 years after the last contact (CNIL recommendations).
 
 #### Your rights
 
@@ -338,7 +348,9 @@ You can clear the basket and the site data at any time in your browser settings.
 
 - Legal form: [из личного реестра: legal.legalForm]
 
-- SIREN number: [из личного реестра: legal.siren] — [из личного реестра: legal.rcsOrRm]
+- SIREN number: [из личного реестра: legal.siren]
+
+- Registration: National business register (Répertoire national des entreprises, RNE)
 
 - VAT: [из личного реестра: legal.vatNumber]
 

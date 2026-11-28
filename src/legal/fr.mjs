@@ -10,7 +10,8 @@ export default {
       { h: 'Éditeur du site', items: [
         'Dénomination : {{legal.legalName|dénomination}}',
         'Forme juridique : {{legal.legalForm|forme juridique}}',
-        'Numéro SIREN : {{legal.siren|SIREN}} — {{legal.rcsOrRm|RCS / RM}}',
+        'Numéro SIREN : {{legal.siren|SIREN}}',
+        'Immatriculation : Répertoire national des entreprises (RNE)',
         'TVA : {{legal.vatNumber|numéro de TVA ou mention de franchise en base}}',
         'Adresse : {{legal.address|adresse}}',
         'Contact : {{contact.email|e-mail}} — {{contact.phone|téléphone}}',
@@ -36,7 +37,7 @@ export default {
       ] },
       { h: 'Destinataires', paras: ['Les données sont accessibles au responsable du traitement. Elles peuvent être transmises à l’hébergeur du site, au service de messagerie utilisé pour répondre aux demandes et, pour les paiements, au prestataire de paiement Revolut ({{business.paymentProviderEntity|entité Revolut contractante}}), qui traite les données de paiement sous sa propre responsabilité. Aucune donnée n’est vendue.'] },
       { h: 'Transferts hors Union européenne', paras: ['Si un prestataire est situé hors de l’Union européenne, un encadrement conforme au RGPD est mis en place. {{policy.transfers|précisez les prestataires situés hors UE, ou indiquez qu’il n’y en a pas}}.'] },
-      { h: 'Durée de conservation', paras: ['Les demandes de contact sont conservées {{policy.retentionMonths|nombre de mois}} mois après le dernier échange. Les données de commande sont conservées le temps imposé par les obligations comptables.'] },
+      { h: 'Durée de conservation', paras: ['Les demandes de contact sont conservées {{policy.retentionMonths|nombre de mois}} mois après le dernier échange.', 'Les documents comptables et justificatifs de facturation sont conservés 10 ans (article L123-22 du Code de commerce).', 'Les données utilisées pour la prospection commerciale sont conservées 3 ans après le dernier contact (recommandations de la CNIL).'] },
       { h: 'Vos droits', paras: ['Vous disposez d’un droit d’accès, de rectification, d’effacement, de limitation, d’opposition et de portabilité, ainsi que du droit de retirer votre consentement à tout moment, sans effet sur les traitements antérieurs. Pour exercer vos droits : {{contact.email|e-mail}}.', 'Vous pouvez introduire une réclamation auprès de la CNIL (www.cnil.fr).'] },
       { h: 'Sécurité', paras: ['Le site utilise le protocole HTTPS. Les données sont stockées sur un serveur à accès restreint. Les fichiers numériques sont accessibles uniquement par un lien personnel à durée limitée.'] },
       { h: 'Mineurs', paras: ['Les consultations sur l’alimentation de l’enfant sont demandées par un parent ou un représentant légal, qui transmet les données pour son enfant.'] },
@@ -66,7 +67,7 @@ export default {
     description: 'Conditions d’annulation, de report et de remboursement des consultations et des produits numériques.',
     sections: [
       { h: 'Consultations', items: [
-        'Annulation ou report : possible en écrivant à {{contact.email|e-mail}} au moins {{policy.refundWindowHours|nombre}} heures avant le rendez-vous.',
+        'Annulation ou report : possible en écrivant à {{contact.email|e-mail}} au moins {{policy.refundWindowHours|nombre}} heures avant le rendez-vous. Dans ce délai, nous proposons un report gratuit ou un remboursement intégral, au choix du client. Ces options ne limitent pas vos droits légaux.',
         'En cas d’annulation dans ce délai : remboursement intégral, sous {{policy.refundDays|nombre}} jours, par le même moyen de paiement.',
         'En cas d’annulation tardive ou d’absence : {{policy.lateCancellation|condition appliquée}}.',
       ] },

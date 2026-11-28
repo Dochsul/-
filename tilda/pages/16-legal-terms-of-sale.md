@@ -56,7 +56,7 @@
 
 #### Консультации
 
-Отмена или перенос — письмом на globalainanutrition@gmail.com не позднее **[УКАЗАТЬ: срок в часах]** часов до встречи. Возврат — в течение **[УКАЗАТЬ: срок в днях]** дней тем же способом оплаты.
+Отмена или перенос — письмом на globalainanutrition@gmail.com не позднее 24 часов до встречи. В этом случае предлагаем бесплатный перенос или полный возврат, на выбор клиента; законные права потребителя от этого не ограничиваются. Возврат — в течение 14 дней тем же способом оплаты.
 
 #### Цифровые продукты
 
@@ -148,7 +148,7 @@ En cas de litige, vous pouvez recourir gratuitement au médiateur suivant : [и�
 
 #### 10. Droit applicable et juridiction
 
-Les présentes conditions sont soumises au **[À COMPLÉTER: droit applicable]**. Pour un consommateur, les règles impératives de son pays de résidence restent applicables. Juridiction compétente : **[À COMPLÉTER: tribunal compétent]**.
+Les présentes conditions sont soumises au droit français, sous réserve des règles impératives de protection du consommateur. Pour un consommateur, les règles impératives de son pays de résidence restent applicables. Juridiction compétente : tribunaux français compétents selon le droit applicable, notamment le tribunal du domicile du consommateur.
 
 #### 11. Contact
 
@@ -160,9 +160,9 @@ globalainanutrition@gmail.com — +33 6 67 65 03 84
 
 #### Consultations
 
-- Annulation ou report : possible en écrivant à globalainanutrition@gmail.com au moins **[À COMPLÉTER: nombre]** heures avant le rendez-vous.
+- Annulation ou report : possible en écrivant à globalainanutrition@gmail.com au moins 24 heures avant le rendez-vous. Dans ce délai, nous proposons un report gratuit ou un remboursement intégral, au choix du client. Ces options ne limitent pas vos droits légaux.
 
-- En cas d’annulation dans ce délai : remboursement intégral, sous **[À COMPLÉTER: nombre]** jours, par le même moyen de paiement.
+- En cas d’annulation dans ce délai : remboursement intégral, sous 14 jours, par le même moyen de paiement.
 
 - En cas d’annulation tardive ou d’absence : **[À COMPLÉTER: condition appliquée]**.
 
@@ -278,7 +278,7 @@ In case of dispute you may use this mediator free of charge: [из личног�
 
 #### 10. Governing law and jurisdiction
 
-These terms are governed by **[TO COMPLETE: governing law]**. Mandatory consumer rules of your country of residence remain applicable. Competent court: **[TO COMPLETE: court]**.
+These terms are governed by droit français, sous réserve des règles impératives de protection du consommateur. Mandatory consumer rules of your country of residence remain applicable. Competent court: tribunaux français compétents selon le droit applicable, notamment le tribunal du domicile du consommateur.
 
 #### 11. Contact
 
@@ -290,9 +290,9 @@ globalainanutrition@gmail.com — +33 6 67 65 03 84
 
 #### Consultations
 
-- Cancellation or rescheduling: write to globalainanutrition@gmail.com at least **[TO COMPLETE: number]** hours before the appointment.
+- Cancellation or rescheduling: write to globalainanutrition@gmail.com at least 24 hours before the appointment. Within that period we offer a free rescheduling or a full refund, at your choice; this does not limit your legal rights.
 
-- Cancellation within that period: full refund within **[TO COMPLETE: number]** days, by the original payment method.
+- Cancellation within that period: full refund within 14 days, by the original payment method.
 
 - Late cancellation or no-show: **[TO COMPLETE: rule applied]**.
 

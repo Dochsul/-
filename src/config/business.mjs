@@ -41,10 +41,10 @@ export const business = {
   // Policy values that the owner must choose (proposals are NOT applied until confirmed in docs/ANKETA.md).
   policy: {
     retentionMonths: null,      // how long contact requests and orders are kept
-    refundWindowHours: null,    // consultation cancellation deadline, e.g. 24
-    refundDays: null,           // days to refund after a valid cancellation, e.g. 14
-    governingLaw: null,         // applicable law for consumer terms (French law for an EU-based seller)
-    courtLocation: null,        // competent court for disputes
+    refundWindowHours: 24,      // owner decision: consultation cancellation deadline (hours); free rescheduling or full refund
+    refundDays: 14,             // owner decision: refund delay after a valid cancellation (days)
+    governingLaw: 'droit français, sous réserve des règles impératives de protection du consommateur', // owner decision
+    courtLocation: 'tribunaux français compétents selon le droit applicable, notamment le tribunal du domicile du consommateur', // owner decision
     transfers: null,            // non-EU providers used, or 'none'
     lateCancellation: null,     // what applies to late cancellation or no-show
   },
