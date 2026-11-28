@@ -18,7 +18,10 @@ import legalFr from '../src/legal/fr.mjs';
 import legalEn from '../src/legal/en.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const out = join(root, 'tilda', 'pages');
+// TILDA_FILL=1 writes the registration values into the texts (for the owner's private copy only).
+// TILDA_OUT=<dir> changes the output folder (the private copy goes to private/, which git ignores).
+const FILL = process.env.TILDA_FILL === '1';
+const out = process.env.TILDA_OUT ? resolve(process.env.TILDA_OUT) : join(root, 'tilda', 'pages');
 const C = { ru, fr, en };
 const LEGAL = { ru: legalRu, fr: legalFr, en: legalEn };
 const LANGS = ['ru', 'fr', 'en'];
@@ -66,7 +69,10 @@ function lookup(path, lang) {
     'business.paymentProviderEntity': business.paymentProviderEntity,
   };
   // Registration values are never written into the repository (it is public): the owner copies them from the private file.
-  if (path.startsWith('legal.') && REGISTRATION_KEYS.includes(path.slice(6))) return `[из личного реестра: ${path}]`;
+  if (path.startsWith('legal.') && REGISTRATION_KEYS.includes(path.slice(6))) {
+    if (!FILL) return `[из личного реестра: ${path}]`;
+    return business.legal[path.slice(6)] ?? null;
+  }
   if (path in map) return map[path];
   const [g, k] = path.split('.');
   return ({ legal: business.legal, policy: business.policy, download: business.download }[g] || {})[k];
@@ -211,7 +217,7 @@ export function exportAll() {
     files.push(name);
   }
   const csv = seoRows.map((r) => r.map((v) => { const s = String(v); return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; }).join(',')).join('\r\n') + '\r\n';
-  writeFileSync(join(root, 'tilda', 'seo.csv'), csv, 'utf8');
+  writeFileSync(join(out, '..', 'seo.csv'), csv, 'utf8');
   return { files, seoRows: seoRows.length - 1 };
 }
 

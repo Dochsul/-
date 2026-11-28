@@ -82,3 +82,27 @@ Tilda отдаёт публичный сайт. Сервер обслужива�
 - Лимиты Oracle не подтверждены: нет доступа к docs.oracle.com.
 - Домен и DNS: требуют решения владельца (бюджет 0 €).
 - Аккаунты Oracle, Brevo, Backblaze, Revolut Sandbox: создаёт владелец.
+
+## 10. Проверка почты через Mailpit (локально, без рассылки)
+
+Mailpit — локальный SMTP-сервер для проверки, наружу письма не уходят.
+
+```bash
+go install github.com/axllent/mailpit@latest          # бинарник: $(go env GOPATH)/bin/mailpit
+mailpit --smtp 127.0.0.1:1025 --listen 127.0.0.1:8025 \
+        --smtp-auth-accept-any --smtp-auth-allow-insecure
+```
+
+Клиент проекта `server/smtp.mjs` отправляет на `127.0.0.1:1025` без TLS (`secure: 'none'`, разрешено только для loopback). Письма видны в веб-интерфейсе `http://127.0.0.1:8025`, API — `/api/v1/messages`.
+
+Результат проверки: тестовое письмо принято (`accepted: true`) и появилось в Mailpit с темой и текстом. Реальных адресов не использовалось.
+
+Для боевого сервера те же переменные указывают на Brevo (`SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE=starttls`). Отправка на Brevo не проверена: нужен аккаунт владельца.
+
+## 11. Приватная копия Tilda с реквизитами
+
+```bash
+TILDA_FILL=1 TILDA_OUT=$PWD/private/tilda-filled/pages node scripts/tilda-export.mjs
+```
+
+Создаёт тексты с реквизитами из `private/registration.json` в каталоге, который игнорирует git. Публичный `npm run tilda` маркеры не заменяет.
